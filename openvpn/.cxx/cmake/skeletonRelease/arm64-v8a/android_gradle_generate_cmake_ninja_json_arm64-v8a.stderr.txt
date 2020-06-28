@@ -1,0 +1,4 @@
+OpenVPN 2.x version -128-NOTFOUND
+OpenVPN 3.x version -128-NOTFOUND
+Not budiling OpenVPN for output dir /Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/build/intermediates/cmake/skeletonRelease/obj/arm64-v8a
+Not budiling SSLSpeedTest for output dir /Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/build/intermediates/cmake/skeletonRelease/obj/arm64-v8a

@@ -1,0 +1,75 @@
+{
+  "variant": {
+    "module": {
+      "rootBuildGradleFolder": "/Users/aliumujib/Desktop/Android_Projects/ics-openvpn",
+      "sdkFolder": "/Users/aliumujib/Library/Android/sdk",
+      "isNativeCompilerSettingsCacheEnabled": false,
+      "isBuildOnlyTargetAbiEnabled": true,
+      "splitsAbiFilterSet": [
+        "armeabi-v7a",
+        "x86_64",
+        "x86",
+        "arm64-v8a"
+      ],
+      "intermediatesFolder": "/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/build/intermediates",
+      "gradleModulePathName": ":openvpn",
+      "moduleRootFolder": "/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn",
+      "makeFile": "/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/src/main/cpp/CMakeLists.txt",
+      "buildSystem": "CMAKE",
+      "compilerSettingsCacheFolder": "/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/.cxx",
+      "cxxFolder": "/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx",
+      "ndkFolder": "/Users/aliumujib/Library/Android/sdk/ndk/21.0.6113669",
+      "ndkVersion": "21.0.6113669",
+      "ndkSupportedAbiList": [
+        "ARMEABI_V7A",
+        "ARM64_V8A",
+        "X86",
+        "X86_64"
+      ],
+      "ndkDefaultAbiList": [
+        "ARMEABI_V7A",
+        "ARM64_V8A",
+        "X86",
+        "X86_64"
+      ],
+      "cmakeToolchainFile": "."
+    },
+    "buildSystemArgumentList": [],
+    "cFlagList": [],
+    "cppFlagsList": [],
+    "variantName": "uiDebug",
+    "soFolder": "/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/build/intermediates/cmake/uiDebug/lib",
+    "objFolder": "/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/build/intermediates/cmake/uiDebug/obj",
+    "jsonFolder": "/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/uiDebug",
+    "gradleBuildOutputFolder": "/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cxx/uiDebug",
+    "isDebuggableEnabled": true,
+    "validAbiList": [
+      "ARMEABI_V7A",
+      "ARM64_V8A",
+      "X86",
+      "X86_64"
+    ],
+    "buildTargetSet": []
+  },
+  "abi": "X86_64",
+  "abiPlatformVersion": 16,
+  "cxxBuildFolder": "/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/uiDebug/x86_64",
+  "jsonFile": "/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/uiDebug/x86_64/android_gradle_build.json",
+  "gradleBuildOutputFolder": "/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cxx/uiDebug/x86_64",
+  "objFolder": "/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/build/intermediates/cmake/uiDebug/obj/x86_64",
+  "buildCommandFile": "/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/uiDebug/x86_64/build_command.txt",
+  "buildOutputFile": "/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/uiDebug/x86_64/build_output.txt",
+  "modelOutputFile": "/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/uiDebug/x86_64/build_model.json",
+  "cmake": {
+    "cmakeListsWrapperFile": "/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cxx/uiDebug/x86_64/CMakeLists.txt",
+    "toolchainWrapperFile": "/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cxx/uiDebug/x86_64/android_gradle_build.toolchain.cmake",
+    "buildGenerationStateFile": "/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cxx/uiDebug/x86_64/build_generation_state.json",
+    "cacheKeyFile": "/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cxx/uiDebug/x86_64/compiler_cache_key.json",
+    "compilerCacheUseFile": "/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cxx/uiDebug/x86_64/compiler_cache_use.json",
+    "compilerCacheWriteFile": "/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cxx/uiDebug/x86_64/compiler_cache_write.json",
+    "toolchainSettingsFromCacheFile": "/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cxx/uiDebug/x86_64/compiler_settings_cache.cmake",
+    "cmakeWrappingBaseFolder": "."
+  },
+  "jsonGenerationLoggingRecordFile": "/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/uiDebug/x86_64/json_generation_record.json",
+  "compileCommandsJsonFile": "/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/uiDebug/x86_64/compile_commands.json"
+}

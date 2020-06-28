@@ -1,0 +1,1 @@
+[1/1] cd /Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/skeletonDebug/arm64-v8a && /Users/aliumujib/Library/Android/sdk/cmake/3.6.4111459/bin/cmake -E make_directory /Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/src/main/cpp/../../../build/ovpnassets

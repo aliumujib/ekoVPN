@@ -1,0 +1,15 @@
+/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/debug/x86_64/CMakeFiles/rebuild_cache.dir
+/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/debug/x86_64/CMakeFiles/makeassetdir.dir
+/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/debug/x86_64/CMakeFiles/pie_openvpn.x86_64.dir
+/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/debug/x86_64/CMakeFiles/jbcrypto.dir
+/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/debug/x86_64/CMakeFiles/libovpnexec.so.dir
+/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/debug/x86_64/CMakeFiles/openvpn.dir
+/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/debug/x86_64/CMakeFiles/edit_cache.dir
+/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/debug/x86_64/CMakeFiles/crypto.dir
+/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/debug/x86_64/CMakeFiles/osslspeedtest.dir
+/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/debug/x86_64/CMakeFiles/opvpnutil.dir
+/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/debug/x86_64/CMakeFiles/ovpn3.dir
+/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/debug/x86_64/CMakeFiles/nopie_openvpn.x86_64.dir
+/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/debug/x86_64/CMakeFiles/lz4.dir
+/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/debug/x86_64/CMakeFiles/ssl.dir
+/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/debug/x86_64/CMakeFiles/lzo.dir

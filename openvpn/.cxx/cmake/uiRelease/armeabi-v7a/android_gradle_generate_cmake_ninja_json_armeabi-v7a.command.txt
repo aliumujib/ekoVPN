@@ -1,0 +1,14 @@
+Executable : /Users/aliumujib/Library/Android/sdk/cmake/3.6.4111459/bin/cmake
+arguments : 
+-H/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/src/main/cpp
+-B/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/uiRelease/armeabi-v7a
+-DANDROID_ABI=armeabi-v7a
+-DANDROID_PLATFORM=android-16
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/build/intermediates/cmake/uiRelease/obj/armeabi-v7a
+-DCMAKE_BUILD_TYPE=Release
+-DANDROID_NDK=/Users/aliumujib/Library/Android/sdk/ndk/21.0.6113669
+-DCMAKE_TOOLCHAIN_FILE=/Users/aliumujib/Library/Android/sdk/ndk/21.0.6113669/build/cmake/android.toolchain.cmake
+-DCMAKE_MAKE_PROGRAM=/Users/aliumujib/Library/Android/sdk/cmake/3.6.4111459/bin/ninja
+-GAndroid Gradle - Ninja
+jvmArgs : 
+
