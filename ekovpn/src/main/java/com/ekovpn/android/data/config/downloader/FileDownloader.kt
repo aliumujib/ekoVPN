@@ -14,6 +14,7 @@ import com.liulishuo.okdownload.DownloadTask
 import com.liulishuo.okdownload.core.cause.EndCause
 import com.liulishuo.okdownload.core.listener.DownloadListener2
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
@@ -24,6 +25,7 @@ import java.lang.Exception
 import javax.inject.Inject
 
 
+@ExperimentalCoroutinesApi
 class FileDownloader @Inject constructor(private val context: Context) {
 
     private fun getRootDirPath(context: Context): String {

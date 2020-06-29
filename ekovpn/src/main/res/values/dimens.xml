@@ -7,4 +7,5 @@
 <resources>
     <dimen name="two_spaces">16dp</dimen>
     <dimen name="four_spaces">36dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

@@ -1,2 +1,1 @@
-[1/2] Building C object CMakeFiles/libovpnexec.so.dir/minivpn/minivpn.c.o
-[2/2] Linking C executable libovpnexec.so
+[1/1] Linking C executable libovpnexec.so

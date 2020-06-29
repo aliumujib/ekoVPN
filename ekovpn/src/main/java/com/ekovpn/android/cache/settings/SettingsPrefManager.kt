@@ -7,6 +7,7 @@ package com.ekovpn.android.cache.settings
 
 import android.content.Context
 import com.ekovpn.android.cache.core.CoreSharedPrefManager
+import com.ekovpn.android.data.config.model.Protocol
 import javax.inject.Inject
 
 class SettingsPrefManager @Inject constructor(val context: Context) : CoreSharedPrefManager(context) {
@@ -19,8 +20,17 @@ class SettingsPrefManager @Inject constructor(val context: Context) : CoreShared
         return getPref(HAS_COMPLETED_SETUP, false)
     }
 
+    fun getLastSelectedProtocol(): Protocol {
+        return Protocol.fromString(getPref(LAST_SELECTED_PROTOCOL, Protocol.TCP.value))
+    }
+
+    fun setLastSelectedProtocol(protocol: Protocol) {
+        savePref(LAST_SELECTED_PROTOCOL, protocol.value)
+    }
+
     companion object {
         const val HAS_COMPLETED_SETUP = "HAS_COMPLETED_SETUP"
+        const val LAST_SELECTED_PROTOCOL = "LAST_SELECTED_PROTOCOL"
     }
 
 }

@@ -20,8 +20,8 @@ import androidx.annotation.VisibleForTesting.PRIVATE
 import com.ekovpn.android.data.config.repository.ConfigRepository
 import com.ekovpn.android.di.scopes.ActivityScope
 import com.ekovpn.android.utils.ext.viewModel
-import com.ekovpn.android.view.SplashActivity
-import com.ekovpn.android.view.SplashViewModel
+import com.ekovpn.android.view.splash.SplashActivity
+import com.ekovpn.android.view.splash.SplashViewModel
 import dagger.Module
 import dagger.Provides
 

@@ -1,0 +1,22 @@
+/*
+ * Copyright (c) 2012-2020 Abdul-Mujeeb Aliu for ekoVPN
+ * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
+ */
+
+package com.ekovpn.android.data.settings
+
+import com.ekovpn.android.cache.settings.SettingsPrefManager
+import com.ekovpn.android.data.config.model.Protocol
+import javax.inject.Inject
+
+class SettingsRepositoryImpl @Inject constructor(private val settingsPrefManager: SettingsPrefManager) : SettingsRepository {
+
+    override fun setSelectedProtocol(protocol: Protocol) {
+        settingsPrefManager.setLastSelectedProtocol(protocol)
+    }
+
+    override fun getSelectedProtocol(): Protocol {
+        return settingsPrefManager.getLastSelectedProtocol()
+    }
+
+}

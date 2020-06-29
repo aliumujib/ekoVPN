@@ -18,6 +18,8 @@ package com.ekovpn.android.di.modules
 import android.content.Context
 import com.ekovpn.android.data.config.repository.ConfigRepository
 import com.ekovpn.android.data.config.repository.ConfigRepositoryImpl
+import com.ekovpn.android.data.settings.SettingsRepository
+import com.ekovpn.android.data.settings.SettingsRepositoryImpl
 import com.ekovpn.android.di.scopes.AppScope
 import dagger.Module
 import dagger.Provides
@@ -33,6 +35,14 @@ class DataModule {
     fun providesConfigRepository(configRepositoryImpl: ConfigRepositoryImpl): ConfigRepository {
         return configRepositoryImpl
     }
+
+
+    @Singleton
+    @Provides
+    fun providesSettingsRepository(settingsRepositoryImpl: SettingsRepositoryImpl): SettingsRepository {
+        return settingsRepositoryImpl
+    }
+
 
     @Singleton
     @Provides

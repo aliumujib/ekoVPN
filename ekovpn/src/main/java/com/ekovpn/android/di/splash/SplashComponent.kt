@@ -18,7 +18,7 @@ package com.ekovpn.android.di.splash
 
 import com.ekovpn.android.di.components.CoreComponent
 import com.ekovpn.android.di.scopes.ActivityScope
-import com.ekovpn.android.view.SplashActivity
+import com.ekovpn.android.view.splash.SplashActivity
 import dagger.Component
 
 /**
