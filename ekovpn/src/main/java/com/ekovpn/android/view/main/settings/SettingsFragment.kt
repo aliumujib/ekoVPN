@@ -5,18 +5,25 @@
 
 package com.ekovpn.android.view.main.settings
 
+import android.content.ActivityNotFoundException
+import android.content.ClipDescription
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioGroup
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.ekovpn.android.BuildConfig
 import com.ekovpn.android.R
 import com.ekovpn.android.data.config.model.Protocol
 import com.ekovpn.android.di.main.settings.DaggerSettingsComponent
 import com.ekovpn.android.di.main.settings.SettingsModule
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
+import com.ekovpn.android.view.main.webview.WebViewDialog
 import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
@@ -70,6 +77,93 @@ class SettingsFragment : Fragment() {
                     viewModel.selectProtocol(Protocol.WIREGUARD)
                 }
             }
+        }
+
+        star_ratings.children.forEach {
+            it.setOnClickListener {
+                openPlayStore()
+            }
+        }
+
+        twitter.children.forEach {
+            it.setOnClickListener {
+                openTwitter()
+            }
+        }
+
+        youtube.children.forEach {
+            it.setOnClickListener {
+                openYoutube()
+            }
+        }
+
+        instagram.children.forEach {
+            it.setOnClickListener {
+                openInstagram()
+            }
+        }
+
+        contact_support.setOnClickListener {
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.type = ClipDescription.MIMETYPE_TEXT_PLAIN
+            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("support@ekovpn.com"))
+            intent.putExtra(Intent.EXTRA_SUBJECT,"HELP WITH")
+            startActivity(Intent.createChooser(intent,"Send Email"))
+        }
+
+        privacy.setOnClickListener {
+            WebViewDialog.display(childFragmentManager, "https://www.ekovpn.com/", null)
+        }
+
+        help.setOnClickListener {
+            WebViewDialog.display(childFragmentManager, "https://www.ekovpn.com/", null)
+        }
+
+        app_version.text = resources.getString(R.string.app_version, BuildConfig.VERSION_NAME)
+
+    }
+
+    private fun openInstagram() {
+        val uri = Uri.parse("http://instagram.com/_u/ekoVPN")
+        val likeIng = Intent(Intent.ACTION_VIEW, uri)
+        likeIng.setPackage("com.instagram.android")
+        try {
+            startActivity(likeIng)
+        } catch (e: ActivityNotFoundException) {
+            startActivity(Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://instagram.com/ekoVPN")))
+        }
+    }
+
+    private fun openYoutube() {
+        val intentApp = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:NcaiHcBvDR4"))
+        val intentBrowser = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=NcaiHcBvDR4"))
+        try {
+            this.startActivity(intentApp)
+        } catch (ex: ActivityNotFoundException) {
+            this.startActivity(intentBrowser)
+        }
+    }
+
+    private fun openTwitter() {
+        var intent: Intent
+        try {
+            // get the Twitter app if possible
+            requireActivity().packageManager.getPackageInfo("com.twitter.android", 0)
+            intent = Intent(Intent.ACTION_VIEW, Uri.parse("twitter://user?user_id=ekovpn"))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        } catch (e: Exception) {
+            intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/ekovpn"))
+        }
+        this.startActivity(intent)
+    }
+
+    private fun openPlayStore() {
+        val appPackageName: String = requireActivity().packageName
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
+        } catch (anfe: ActivityNotFoundException) {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")))
         }
     }
 

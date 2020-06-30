@@ -196,17 +196,17 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/one_space"
+                    android:layout_marginTop="@dimen/two_spaces"
                     android:orientation="horizontal">
 
                     <LinearLayout
+                        android:id="@+id/twitter"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:orientation="vertical">
 
                         <ImageView
-                            android:id="@+id/twitter"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_gravity="center"
@@ -216,21 +216,20 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="@string/twitter"
                             android:layout_marginTop="@dimen/half_space"
+                            android:text="@string/twitter"
                             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                            android:textColor="@color/black"
-                            />
+                            android:textColor="@color/black" />
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/youtube"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical">
 
                         <ImageView
-                            android:id="@+id/youtube"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_gravity="center"
@@ -240,34 +239,34 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/half_space"
                             android:text="@string/youtube"
                             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                            android:textColor="@color/black"
-                            android:layout_marginTop="@dimen/half_space" />
+                            android:textColor="@color/black" />
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/instagram"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical">
 
                         <ImageView
-                            android:id="@+id/instagram"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:scaleType="centerCrop"
                             android:layout_gravity="center"
+                            android:scaleType="centerCrop"
                             android:src="@drawable/instagram" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/half_space"
                             android:text="@string/instagram"
                             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                            android:textColor="@color/black"
-                            android:layout_marginTop="@dimen/half_space" />
+                            android:textColor="@color/black" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -275,6 +274,74 @@
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/contact_support"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/two_spaces"
+            android:src="@drawable/contact_support"
+            android:text="@string/contact_support"
+            android:textColor="@color/white"
+            app:icon="@drawable/contact_support"
+            app:iconTint="@color/white"
+            app:layout_constraintEnd_toEndOf="@+id/social"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="@id/social"
+            app:layout_constraintTop_toBottomOf="@+id/social" />
+
+
+        <View
+            android:id="@+id/divider"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/two_spaces"
+            android:alpha="0.5"
+            android:background="@color/white"
+            app:layout_constraintEnd_toEndOf="@id/social"
+            app:layout_constraintStart_toStartOf="@+id/social"
+            app:layout_constraintTop_toBottomOf="@id/contact_support" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/privacy"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/two_spaces"
+            android:text="@string/privacy_policy"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="@+id/divider"
+            app:layout_constraintTop_toBottomOf="@id/divider" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/help"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="@string/help"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@+id/divider"
+            app:layout_constraintTop_toTopOf="@id/privacy" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/app_name"
+            android:id="@+id/app_version"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/privacy"
+            app:layout_constraintEnd_toEndOf="@+id/help"
+            app:layout_constraintTop_toBottomOf="@+id/privacy" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

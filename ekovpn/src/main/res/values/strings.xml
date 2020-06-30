@@ -26,4 +26,9 @@
     <string name="twitter">Twitter</string>
     <string name="youtube">Youtube</string>
     <string name="instagram">Instagram</string>
+    <string name="contact_support">Contact Support</string>
+    <string name="help">Help</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="app_version">App version %1$s</string>
+
 </resources>

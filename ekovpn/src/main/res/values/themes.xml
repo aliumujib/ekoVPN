@@ -21,6 +21,25 @@
     </style>
 
 
+    <style name="Theme.IcsopenvpnNoActionBar.FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="colorPrimary">@color/eko_red_light</item>
+        <item name="colorPrimaryVariant">@color/eko_red</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorAccent">@color/eko_red_light</item> <!-- Whatever color you want-->
+        <item name="colorSecondary">@color/white</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@android:color/white</item>
+    </style>
+
+    <style name="Theme.IcsopenvpnNoActionBar.Slide">
+        <item name="android:windowEnterAnimation">@anim/slide_in_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_down</item>
+    </style>
 
     <!-- Base application theme. -->
     <style name="Theme.IcsopenvpnNoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
