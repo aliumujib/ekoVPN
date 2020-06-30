@@ -8,4 +8,7 @@
     <dimen name="two_spaces">16dp</dimen>
     <dimen name="four_spaces">36dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="one_space">8dp</dimen>
+    <dimen name="half_space">4dp</dimen>
+    <dimen name="text_headline">16sp</dimen>
 </resources>

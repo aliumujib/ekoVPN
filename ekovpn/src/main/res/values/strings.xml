@@ -9,11 +9,21 @@
     <string name="an_error_occured">An error occured during set up</string>
     <string name="title_activity_vpn">VpnActivity</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="home_fragment_label">Home Fragment</string>
-    <string name="settings_fragment_label">Settings Fragment</string>
+    <string name="home_fragment_label">Home</string>
+    <string name="settings_fragment_label">Settings</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="select_connection_type">Select Connection Type</string>
+    <string name="TCP">TCP (OPENVPN)</string>
+    <string name="UDP">UDP (OPEN VPN)</string>
+    <string name="IkeV2">IkeV2</string>
+    <string name="wireguard">Wireguard</string>
+    <string name="rate_our_app">Rate our App</string>
+    <string name="lets_go_social">Lets go social</string>
+    <string name="twitter">Twitter</string>
+    <string name="youtube">Youtube</string>
+    <string name="instagram">Instagram</string>
 </resources>
