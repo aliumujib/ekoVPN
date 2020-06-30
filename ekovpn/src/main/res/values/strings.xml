@@ -30,5 +30,10 @@
     <string name="help">Help</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="app_version">App version %1$s</string>
+    <string name="connection_status_">Status: %1$s</string>
+    <string name="selected_location">Selected Location:</string>
+    <string name="current_location">Current Location:</string>
+    <string name="usa_new_york">USA - New York</string>
+    <string name="select_location">Select Location</string>
 
 </resources>
