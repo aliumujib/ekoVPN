@@ -40,9 +40,7 @@ class SplashModule(
 
     @ActivityScope
     @Provides
-    fun providesViewModel(
-            configRepository: ConfigRepository
-    ) = activity.viewModel {
+    fun providesViewModel(configRepository: ConfigRepository) = activity.viewModel {
         SplashViewModel(
                 configRepository
         )

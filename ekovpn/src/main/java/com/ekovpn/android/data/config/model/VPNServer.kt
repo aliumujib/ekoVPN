@@ -7,11 +7,13 @@ package com.ekovpn.android.data.config.model
 
 import de.blinkt.openvpn.VpnProfile
 
-data class Profile(
-        val vpnProfile: VpnProfile,
-        val location: Location,
-        val protocol: Protocol
-)
+sealed class VPNServer(
+        val location_: Location,
+        val protocol_: Protocol
+) {
+    data class OVPNServer(val openVpnProfile: VpnProfile, val location: Location, val protocol: Protocol) : VPNServer(location, protocol)
+}
+
 
 enum class Protocol(val value: String) {
     TCP("TCP"),
@@ -22,6 +24,7 @@ enum class Protocol(val value: String) {
     companion object {
         @JvmStatic
         fun fromString(protocol: String): Protocol =
-                values().find { value -> value.value.toLowerCase() == protocol.toLowerCase() } ?: TCP
+                values().find { value -> value.value.toLowerCase() == protocol.toLowerCase() }
+                        ?: TCP
     }
 }

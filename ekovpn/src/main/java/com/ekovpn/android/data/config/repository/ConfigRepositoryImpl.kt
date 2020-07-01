@@ -11,15 +11,14 @@ import androidx.core.net.toUri
 import com.ekovpn.android.cache.settings.SettingsPrefManager
 import com.ekovpn.android.data.config.downloader.FileDownloader
 import com.ekovpn.android.data.config.importer.OVPNProfileImporter
-import com.ekovpn.android.data.config.model.Profile
+import com.ekovpn.android.data.config.model.VPNServer
 import com.ekovpn.android.data.config.model.Protocol
 import com.ekovpn.android.data.config.model.ServerConfig
+import com.ekovpn.android.data.config.model.ServerSetUp
 import com.google.gson.Gson
-import de.blinkt.openvpn.VpnProfile
 import de.blinkt.openvpn.core.ProfileManager
 import kotlinx.coroutines.flow.*
 import java.io.File
-import java.util.*
 import javax.inject.Inject
 
 
@@ -44,25 +43,37 @@ class ConfigRepositoryImpl @Inject constructor(private val context: Context,
         serverConfig.forEach {
             Log.d(ConfigRepositoryImpl::class.java.simpleName, it.location.toString())
         }
-        val listOfFlows: List<Flow<Result<ServerConfig>>> = serverConfig.map {
-            fileDownloader.downloadConfigFile(it)
+
+        serverConfig.sortBy { it.location.city }
+        val ovpnConfigs: MutableList<Flow<Result<ServerSetUp>>> = mutableListOf()
+
+        serverConfig.forEach { server ->
+            server.open_vpn.forEach {
+                ovpnConfigs.add(fileDownloader.downloadConfigFile(server.location, Protocol.fromString(it.protocol), it.configfileurl))
+            }
         }
 
-        return listOfFlows.merge()
+        return ovpnConfigs.merge()
                 .takeWhile {
-                    !it.getOrNull()?.location?.city.equals("END", true)
+                    !it.getOrNull()?.location_?.city.equals("ZZ", true)
+                }.filterNot {
+                    it.getOrNull()?.location_?.city.equals("ZZ", true)
                 }
                 .flatMapConcat {
                     if (it.isSuccess) {
-                        configureProfileForServer(it.getOrNull()!!)
+                        Log.d(ConfigRepositoryImpl::class.java.simpleName, "Configuring: ${it.getOrNull()}")
+                        configureOVPNProfileForServer(it.getOrNull() as ServerSetUp.OVPNSetup)
                     } else {
+                        Log.d(ConfigRepositoryImpl::class.java.simpleName, "Failed to configure: ${it.getOrNull()}")
                         flowOf(Result.failure(Exception("An error occurred for config ${it.getOrNull()}")))
                     }
                 }.map { profile ->
-                    if (profile.getOrNull() is Profile) {
-                        userActionSaveProfile(profile.getOrNull() as Profile)
+                    if (profile.getOrNull() is VPNServer) {
+                        Log.d(ConfigRepositoryImpl::class.java.simpleName, "Saving: ${profile.getOrNull()}")
+                        userActionSaveProfile(profile.getOrNull() as VPNServer.OVPNServer)
                         Result.success(Unit)
                     } else {
+                        Log.d(ConfigRepositoryImpl::class.java.simpleName, "Failed Saving: ${profile.getOrNull()}")
                         Result.failure(Exception("An error occurred for config"))
                     }
                 }.onCompletion {
@@ -70,20 +81,23 @@ class ConfigRepositoryImpl @Inject constructor(private val context: Context,
                 }
     }
 
-    private fun userActionSaveProfile(result: Profile) {
-        val profile = result.vpnProfile
+    private fun userActionSaveProfile(result: VPNServer.OVPNServer) {
+        val profile = result.openVpnProfile
         profile.mName = "${result.location.city}-${result.location.country}-${result.protocol.value}"
         profileManager.addProfile(profile)
         profileManager.saveProfile(context, profile)
         profileManager.saveProfileList(context)
+        Log.d(ConfigRepositoryImpl::class.java.simpleName, "Saved: $result")
     }
 
-    private fun configureProfileForServer(serverConfig: ServerConfig): Flow<Result<Profile>> {
-        return profileImporter.importServerConfig("file://${serverConfig.configfileurl}".toUri()).map {
+    private fun configureOVPNProfileForServer(serverSetUp: ServerSetUp.OVPNSetup): Flow<Result<VPNServer>> {
+        return profileImporter.importServerConfig("file://${serverSetUp.ovpnFileDir}".toUri()).map {
             if (it.isSuccess) {
-                File(serverConfig.configfileurl).delete()
-                Result.success(Profile(it.getOrNull()!!, serverConfig.location, Protocol.fromString(serverConfig.protocol)))
+                Log.d(ConfigRepositoryImpl::class.java.simpleName, "Importing: ${it.getOrNull()}")
+                File(serverSetUp.ovpnFileDir).delete()
+                Result.success(VPNServer.OVPNServer(it.getOrNull()!!, serverSetUp.location, serverSetUp.protocol))
             } else {
+                Log.d(ConfigRepositoryImpl::class.java.simpleName, "Failed Importing: ${it.getOrNull()}")
                 Result.failure(it.exceptionOrNull() ?: Exception("An error occurred"))
             }
         }

@@ -9,7 +9,10 @@ import android.content.Context
 import android.os.Environment
 import android.util.Log
 import androidx.core.content.ContextCompat
+import com.ekovpn.android.data.config.model.Location
+import com.ekovpn.android.data.config.model.Protocol
 import com.ekovpn.android.data.config.model.ServerConfig
+import com.ekovpn.android.data.config.model.ServerSetUp
 import com.liulishuo.okdownload.DownloadTask
 import com.liulishuo.okdownload.core.cause.EndCause
 import com.liulishuo.okdownload.core.listener.DownloadListener2
@@ -37,10 +40,10 @@ class FileDownloader @Inject constructor(private val context: Context) {
         }
     }
 
-    fun downloadConfigFile(serverConfig: ServerConfig): Flow<Result<ServerConfig>> {
-        val fileName = "${serverConfig.location.city}_${serverConfig.location.country}_${serverConfig.protocol}.ovpn"
-        val channel = ConflatedBroadcastChannel<Result<ServerConfig>>()
-        val task = DownloadTask.Builder(serverConfig.configfileurl, File(getRootDirPath(context)))
+    fun downloadConfigFile(location: Location, protocol: Protocol, configFileURL: String): Flow<Result<ServerSetUp>> {
+        val fileName = "${location.city}_${location.country}_${protocol.value}.ovpn"
+        val channel = ConflatedBroadcastChannel<Result<ServerSetUp>>()
+        val task = DownloadTask.Builder(configFileURL, File(getRootDirPath(context)))
                 .setFilename(fileName)
                 .setMinIntervalMillisCallbackProcess(30)
                 .setPassIfAlreadyCompleted(false)
@@ -54,13 +57,14 @@ class FileDownloader @Inject constructor(private val context: Context) {
             override fun taskEnd(task: DownloadTask, cause: EndCause, realCause: Exception?) {
                 GlobalScope.launch(Dispatchers.IO) {
                     if (cause == EndCause.COMPLETED) {
-                        Log.d(FileDownloader::class.java.simpleName, "SUCCESS: ${task.file?.absolutePath}")
-                        val result = serverConfig.copy(configfileurl = task.file!!.path)
+                        Log.d(FileDownloader::class.java.simpleName, "Downloaded: ${task.file?.absolutePath}")
+                        val result = ServerSetUp.OVPNSetup(task.file?.absolutePath!!, location = location, protocol = protocol)
                         channel.send(Result.success(result))
                     } else {
                         realCause?.printStackTrace()
                         Log.d(FileDownloader::class.java.simpleName, realCause?.localizedMessage, realCause)
-                        channel.send(Result.failure(FileDownloaderException(realCause?.localizedMessage ?: "An error occurred")))
+                        channel.send(Result.failure(FileDownloaderException(realCause?.localizedMessage
+                                ?: "An error occurred")))
                     }
                 }
             }
