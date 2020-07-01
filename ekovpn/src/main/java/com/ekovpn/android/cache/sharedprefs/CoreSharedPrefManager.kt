@@ -3,7 +3,7 @@
  * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
  */
 
-package com.ekovpn.android.cache.core
+package com.ekovpn.android.cache.sharedprefs
 
 import android.content.Context
 import android.content.SharedPreferences

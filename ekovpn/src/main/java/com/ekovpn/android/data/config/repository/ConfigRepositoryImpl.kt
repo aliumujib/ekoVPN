@@ -8,13 +8,18 @@ package com.ekovpn.android.data.config.repository
 import android.content.Context
 import android.util.Log
 import androidx.core.net.toUri
+import com.ekovpn.android.cache.room.dao.LocationsDao
+import com.ekovpn.android.cache.room.dao.ServersDao
+import com.ekovpn.android.cache.room.entities.LocationCacheModel
+import com.ekovpn.android.cache.room.entities.ServerCacheModel
 import com.ekovpn.android.cache.settings.SettingsPrefManager
 import com.ekovpn.android.data.config.downloader.FileDownloader
 import com.ekovpn.android.data.config.importer.OVPNProfileImporter
-import com.ekovpn.android.data.config.model.VPNServer
-import com.ekovpn.android.data.config.model.Protocol
-import com.ekovpn.android.data.config.model.ServerConfig
-import com.ekovpn.android.data.config.model.ServerSetUp
+import com.ekovpn.android.data.config.VPNServer
+import com.ekovpn.android.data.config.ServerConfig
+import com.ekovpn.android.data.config.ServerLocation
+import com.ekovpn.android.data.config.ServerSetUp
+import com.ekovpn.android.models.Protocol
 import com.google.gson.Gson
 import de.blinkt.openvpn.core.ProfileManager
 import kotlinx.coroutines.flow.*
@@ -23,6 +28,8 @@ import javax.inject.Inject
 
 
 class ConfigRepositoryImpl @Inject constructor(private val context: Context,
+                                               private val locationsDao: LocationsDao,
+                                               private val serversDao: ServersDao,
                                                private val fileDownloader: FileDownloader,
                                                private val profileManager: ProfileManager,
                                                private val profileImporter: OVPNProfileImporter,
@@ -41,23 +48,33 @@ class ConfigRepositoryImpl @Inject constructor(private val context: Context,
         val gson = Gson()
         val serverConfig = gson.fromJson(data, Array<ServerConfig>::class.java)
         serverConfig.forEach {
-            Log.d(ConfigRepositoryImpl::class.java.simpleName, it.location.toString())
+            Log.d(ConfigRepositoryImpl::class.java.simpleName, it.serverLocation.toString())
         }
 
-        serverConfig.sortBy { it.location.city }
+        val setOfLocations = mutableSetOf<ServerLocation>()
+
+        serverConfig.sortBy { it.serverLocation.city }
         val ovpnConfigs: MutableList<Flow<Result<ServerSetUp>>> = mutableListOf()
 
         serverConfig.forEach { server ->
             server.open_vpn.forEach {
-                ovpnConfigs.add(fileDownloader.downloadConfigFile(server.location, Protocol.fromString(it.protocol), it.configfileurl))
+                setOfLocations.add(server.serverLocation)
+                ovpnConfigs.add(fileDownloader.downloadConfigFile(server.serverLocation, Protocol.fromString(it.protocol), it.configfileurl))
             }
         }
 
+        val listOfCachedLocations = setOfLocations.map {
+            ServerLocation.toLocationCacheModel(it)
+        }.toList()
+
         return ovpnConfigs.merge()
+                .onStart {
+                    locationsDao.insert(listOfCachedLocations)
+                }
                 .takeWhile {
-                    !it.getOrNull()?.location_?.city.equals("ZZ", true)
+                    !it.getOrNull()?.serverLocation_?.city.equals("ZZ", true)
                 }.filterNot {
-                    it.getOrNull()?.location_?.city.equals("ZZ", true)
+                    it.getOrNull()?.serverLocation_?.city.equals("ZZ", true)
                 }
                 .flatMapConcat {
                     if (it.isSuccess) {
@@ -81,12 +98,19 @@ class ConfigRepositoryImpl @Inject constructor(private val context: Context,
                 }
     }
 
-    private fun userActionSaveProfile(result: VPNServer.OVPNServer) {
+    private suspend fun userActionSaveProfile(result: VPNServer.OVPNServer) {
         val profile = result.openVpnProfile
-        profile.mName = "${result.location.city}-${result.location.country}-${result.protocol.value}"
+        profile.mName = "${result.serverLocation.city}-${result.serverLocation.country}-${result.protocol.value}"
         profileManager.addProfile(profile)
         profileManager.saveProfile(context, profile)
         profileManager.saveProfileList(context)
+
+        val location = locationsDao.getLocation(result.serverLocation.country, result.serverLocation.city)
+        location?.let {
+            val serCacheModel = VPNServer.OVPNServer.toServerCacheModel(location, result.protocol, profile.uuidString)
+            serversDao.insert(serCacheModel)
+        }
+
         Log.d(ConfigRepositoryImpl::class.java.simpleName, "Saved: $result")
     }
 
@@ -95,7 +119,7 @@ class ConfigRepositoryImpl @Inject constructor(private val context: Context,
             if (it.isSuccess) {
                 Log.d(ConfigRepositoryImpl::class.java.simpleName, "Importing: ${it.getOrNull()}")
                 File(serverSetUp.ovpnFileDir).delete()
-                Result.success(VPNServer.OVPNServer(it.getOrNull()!!, serverSetUp.location, serverSetUp.protocol))
+                Result.success(VPNServer.OVPNServer(it.getOrNull()!!, serverSetUp.serverLocation, serverSetUp.protocol))
             } else {
                 Log.d(ConfigRepositoryImpl::class.java.simpleName, "Failed Importing: ${it.getOrNull()}")
                 Result.failure(it.exceptionOrNull() ?: Exception("An error occurred"))

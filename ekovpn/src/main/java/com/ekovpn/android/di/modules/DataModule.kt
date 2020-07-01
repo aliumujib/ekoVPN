@@ -18,14 +18,14 @@ package com.ekovpn.android.di.modules
 import android.content.Context
 import com.ekovpn.android.data.config.repository.ConfigRepository
 import com.ekovpn.android.data.config.repository.ConfigRepositoryImpl
+import com.ekovpn.android.data.servers.ServersRepository
+import com.ekovpn.android.data.servers.ServersRepositoryImpl
 import com.ekovpn.android.data.settings.SettingsRepository
 import com.ekovpn.android.data.settings.SettingsRepositoryImpl
-import com.ekovpn.android.di.scopes.AppScope
 import dagger.Module
 import dagger.Provides
 import de.blinkt.openvpn.core.ProfileManager
 import javax.inject.Singleton
-
 
 @Module
 class DataModule {
@@ -36,13 +36,17 @@ class DataModule {
         return configRepositoryImpl
     }
 
+    @Singleton
+    @Provides
+    fun providesServersRepository(serversRepositoryImpl: ServersRepositoryImpl): ServersRepository {
+        return serversRepositoryImpl
+    }
 
     @Singleton
     @Provides
     fun providesSettingsRepository(settingsRepositoryImpl: SettingsRepositoryImpl): SettingsRepository {
         return settingsRepositoryImpl
     }
-
 
     @Singleton
     @Provides

@@ -5,7 +5,7 @@
 
 package com.ekovpn.android.data.settings
 
-import com.ekovpn.android.data.config.model.Protocol
+import com.ekovpn.android.models.Protocol
 
 interface SettingsRepository {
 

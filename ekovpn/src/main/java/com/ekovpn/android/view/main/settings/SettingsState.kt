@@ -5,7 +5,7 @@
 
 package com.ekovpn.android.view.main.settings
 
-import com.ekovpn.android.data.config.model.Protocol
+import com.ekovpn.android.models.Protocol
 
 
 sealed class SettingsState(

@@ -6,7 +6,7 @@
 package com.ekovpn.android.data.settings
 
 import com.ekovpn.android.cache.settings.SettingsPrefManager
-import com.ekovpn.android.data.config.model.Protocol
+import com.ekovpn.android.models.Protocol
 import javax.inject.Inject
 
 class SettingsRepositoryImpl @Inject constructor(private val settingsPrefManager: SettingsPrefManager) : SettingsRepository {

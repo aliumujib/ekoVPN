@@ -9,10 +9,9 @@ import android.content.Context
 import android.os.Environment
 import android.util.Log
 import androidx.core.content.ContextCompat
-import com.ekovpn.android.data.config.model.Location
-import com.ekovpn.android.data.config.model.Protocol
-import com.ekovpn.android.data.config.model.ServerConfig
-import com.ekovpn.android.data.config.model.ServerSetUp
+import com.ekovpn.android.data.config.ServerLocation
+import com.ekovpn.android.data.config.ServerSetUp
+import com.ekovpn.android.models.Protocol
 import com.liulishuo.okdownload.DownloadTask
 import com.liulishuo.okdownload.core.cause.EndCause
 import com.liulishuo.okdownload.core.listener.DownloadListener2
@@ -40,8 +39,8 @@ class FileDownloader @Inject constructor(private val context: Context) {
         }
     }
 
-    fun downloadConfigFile(location: Location, protocol: Protocol, configFileURL: String): Flow<Result<ServerSetUp>> {
-        val fileName = "${location.city}_${location.country}_${protocol.value}.ovpn"
+    fun downloadConfigFile(serverLocation: ServerLocation, protocol: Protocol, configFileURL: String): Flow<Result<ServerSetUp>> {
+        val fileName = "${serverLocation.city}_${serverLocation.country}_${protocol.value}.ovpn"
         val channel = ConflatedBroadcastChannel<Result<ServerSetUp>>()
         val task = DownloadTask.Builder(configFileURL, File(getRootDirPath(context)))
                 .setFilename(fileName)
@@ -58,7 +57,7 @@ class FileDownloader @Inject constructor(private val context: Context) {
                 GlobalScope.launch(Dispatchers.IO) {
                     if (cause == EndCause.COMPLETED) {
                         Log.d(FileDownloader::class.java.simpleName, "Downloaded: ${task.file?.absolutePath}")
-                        val result = ServerSetUp.OVPNSetup(task.file?.absolutePath!!, location = location, protocol = protocol)
+                        val result = ServerSetUp.OVPNSetup(task.file?.absolutePath!!, serverLocation = serverLocation, protocol = protocol)
                         channel.send(Result.success(result))
                     } else {
                         realCause?.printStackTrace()

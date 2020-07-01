@@ -17,6 +17,7 @@ package com.ekovpn.android.di.main
 
 
 import android.content.Context
+import com.ekovpn.android.data.servers.ServersRepository
 import com.ekovpn.android.data.settings.SettingsRepository
 import com.ekovpn.android.di.components.CoreComponent
 import com.ekovpn.android.di.scopes.ActivityScope
@@ -38,6 +39,8 @@ interface VPNComponent {
     fun context(): Context
 
     fun settingsRepository(): SettingsRepository
+
+    fun serversRepository(): ServersRepository
 
     fun inject(vpnActivity: VpnActivity)
 

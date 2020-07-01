@@ -6,8 +6,8 @@
 package com.ekovpn.android.cache.settings
 
 import android.content.Context
-import com.ekovpn.android.cache.core.CoreSharedPrefManager
-import com.ekovpn.android.data.config.model.Protocol
+import com.ekovpn.android.cache.sharedprefs.CoreSharedPrefManager
+import com.ekovpn.android.models.Protocol
 import javax.inject.Inject
 
 class SettingsPrefManager @Inject constructor(val context: Context) : CoreSharedPrefManager(context) {

@@ -15,12 +15,40 @@
  */
 package com.ekovpn.android.di.modules
 
+import android.content.Context
+import androidx.room.Room
+import com.ekovpn.android.cache.room.DBClass
+import com.ekovpn.android.cache.room.dao.LocationsDao
+import com.ekovpn.android.cache.room.dao.ServersDao
 import dagger.Module
+import dagger.Provides
+import javax.inject.Singleton
 
 
 @Module
 class CacheModule {
 
+    @Singleton
+    @Provides
+    fun providesLocationsDao(dBClass: DBClass): LocationsDao {
+        return dBClass.locationsDao()
+    }
+
+    @Singleton
+    @Provides
+    fun providesServersDao(dBClass: DBClass): ServersDao {
+        return dBClass.serversDao()
+    }
+
+
+    @Singleton
+    @Provides
+    fun providesDB(context: Context): DBClass {
+        return Room.databaseBuilder(
+                context.applicationContext,
+                DBClass::class.java, "eko_vpn_database"
+        ).fallbackToDestructiveMigration().build()
+    }
 
 
 }

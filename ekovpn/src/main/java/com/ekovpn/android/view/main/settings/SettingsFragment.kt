@@ -19,7 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.ekovpn.android.BuildConfig
 import com.ekovpn.android.R
-import com.ekovpn.android.data.config.model.Protocol
+import com.ekovpn.android.models.Protocol
 import com.ekovpn.android.di.main.settings.DaggerSettingsComponent
 import com.ekovpn.android.di.main.settings.SettingsModule
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
