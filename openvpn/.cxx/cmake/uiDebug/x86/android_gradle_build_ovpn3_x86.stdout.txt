@@ -1,7 +1,1 @@
-[1/1] Re-running CMake...
--- Configuring done
--- Generating done
--- Build files have been written to: /Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/uiDebug/x86
-[1/3] Building CXX object CMakeFiles/ovpn3.dir/openvpn3/client/ovpncli.cpp.o
-[2/3] Building CXX object CMakeFiles/ovpn3.dir/ovpncli_wrap.cxx.o
-[3/3] Linking CXX shared library /Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/build/intermediates/cmake/uiDebug/obj/x86/libovpn3.so
+ninja: no work to do.

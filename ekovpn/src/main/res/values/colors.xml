@@ -17,5 +17,6 @@
     <color name="eko_orange">#FD694D</color>
     <color name="eko_orange_light">#FD8D44</color>
     <color name="grey">#e4e4e4</color>
+    <color name="connected_green">#3EAC04</color>
 
 </resources>

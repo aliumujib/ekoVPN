@@ -12,4 +12,8 @@ interface ServersRepository {
 
     fun getServersForCurrentProtocol(): Flow<List<Server>>
 
+    fun saveLastUsedServer(location: Int)
+
+    fun getLastUsedLocation(): Flow<Server>
+
 }

@@ -11,6 +11,10 @@ interface SettingsRepository {
 
     fun setSelectedProtocol(protocol: Protocol)
 
+    fun saveLastServerId(id: Int)
+
+    fun getLastServerId(): Int
+
     fun getSelectedProtocol(): Protocol
 
 }

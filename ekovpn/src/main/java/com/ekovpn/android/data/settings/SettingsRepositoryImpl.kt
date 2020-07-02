@@ -15,6 +15,14 @@ class SettingsRepositoryImpl @Inject constructor(private val settingsPrefManager
         settingsPrefManager.setLastSelectedProtocol(protocol)
     }
 
+    override fun saveLastServerId(id: Int) {
+        settingsPrefManager.saveLastServerId(id)
+    }
+
+    override fun getLastServerId(): Int {
+        return settingsPrefManager.getLastServerId()
+    }
+
     override fun getSelectedProtocol(): Protocol {
         return settingsPrefManager.getLastSelectedProtocol()
     }

@@ -1,1 +1,1 @@
-[1/1] Linking C executable libovpnexec.so
+ninja: no work to do.

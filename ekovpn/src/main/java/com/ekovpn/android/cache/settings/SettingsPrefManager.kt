@@ -28,9 +28,19 @@ class SettingsPrefManager @Inject constructor(val context: Context) : CoreShared
         savePref(LAST_SELECTED_PROTOCOL, protocol.value)
     }
 
+    fun saveLastServerId(id: Int) {
+        return savePref(LAST_USED_SERVER, id)
+    }
+
+    fun getLastServerId(): Int {
+        return getPref(LAST_USED_SERVER, -1)
+    }
+
+
     companion object {
         const val HAS_COMPLETED_SETUP = "HAS_COMPLETED_SETUP"
         const val LAST_SELECTED_PROTOCOL = "LAST_SELECTED_PROTOCOL"
+        const val LAST_USED_SERVER = "LAST_USED_SERVER"
     }
 
 }

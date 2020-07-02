@@ -36,7 +36,6 @@
                 android:insetBottom="0dp"
                 android:paddingTop="0dp"
                 android:paddingBottom="0dp"
-                android:text="@string/connection_status_"
                 android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
@@ -89,10 +88,9 @@
 
             <ImageView
                 android:id="@+id/selected_flag"
-                android:layout_width="20dp"
-                android:layout_height="14dp"
+                android:layout_width="30dp"
+                android:layout_height="24dp"
                 android:layout_marginTop="@dimen/half_space"
-                android:background="@color/black"
                 app:layout_constraintStart_toStartOf="@+id/selected_title"
                 app:layout_constraintTop_toBottomOf="@+id/selected_title" />
 
@@ -102,10 +100,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/one_space"
-                android:text="@string/usa_new_york"
                 android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                android:textSize="@dimen/text_small"
-                app:layout_constraintBottom_toBottomOf="@id/connect"
+                app:layout_constraintBottom_toBottomOf="@id/selected_flag"
                 app:layout_constraintStart_toEndOf="@+id/selected_flag"
                 app:layout_constraintTop_toTopOf="@+id/selected_flag" />
 
@@ -173,10 +169,10 @@
 
             <ImageView
                 android:id="@+id/country_flag"
-                android:layout_width="20dp"
-                android:layout_height="14dp"
+                android:layout_width="30dp"
+                android:visibility="invisible"
+                android:layout_height="24dp"
                 android:layout_marginTop="@dimen/two_spaces"
-                android:background="@color/black"
                 app:layout_constraintStart_toStartOf="@+id/select_location"
                 app:layout_constraintTop_toBottomOf="@+id/select_location" />
 
@@ -186,9 +182,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/one_space"
+                android:visibility="invisible"
                 android:text="@string/usa_new_york"
                 android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                android:textSize="@dimen/text_small"
                 app:layout_constraintBottom_toBottomOf="@+id/country_flag"
                 app:layout_constraintStart_toEndOf="@+id/country_flag"
                 app:layout_constraintTop_toTopOf="@+id/country_flag" />

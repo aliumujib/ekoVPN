@@ -5,12 +5,10 @@
 
 package com.ekovpn.android.view.main.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ekovpn.android.data.servers.ServersRepository
-import com.ekovpn.android.models.Protocol
-import com.ekovpn.android.data.settings.SettingsRepository
+import com.ekovpn.android.models.Server
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,16 +19,41 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 class HomeViewModel @Inject constructor(private val serversRepository: ServersRepository) : ViewModel() {
 
+    fun connectingToServer(server: Server) {
+        _state.value = state.value.copy(currentConnectionServer = server, connectionStatus = HomeState.ConnectionStatus.CONNECTING)
+    }
 
-//    private val _state = MutableStateFlow<SettingsState>(SettingsState.Init(settingsRepository.getSelectedProtocol()))
-//    val state: StateFlow<SettingsState> = _state
+    fun setDisconnected() {
+        saveLastUsedLocation()
+        _state.value = state.value.copy(connectionStatus = HomeState.ConnectionStatus.DISCONNECTED)
+    }
+
+    fun setConnected() {
+        saveLastUsedLocation()
+        _state.value = state.value.copy(connectionStatus = HomeState.ConnectionStatus.CONNECTED)
+    }
+
+    fun saveLastUsedLocation() {
+        _state.value = state.value.copy(lastUsedServer = state.value.currentConnectionServer)
+        state.value.currentConnectionServer?.let {
+            serversRepository.saveLastUsedServer(it.id_)
+        }
+    }
+
+
+    private val _state = MutableStateFlow(HomeState())
+    val state: StateFlow<HomeState> = _state
 
     init {
+
         serversRepository.getServersForCurrentProtocol()
                 .onEach {
-                    it.forEach {
-                        Log.d("AAA", it.toString())
-                    }
+                    _state.value = _state.value.copy(_serversList = it)
+                }.launchIn(viewModelScope)
+
+        serversRepository.getLastUsedLocation()
+                .onEach {
+                    _state.value = _state.value.copy(lastUsedServer = it)
                 }.launchIn(viewModelScope)
     }
 

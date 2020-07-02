@@ -12,7 +12,8 @@ sealed class Server(
         val location_: Location,
         val protocol_: Protocol) {
 
-    data class OVPNServer(val ovpnProfileId: String, val id: Int,
+    data class OVPNServer(val ovpnProfileId: String,
+                          val id: Int,
                           val location: Location,
                           val protocol: Protocol) : Server(id, location, protocol) {
         companion object {

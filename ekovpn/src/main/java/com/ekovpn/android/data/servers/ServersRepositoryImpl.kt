@@ -9,17 +9,36 @@ import com.ekovpn.android.cache.room.dao.ServersDao
 import com.ekovpn.android.data.settings.SettingsRepository
 import com.ekovpn.android.models.Server
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class ServersRepositoryImpl @Inject constructor(val serversDao: ServersDao,
-                                                val settingsRepository: SettingsRepository) : ServersRepository {
+class ServersRepositoryImpl @Inject constructor(private val serversDao: ServersDao,
+                                                private val settingsRepository: SettingsRepository) : ServersRepository {
 
     override fun getServersForCurrentProtocol(): Flow<List<Server>> {
         return serversDao.getServersForProtocol(settingsRepository.getSelectedProtocol().value).map {
-            it.map {
-                Server.OVPNServer.fromServerCacheModel(it)
+            it.map {server->
+                Server.OVPNServer.fromServerCacheModel(server)
             }
+        }
+    }
+
+    override fun saveLastUsedServer(serverId: Int) {
+        settingsRepository.saveLastServerId(serverId)
+    }
+
+    override fun getLastUsedLocation(): Flow<Server> {
+        return serversDao.getServersForProtocol(settingsRepository.getSelectedProtocol().value).map {
+            it.filter {
+                it.serverCacheModel.serverId == settingsRepository.getLastServerId()
+            }.map {
+                Server.OVPNServer.fromServerCacheModel(it)
+            }.firstOrNull()
+        }.filter {
+            it != null
+        }.map {
+            it!!
         }
     }
 

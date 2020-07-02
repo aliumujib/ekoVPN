@@ -102,7 +102,6 @@ public class VPNProfileList extends ListFragment implements OnClickListener, Vpn
         if (level == LEVEL_WAITING_FOR_USER_INPUT) {
             if (intent.getStringExtra(EXTRA_CHALLENGE_TXT) != null) {
                 PasswordDialogFragment pwInputFrag = PasswordDialogFragment.Companion.newInstance(intent, false);
-
                 pwInputFrag.show(getParentFragmentManager(), "dialog");
                 return true;
             }
@@ -112,6 +111,7 @@ public class VPNProfileList extends ListFragment implements OnClickListener, Vpn
 
     @Override
     public void setConnectedVPN(String uuid) {
+
     }
 
     private void startOrStopVPN(VpnProfile profile) {
@@ -313,12 +313,12 @@ public class VPNProfileList extends ListFragment implements OnClickListener, Vpn
         else
             sortedset = new TreeSet<>(new VpnProfileNameComparator());
 
-        if(allvpn.isEmpty()){
-            ovpnFiles.add(getFileFromAssets("assets/usa_tcp.ovpn"));
-            ovpnFiles.add(getFileFromAssets("assets/usa_udp.ovpn"));
-
-            startConfigImport(ovpnFiles.get(index));
-        }
+//        if(allvpn.isEmpty()){
+//            ovpnFiles.add(getFileFromAssets("assets/usa_tcp.ovpn"));
+//            ovpnFiles.add(getFileFromAssets("assets/usa_udp.ovpn"));
+//
+//            startConfigImport(ovpnFiles.get(index));
+//        }
         sortedset.addAll(allvpn);
         mArrayadapter.clear();
         mArrayadapter.addAll(sortedset);
@@ -557,9 +557,7 @@ public class VPNProfileList extends ListFragment implements OnClickListener, Vpn
     }
 
     private void startVPN(VpnProfile profile) {
-
         getPM().saveProfile(getActivity(), profile);
-
         Intent intent = new Intent(getActivity(), LaunchVPN.class);
         intent.putExtra(LaunchVPN.EXTRA_KEY, profile.getUUID().toString());
         intent.setAction(Intent.ACTION_MAIN);

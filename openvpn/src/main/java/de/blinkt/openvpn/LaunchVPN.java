@@ -151,7 +151,7 @@ public class LaunchVPN extends Activity {
             if (profileToConnect == null) {
                 VpnStatus.logError(R.string.shortcut_profile_notfound);
                 // show Log window to display error
-                showLogWindow();
+                //showLogWindow();
                 finish();
             } else {
                 mSelectedProfile = profileToConnect;
@@ -247,7 +247,7 @@ public class LaunchVPN extends Activity {
                     boolean showLogWindow = prefs.getBoolean("showlogwindow", true);
 
                     if (!mhideLog && showLogWindow)
-                        showLogWindow();
+                        //showLogWindow();
                     ProfileManager.updateLRU(this, mSelectedProfile);
                     VPNLaunchHelper.startOpenVpn(mSelectedProfile, getBaseContext());
                     finish();
@@ -337,7 +337,7 @@ public class LaunchVPN extends Activity {
                 // Shame on you Sony! At least one user reported that
                 // an official Sony Xperia Arc S image triggers this exception
                 VpnStatus.logError(R.string.no_vpn_support_image);
-                showLogWindow();
+                //showLogWindow();
             }
         } else {
             onActivityResult(START_VPN_PROFILE, Activity.RESULT_OK, null);
