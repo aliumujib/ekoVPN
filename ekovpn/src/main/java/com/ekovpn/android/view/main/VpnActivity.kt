@@ -8,6 +8,7 @@ package com.ekovpn.android.view.main
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.os.CountDownTimer
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -36,8 +37,9 @@ class VpnActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         injectDependencies()
         setContentView(R.layout.activity_vpn)
-        setSupportActionBar(findViewById(R.id.toolbar))
 
+
+        setSupportActionBar(findViewById(R.id.toolbar))
         val navController = findNavController(this@VpnActivity, R.id.nav_host_fragment)
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         toolbar.setupWithNavController(navController, appBarConfiguration)

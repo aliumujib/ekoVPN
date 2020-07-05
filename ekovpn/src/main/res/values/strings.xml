@@ -17,8 +17,8 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="select_connection_type">Select Connection Type</string>
-    <string name="TCP">TCP (OPENVPN)</string>
-    <string name="UDP">UDP (OPEN VPN)</string>
+    <string name="TCP">TCP (OpenVPN)</string>
+    <string name="UDP">UDP (OpenVPN)</string>
     <string name="IkeV2">IkeV2</string>
     <string name="wireguard">Wireguard</string>
     <string name="rate_our_app">Rate our App</string>
@@ -38,5 +38,7 @@
     <string name="usa_new_york">USA - New York</string>
     <string name="select_location">Select Location</string>
     <string name="select_a_location">Select Server Location</string>
+    <string name="time_left">Time left</string>
+    <string name="get_more_time">Get More Time</string>
 
 </resources>

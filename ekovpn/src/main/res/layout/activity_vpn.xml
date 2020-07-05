@@ -17,6 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:id="@+id/app_bar"
+        app:elevation="0dp"
         android:theme="@style/Theme.Icsopenvpn.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar

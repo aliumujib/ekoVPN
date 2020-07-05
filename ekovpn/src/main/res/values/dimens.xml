@@ -9,9 +9,11 @@
     <dimen name="four_spaces">36dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="one_space">8dp</dimen>
+    <dimen name="three_quarter_space">6dp</dimen>
     <dimen name="half_space">4dp</dimen>
     <dimen name="quarter_space">2dp</dimen>
     <dimen name="text_headline">16sp</dimen>
     <dimen name="text_small">11sp</dimen>
     <dimen name="one_half_space">12dp</dimen>
+    <dimen name="ripple_radius">64dp</dimen>
 </resources>

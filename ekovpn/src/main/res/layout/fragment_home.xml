@@ -29,14 +29,16 @@
                 android:id="@+id/connection_status_"
                 style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:backgroundTint="@color/grey"
                 android:insetTop="0dp"
+                app:iconGravity="end"
+                app:icon="@drawable/circle_gray"
                 android:insetRight="0dp"
                 android:insetBottom="0dp"
                 android:paddingTop="0dp"
                 android:paddingBottom="0dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -52,6 +54,8 @@
                 app:layout_constraintEnd_toStartOf="@id/connect"
                 app:layout_constraintStart_toStartOf="@+id/connection_status_"
                 app:layout_constraintTop_toBottomOf="@id/connection_status_" />
+
+
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/connect"
@@ -73,7 +77,16 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:strokeColor="@color/eko_red"
-                app:strokeWidth="@dimen/half_space" />
+                app:strokeWidth="@dimen/three_quarter_space" />
+
+
+            <ProgressBar
+                android:layout_width="90dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:id="@+id/progressBar"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_height="90dp"/>
 
             <TextView
                 android:id="@+id/selected_title"
@@ -81,8 +94,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/two_spaces"
                 android:text="@string/selected_location"
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                android:textSize="@dimen/text_small"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                 app:layout_constraintStart_toStartOf="@+id/divider"
                 app:layout_constraintTop_toBottomOf="@+id/divider" />
 
@@ -100,7 +112,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/one_space"
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                 app:layout_constraintBottom_toBottomOf="@id/selected_flag"
                 app:layout_constraintStart_toEndOf="@+id/selected_flag"
                 app:layout_constraintTop_toTopOf="@+id/selected_flag" />
@@ -118,6 +130,54 @@
         app:layout_constraintEnd_toEndOf="@+id/connect_card"
         app:layout_constraintStart_toStartOf="@+id/connect_card"
         app:layout_constraintTop_toBottomOf="@+id/connect_card">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/time_left"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:textColor="@color/white"
+            android:id="@+id/time_left_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.ekovpn.android.view.countdowntimer.CountDownTimerTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/time_left"
+            android:id="@+id/timer_view"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:textColor="@color/white"
+            android:layout_marginTop="@dimen/half_space"
+            app:layout_constraintStart_toStartOf="@id/time_left_label"
+            app:layout_constraintTop_toBottomOf="@+id/time_left_label" />
+
+        <View
+            android:id="@+id/divider_view"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/get_more_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/get_more_time_icon"
+            android:text="@string/get_more_time"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/white"
+            android:textAllCaps="false"
+            app:icon="@drawable/get_more_time_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:iconTint="@color/black"
+            />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -151,28 +211,28 @@
                 android:paddingTop="0dp"
                 android:paddingBottom="0dp"
                 android:text="@string/select_location"
-                app:icon="@drawable/map_icon"
-                app:iconTint="@color/black"
-                app:iconGravity="end"
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                 android:textColor="@color/black"
+                app:icon="@drawable/map_icon"
+                app:iconGravity="end"
+                app:iconTint="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:layout_width="16dp"
+                android:layout_height="16dp"
                 android:src="@drawable/arrow_down"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_height="16dp"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <ImageView
                 android:id="@+id/country_flag"
                 android:layout_width="30dp"
-                android:visibility="invisible"
                 android:layout_height="24dp"
                 android:layout_marginTop="@dimen/two_spaces"
+                android:visibility="invisible"
                 app:layout_constraintStart_toStartOf="@+id/select_location"
                 app:layout_constraintTop_toBottomOf="@+id/select_location" />
 
@@ -182,9 +242,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/one_space"
-                android:visibility="invisible"
                 android:text="@string/usa_new_york"
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="@+id/country_flag"
                 app:layout_constraintStart_toEndOf="@+id/country_flag"
                 app:layout_constraintTop_toTopOf="@+id/country_flag" />
@@ -192,5 +252,33 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/privacy"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:text="@string/privacy_policy"
+        android:letterSpacing="0"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="@+id/select_location_card"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/select_location_card" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/help"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:text="@string/help"
+        android:textAllCaps="false"
+        android:letterSpacing="0"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="@+id/select_location_card"
+        app:layout_constraintTop_toTopOf="@id/privacy" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
