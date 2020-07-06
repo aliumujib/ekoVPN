@@ -19,7 +19,9 @@ import coil.api.load
 import com.ekovpn.android.R
 import com.ekovpn.android.di.main.home.DaggerHomeComponent
 import com.ekovpn.android.di.main.home.HomeModule
+import com.ekovpn.android.models.Location
 import com.ekovpn.android.models.Server
+import com.ekovpn.android.utils.ext.getIpAddress
 import com.ekovpn.android.utils.ext.hide
 import com.ekovpn.android.utils.ext.show
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
@@ -73,13 +75,11 @@ class HomeFragment : Fragment(), StateListener {
                     }
 
                     override fun onLocationSelected(server: Server) {
-                        initCurrentConnectionUI(server)
                         if (server is Server.OVPNServer) {
                             startOrStopVPN(ProfileManager.get(requireContext(), server.ovpnProfileId))
                             viewModel.connectingToServer(server)
                         }
                     }
-
                 }, viewModel.state.value._serversList)
             }
         }
@@ -96,8 +96,8 @@ class HomeFragment : Fragment(), StateListener {
                     startOrStopVPN(ProfileManager.get(requireContext(), currentServer.ovpnProfileId))
                     viewModel.connectingToServer(currentServer)
                 }
-            }else{
-                Toast.makeText(context,"Please pick a location", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(context, "Please pick a location", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -116,9 +116,9 @@ class HomeFragment : Fragment(), StateListener {
         VpnStatus.addStateListener(this)
     }
 
-    private fun initCurrentConnectionUI(server: Server) {
-        selected_flag.load("https://www.countryflags.io/${server.location_.country_code}/flat/64.png")
-        selected_location.text = Html.fromHtml("${server.location_.city}-${server.location_.country}")
+    private fun initCurrentConnectionUI(location_: Location) {
+        selected_flag.load("https://www.countryflags.io/${location_.country_code}/flat/64.png")
+        selected_location.text = Html.fromHtml(location_.country)
     }
 
     private fun initLastSelectedUI(server: Server) {
@@ -164,10 +164,8 @@ class HomeFragment : Fragment(), StateListener {
             }
         }
 
-        if (it.currentConnectionServer == null) {
-            //get location via IP and use that
-        } else {
-            initCurrentConnectionUI(it.currentConnectionServer)
+        it.currentLocation?.let {
+            initCurrentConnectionUI(it)
         }
 
         it.lastUsedServer?.let {
@@ -208,8 +206,12 @@ class HomeFragment : Fragment(), StateListener {
     override fun updateState(state: String?, logmessage: String?, localizedResId: Int, level: ConnectionStatus?, Intent: Intent?) {
         if (level == ConnectionStatus.LEVEL_CONNECTED) {
             viewModel.setConnected()
+            viewModel.state.value.currentConnectionServer?.let {
+                initCurrentConnectionUI(it.location_)
+            }
         } else if (level == ConnectionStatus.LEVEL_NOTCONNECTED) {
             viewModel.setDisconnected()
+            viewModel.fetchLocationForCurrentIP()
         }
     }
 

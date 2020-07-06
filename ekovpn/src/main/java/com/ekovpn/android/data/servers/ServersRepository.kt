@@ -5,6 +5,7 @@
 
 package com.ekovpn.android.data.servers
 
+import com.ekovpn.android.models.Location
 import com.ekovpn.android.models.Server
 import kotlinx.coroutines.flow.Flow
 
@@ -15,5 +16,7 @@ interface ServersRepository {
     fun saveLastUsedServer(location: Int)
 
     fun getLastUsedLocation(): Flow<Server>
+
+    fun getCurrentLocation(): Flow<Location>
 
 }

@@ -15,10 +15,31 @@
  */
 package com.ekovpn.android.di.modules
 
+import com.ekovpn.android.BuildConfig
+import com.ekovpn.android.remote.retrofit.APIServiceFactory
+import com.ekovpn.android.remote.retrofit.AWSIPApiService
+import com.ekovpn.android.remote.retrofit.IPStackApiService
 import dagger.Module
+import dagger.Provides
 
 @Module
 abstract class RemoteModule {
 
+    @Module
+    companion object {
+
+        @Provides
+        @JvmStatic
+        fun provideIPStackAPIService(): IPStackApiService {
+            return APIServiceFactory.iPStackAPIService(BuildConfig.IP_STACK_BASE_URL)
+        }
+
+        @Provides
+        @JvmStatic
+        fun provideAWSIPApiService(): AWSIPApiService {
+            return APIServiceFactory.amazonWSAPIService(BuildConfig.AWS_IP_BASE_URL)
+        }
+
+    }
 
 }

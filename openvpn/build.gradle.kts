@@ -44,8 +44,6 @@ android {
     defaultConfig {
         minSdkVersion(14)
         targetSdkVersion(29)
-        versionCode = 169
-        versionName = "0.7.16"
     }
 
     //testOptions.unitTests.isIncludeAndroidResources = true

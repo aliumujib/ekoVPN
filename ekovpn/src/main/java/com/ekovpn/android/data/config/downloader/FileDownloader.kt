@@ -40,7 +40,11 @@ class FileDownloader @Inject constructor(private val context: Context) {
     }
 
     fun downloadConfigFile(serverLocation: ServerLocation, protocol: Protocol, configFileURL: String): Flow<Result<ServerSetUp>> {
-        val fileName = "${serverLocation.city}_${serverLocation.country}_${protocol.value}.ovpn"
+        val fileName = if(protocol == Protocol.TCP || protocol == Protocol.UDP){
+            "${serverLocation.city}_${serverLocation.country}_${protocol.value}.ovpn"
+        }else{
+            "${serverLocation.city}_${serverLocation.country}_${protocol.value}.pem"
+        }
         val channel = ConflatedBroadcastChannel<Result<ServerSetUp>>()
         val task = DownloadTask.Builder(configFileURL, File(getRootDirPath(context)))
                 .setFilename(fileName)

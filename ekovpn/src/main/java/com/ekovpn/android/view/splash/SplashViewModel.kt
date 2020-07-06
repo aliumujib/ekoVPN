@@ -36,6 +36,8 @@ class SplashViewModel @Inject constructor(private val configRepository: ConfigRe
                         }
                     }.onCompletion {
                         _state.value = SetUpState.Finished
+                    }.catch {
+                        Log.d(SplashActivity::class.java.simpleName, it.message)
                     }
                     .launchIn(viewModelScope)
         }else{

@@ -16,10 +16,13 @@
 package com.ekovpn.android.utils.ext
 
 import android.content.Context
+import android.net.wifi.WifiManager
 import android.util.DisplayMetrics
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
+import java.net.InetAddress
+import java.net.UnknownHostException
 import kotlin.math.roundToInt
 
 /**
@@ -44,4 +47,24 @@ fun Context.dpToPx(dp: Int): Int {
 fun Context.getColorHexString(@ColorRes resId: Int): String {
     val colorInt = ContextCompat.getColor(this, resId)
     return String.format("#%06X", 0xFFFFFF and colorInt)
+}
+
+
+fun Context.getIpAddress(): String? {
+    val wifiManager: WifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+    var ipAddress: String = intToInetAddress(wifiManager.dhcpInfo.ipAddress).toString()
+    ipAddress = ipAddress.substring(1)
+    return ipAddress
+}
+
+fun intToInetAddress(hostAddress: Int): InetAddress {
+    val addressBytes = byteArrayOf((0xff and hostAddress).toByte(),
+            (0xff and (hostAddress shr 8)).toByte(),
+            (0xff and (hostAddress shr 16)).toByte(),
+            (0xff and (hostAddress shr 24)).toByte())
+    return try {
+        InetAddress.getByAddress(addressBytes)
+    } catch (e: UnknownHostException) {
+        throw AssertionError()
+    }
 }
