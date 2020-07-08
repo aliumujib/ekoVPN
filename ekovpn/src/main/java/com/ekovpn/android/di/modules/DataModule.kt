@@ -48,10 +48,4 @@ class DataModule {
         return settingsRepositoryImpl
     }
 
-    @Singleton
-    @Provides
-    fun providesProfileManager(context: Context): ProfileManager{
-        return ProfileManager.getInstance(context)
-    }
-
 }

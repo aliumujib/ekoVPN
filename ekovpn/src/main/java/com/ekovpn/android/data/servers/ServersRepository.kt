@@ -5,6 +5,7 @@
 
 package com.ekovpn.android.data.servers
 
+import com.ekovpn.android.models.Location
 import com.ekovpn.android.models.Server
 import kotlinx.coroutines.flow.Flow
 
@@ -15,5 +16,11 @@ interface ServersRepository {
     fun saveLastUsedServer(location: Int)
 
     fun getLastUsedLocation(): Flow<Server>
+
+    fun getCurrentLocation(): Flow<Location>
+
+    suspend fun getOVPNProfileForServer(profileUUID: String): de.blinkt.openvpn.VpnProfile?
+
+    suspend fun getIkev2ProfileForServer(alias: String): org.strongswan.android.data.VpnProfile?
 
 }

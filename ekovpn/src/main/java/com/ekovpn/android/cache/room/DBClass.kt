@@ -18,7 +18,6 @@ package com.ekovpn.android.cache.room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
 import com.ekovpn.android.cache.room.dao.LocationsDao
 import com.ekovpn.android.cache.room.dao.ServersDao
 import com.ekovpn.android.cache.room.entities.LocationCacheModel

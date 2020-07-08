@@ -23,6 +23,7 @@ import com.ekovpn.android.view.main.VPNViewModel
 import com.ekovpn.android.view.main.VpnActivity
 import dagger.Module
 import dagger.Provides
+import kotlinx.android.parcel.Parcelize
 
 /**
  * Class that contributes to the object graph [VPNComponent].

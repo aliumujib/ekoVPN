@@ -5,20 +5,31 @@
 
 package com.ekovpn.android.data.servers
 
+import android.util.Log
+import com.ekovpn.android.BuildConfig
 import com.ekovpn.android.cache.room.dao.ServersDao
 import com.ekovpn.android.data.settings.SettingsRepository
+import com.ekovpn.android.models.Location
 import com.ekovpn.android.models.Server
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.map
+import com.ekovpn.android.remote.retrofit.AWSIPApiService
+import com.ekovpn.android.remote.retrofit.IPStackApiService
+import de.blinkt.openvpn.VpnProfile
+import de.blinkt.openvpn.core.ProfileManager
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
+import org.strongswan.android.data.VpnProfileDataSource
 import javax.inject.Inject
 
 class ServersRepositoryImpl @Inject constructor(private val serversDao: ServersDao,
+                                                private val profileManager: ProfileManager,
+                                                private val vpnProfileDataSource: VpnProfileDataSource,
+                                                private val ipStackApiService: IPStackApiService,
+                                                private val awsipApiService: AWSIPApiService,
                                                 private val settingsRepository: SettingsRepository) : ServersRepository {
 
     override fun getServersForCurrentProtocol(): Flow<List<Server>> {
         return serversDao.getServersForProtocol(settingsRepository.getSelectedProtocol().value).map {
-            it.map {server->
+            it.map { server ->
                 Server.OVPNServer.fromServerCacheModel(server)
             }
         }
@@ -40,6 +51,25 @@ class ServersRepositoryImpl @Inject constructor(private val serversDao: ServersD
         }.map {
             it!!
         }
+    }
+
+    override fun getCurrentLocation(): Flow<Location> {
+        return flow {
+            delay(1000)
+            val ipAddress = awsipApiService.fetchIP().body()?.string() ?: "0.0.0.0"
+            Log.d("TAG", ipAddress)
+            emit(ipStackApiService.resolveIpToLocation(ipAddress, BuildConfig.IP_STACK_API_KEY))
+        }.map {
+            Location(-1, it.city, it.country_name, it.country_code)
+        }
+    }
+
+    override suspend fun getOVPNProfileForServer(profileUUID: String): VpnProfile? {
+        return profileManager.getProfile(profileUUID)
+    }
+
+    override suspend fun getIkev2ProfileForServer(alias: String): org.strongswan.android.data.VpnProfile? {
+        return vpnProfileDataSource.getVpnProfileByAlias(alias)
     }
 
 }

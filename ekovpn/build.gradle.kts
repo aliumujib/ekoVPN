@@ -32,10 +32,18 @@ android {
 
     productFlavors {
         create("ui") {
+            buildConfigField("String", "IP_STACK_API_KEY", "\"c1aab8424db6187a6d0e5baa164afc13\"")
+            buildConfigField("String", "IP_STACK_BASE_URL", "\"http://api.ipstack.com/\"")
+            buildConfigField("String", "AWS_IP_BASE_URL", "\"http://checkip.amazonaws.com/\"")
+
             setDimension("implementation")
             matchingFallbacks = mutableListOf("uiRelease")
         }
         create("skeleton") {
+            buildConfigField("String", "IP_STACK_API_KEY", "\"c1aab8424db6187a6d0e5baa164afc13\"")
+            buildConfigField("String", "IP_STACK_BASE_URL", "\"http://api.ipstack.com/\"")
+            buildConfigField("String", "AWS_IP_BASE_URL", "\"http://checkip.amazonaws.com/\"")
+
             setDimension("implementation")
             matchingFallbacks = mutableListOf("skeletonRelease")
         }
@@ -55,6 +63,9 @@ dependencies {
     val roomVersion = "2.2.5"
     val coroutines = "1.3.4"
     val dagger = "2.27"
+    val okhttp3LoggingInterceptorVersion = "3.9.0"
+    val retrofitGsonVersion = "2.3.0"
+
 
     implementation("androidx.annotation:annotation:1.1.0")
     implementation("androidx.core:core:$coreVersion")
@@ -73,6 +84,8 @@ dependencies {
     implementation("androidx.preference:preference-ktx:$preferenceVersion")
     implementation("com.google.android.material:material:$materialVersion")
     implementation("androidx.webkit:webkit:1.2.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:${okhttp3LoggingInterceptorVersion}")
+    implementation("com.squareup.retrofit2:converter-gson:${retrofitGsonVersion}")
 
     implementation("androidx.activity:activity-ktx:$activityVersion")
     implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
@@ -88,22 +101,22 @@ dependencies {
     implementation("androidx.core:core-ktx:1.3.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.2.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
-
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
 
     implementation("com.liulishuo.okdownload:okdownload:${okDownload}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.7")
     implementation("com.google.code.gson:gson:2.8.6")
-    implementation( "io.cabriole:decorator:1.0.0")
+    implementation("io.cabriole:decorator:1.0.0")
 
     dependencies.add("uiImplementation", project(":openvpn"))
     dependencies.add("skeletonImplementation", project(":openvpn"))
+    implementation(project(":ikeV2"))
 
     testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.72")
     testImplementation("junit:junit:4.13")
     testImplementation("org.mockito:mockito-core:3.3.3")
     testImplementation("org.robolectric:robolectric:4.3.1")
     testImplementation("androidx.test:core:1.2.0")
-
 
     kapt("androidx.room:room-compiler:$roomVersion")
     kapt("com.google.dagger:dagger-compiler:$dagger")

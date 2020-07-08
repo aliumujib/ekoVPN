@@ -9,6 +9,7 @@ import android.content.Context
 import android.os.Environment
 import android.util.Log
 import androidx.core.content.ContextCompat
+import com.ekovpn.android.data.config.IkeV2
 import com.ekovpn.android.data.config.ServerLocation
 import com.ekovpn.android.data.config.ServerSetUp
 import com.ekovpn.android.models.Protocol
@@ -39,8 +40,20 @@ class FileDownloader @Inject constructor(private val context: Context) {
         }
     }
 
-    fun downloadConfigFile(serverLocation: ServerLocation, protocol: Protocol, configFileURL: String): Flow<Result<ServerSetUp>> {
-        val fileName = "${serverLocation.city}_${serverLocation.country}_${protocol.value}.ovpn"
+    fun downloadIkev2Certificate(serverLocation: ServerLocation, protocol: Protocol, configFileURL: String) {
+
+    }
+
+    fun downloadOVPNConfig(serverLocation: ServerLocation, protocol: Protocol, configFileURL: String) {
+
+    }
+
+    fun downloadConfigFile(serverLocation: ServerLocation, protocol: Protocol, configFileURL: String, ikeV2: IkeV2? = null): Flow<Result<ServerSetUp>> {
+        val fileName = if (protocol == Protocol.TCP || protocol == Protocol.UDP) {
+            "${serverLocation.city}_${serverLocation.country}_${protocol.value}.ovpn"
+        } else {
+            "${serverLocation.city}_${serverLocation.country}_${protocol.value}.pem"
+        }
         val channel = ConflatedBroadcastChannel<Result<ServerSetUp>>()
         val task = DownloadTask.Builder(configFileURL, File(getRootDirPath(context)))
                 .setFilename(fileName)
@@ -57,8 +70,13 @@ class FileDownloader @Inject constructor(private val context: Context) {
                 GlobalScope.launch(Dispatchers.IO) {
                     if (cause == EndCause.COMPLETED) {
                         Log.d(FileDownloader::class.java.simpleName, "Downloaded: ${task.file?.absolutePath}")
-                        val result = ServerSetUp.OVPNSetup(task.file?.absolutePath!!, serverLocation = serverLocation, protocol = protocol)
-                        channel.send(Result.success(result))
+                        if (protocol == Protocol.UDP || protocol == Protocol.TCP) {
+                            val result = ServerSetUp.OVPNSetup(task.file?.toURI().toString(), serverLocation = serverLocation, protocol = protocol)
+                            channel.send(Result.success(result))
+                        } else {
+                            val result = ServerSetUp.IkeV2Setup(task.file?.toURI().toString(), serverLocation = serverLocation, protocol = protocol, ikeV2 = ikeV2!!)
+                            channel.send(Result.success(result))
+                        }
                     } else {
                         realCause?.printStackTrace()
                         Log.d(FileDownloader::class.java.simpleName, realCause?.localizedMessage, realCause)

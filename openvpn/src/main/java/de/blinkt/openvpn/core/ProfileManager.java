@@ -136,6 +136,10 @@ public class ProfileManager {
         return mLastConnectedVpn != null && mLastConnectedVpn  == tmpprofile;
     }
 
+    public VpnProfile getProfile(String uuId) {
+        return this.get(uuId);
+    }
+
     public void saveProfile(Context context, VpnProfile profile) {
         saveProfile(context, profile, true, false);
     }

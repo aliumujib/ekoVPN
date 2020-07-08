@@ -5,6 +5,7 @@
 
 package com.ekovpn.android.view.main.home
 
+import com.ekovpn.android.models.Location
 import com.ekovpn.android.models.Server
 
 data class HomeState(
@@ -12,6 +13,7 @@ data class HomeState(
         val _serversList: List<Server> = emptyList(),
         val lastUsedServer: Server? = null,
         val currentConnectionServer: Server? = null,
+        val currentLocation: Location? = null,
         val _error: Throwable? = null
 ) {
     enum class ConnectionStatus(val status: Int) {

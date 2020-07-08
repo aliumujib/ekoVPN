@@ -5,6 +5,7 @@
 
 package com.ekovpn.android.data.config.repository
 
+import com.ekovpn.android.data.config.ServerConfig
 import kotlinx.coroutines.flow.Flow
 
 interface ConfigRepository {
@@ -12,4 +13,6 @@ interface ConfigRepository {
     fun fetchAndConfigureServers(): Flow<Result<Unit>>
 
     fun hasConfiguredServers(): Boolean
+    fun configureOVPNServers(serverConfig: Array<ServerConfig>): Flow<Result<Unit>>
+    fun configureIkeV2Servers(serverConfig: Array<ServerConfig>): Flow<Result<Unit>>
 }

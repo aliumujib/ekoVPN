@@ -16,6 +16,10 @@ import com.ekovpn.android.di.components.DaggerCoreComponent
 import com.ekovpn.android.di.modules.ContextModule
 import com.ekovpn.android.utils.detectAllExpect
 import de.blinkt.openvpn.core.ICSOpenVPNApplication
+import org.strongswan.android.security.LocalCertificateKeyStoreProvider
+import org.strongswan.android.ui.LaunchActivity
+import org.strongswan.android.utils.ContextProvider
+import java.security.Security
 
 
 class ApplicationClass: ICSOpenVPNApplication() {
@@ -23,13 +27,21 @@ class ApplicationClass: ICSOpenVPNApplication() {
 
     lateinit var coreComponent: CoreComponent
 
+    init {
+        Security.addProvider(LocalCertificateKeyStoreProvider())
+        System.loadLibrary("androidbridge")
+    }
+
     override fun onCreate() {
         super.onCreate()
 
         initCoreDependencyInjection()
         initAppDependencyInjection()
         handleAndroidOStrictModeViolations()
+        ContextProvider.setContext(applicationContext)
     }
+
+
 
     @RequiresApi(Build.VERSION_CODES.P)
     private fun handleAndroidOStrictModeViolations() {

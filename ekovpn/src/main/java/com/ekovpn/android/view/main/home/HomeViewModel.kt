@@ -10,14 +10,20 @@ import androidx.lifecycle.viewModelScope
 import com.ekovpn.android.data.servers.ServersRepository
 import com.ekovpn.android.models.Server
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 class HomeViewModel @Inject constructor(private val serversRepository: ServersRepository) : ViewModel() {
+
+
+    suspend fun getOVPNProfileForServer(profileUUID: String): de.blinkt.openvpn.VpnProfile?{
+        return serversRepository.getOVPNProfileForServer(profileUUID)
+    }
+
+    suspend fun getIkev2ProfileForServer(alias: String): org.strongswan.android.data.VpnProfile?{
+        return serversRepository.getIkev2ProfileForServer(alias)
+    }
 
     fun connectingToServer(server: Server) {
         _state.value = state.value.copy(currentConnectionServer = server, connectionStatus = HomeState.ConnectionStatus.CONNECTING)
@@ -28,16 +34,28 @@ class HomeViewModel @Inject constructor(private val serversRepository: ServersRe
         _state.value = state.value.copy(connectionStatus = HomeState.ConnectionStatus.DISCONNECTED)
     }
 
+
     fun setConnected() {
         saveLastUsedLocation()
         _state.value = state.value.copy(connectionStatus = HomeState.ConnectionStatus.CONNECTED)
     }
 
-    fun saveLastUsedLocation() {
+    private fun saveLastUsedLocation() {
         _state.value = state.value.copy(lastUsedServer = state.value.currentConnectionServer)
         state.value.currentConnectionServer?.let {
             serversRepository.saveLastUsedServer(it.id_)
         }
+    }
+
+    fun fetchLocationForCurrentIP(){
+        serversRepository.getCurrentLocation()
+                .catch {
+                    _state.value = _state.value.copy(_error = it)
+                }
+                .onEach {
+                    _state.value = _state.value.copy(currentLocation = it)
+                }
+                .launchIn(viewModelScope)
     }
 
 
@@ -45,13 +63,18 @@ class HomeViewModel @Inject constructor(private val serversRepository: ServersRe
     val state: StateFlow<HomeState> = _state
 
     init {
-
         serversRepository.getServersForCurrentProtocol()
+                .catch {
+                    _state.value = _state.value.copy(_error = it)
+                }
                 .onEach {
                     _state.value = _state.value.copy(_serversList = it)
                 }.launchIn(viewModelScope)
 
         serversRepository.getLastUsedLocation()
+                .catch {
+                    _state.value = _state.value.copy(_error = it)
+                }
                 .onEach {
                     _state.value = _state.value.copy(lastUsedServer = it)
                 }.launchIn(viewModelScope)
