@@ -5,7 +5,6 @@
       "sdkFolder": "/Users/aliumujib/Library/Android/sdk",
       "isNativeCompilerSettingsCacheEnabled": false,
       "isBuildOnlyTargetAbiEnabled": true,
-      "ideBuildTargetAbi": "x86",
       "splitsAbiFilterSet": [
         "armeabi-v7a",
         "x86_64",
@@ -45,7 +44,10 @@
     "gradleBuildOutputFolder": "/Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cxx/skeletonDebug",
     "isDebuggableEnabled": true,
     "validAbiList": [
-      "X86"
+      "ARMEABI_V7A",
+      "ARM64_V8A",
+      "X86",
+      "X86_64"
     ],
     "buildTargetSet": []
   },

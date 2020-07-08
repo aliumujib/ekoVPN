@@ -17,6 +17,7 @@ class ServerCacheModel(
         val serverId: Int,
         val location: Int,
         val protocol: String,
-        val ovpnProfileId: String?
+        val ovpnProfileId: String?,
+        val ikeV2Alias: String?
 )
 

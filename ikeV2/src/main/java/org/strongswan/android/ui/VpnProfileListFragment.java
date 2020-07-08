@@ -266,8 +266,7 @@ public class VpnProfileListFragment extends Fragment {
                 Intent intent = new Intent(Constants.VPN_PROFILES_CHANGED);
                 intent.putExtra(Constants.VPN_PROFILES_MULTIPLE, ids);
                 LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
-                Toast.makeText(VpnProfileListFragment.this.getActivity(),
-                        R.string.profiles_deleted, Toast.LENGTH_SHORT).show();
+                Toast.makeText(VpnProfileListFragment.this.getActivity(), R.string.profiles_deleted, Toast.LENGTH_SHORT).show();
             }
             mode.finish();
             return true;

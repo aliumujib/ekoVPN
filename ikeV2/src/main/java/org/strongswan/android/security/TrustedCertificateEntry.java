@@ -24,158 +24,130 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class TrustedCertificateEntry implements Comparable<TrustedCertificateEntry>
-{
-	private final X509Certificate mCert;
-	private final String mAlias;
-	private String mSubjectPrimary;
-	private String mSubjectSecondary = "";
-	private String mString;
+public class TrustedCertificateEntry implements Comparable<TrustedCertificateEntry> {
 
-	/**
-	 * Create an entry for certificate lists.
-	 *
-	 * @param alias alias of the certificate (as used in the KeyStore)
-	 * @param cert certificate associated with that alias
-	 */
-	public TrustedCertificateEntry(String alias, X509Certificate cert)
-	{
-		mCert = cert;
-		mAlias = alias;
+    private final X509Certificate mCert;
+    private final String mAlias;
+    private String mSubjectPrimary;
+    private String mSubjectSecondary = "";
+    private String mString;
 
-		try
-		{
-			SslCertificate ssl = new SslCertificate(mCert);
-			String o = ssl.getIssuedTo().getOName();
-			String ou = ssl.getIssuedTo().getUName();
-			String cn = ssl.getIssuedTo().getCName();
-			if (!o.isEmpty())
-			{
-				mSubjectPrimary = o;
-				if (!cn.isEmpty())
-				{
-					mSubjectSecondary = cn;
-				}
-				else if (!ou.isEmpty())
-				{
-					mSubjectSecondary = ou;
-				}
-			}
-			else if (!cn.isEmpty())
-			{
-				mSubjectPrimary = cn;
-			}
-			else
-			{
-				mSubjectPrimary = ssl.getIssuedTo().getDName();
-			}
-		}
-		catch (NullPointerException ex)
-		{
-			/* this has been seen in Play Console for certificates for which notBefore apparently
-			 * can't be parsed (which SslCertificate() does) */
-			mSubjectPrimary = cert.getSubjectDN().getName();
-		}
-	}
+    /**
+     * Create an entry for certificate lists.
+     *
+     * @param alias alias of the certificate (as used in the KeyStore)
+     * @param cert  certificate associated with that alias
+     */
+    public TrustedCertificateEntry(String alias, X509Certificate cert) {
+        mCert = cert;
+        mAlias = alias;
 
-	/**
-	 * The main subject of this certificate (O, CN or the complete DN, whatever
-	 * is found first).
-	 *
-	 * @return the main subject
-	 */
-	public String getSubjectPrimary()
-	{
-		return mSubjectPrimary;
-	}
+        try {
+            SslCertificate ssl = new SslCertificate(mCert);
+            String o = ssl.getIssuedTo().getOName();
+            String ou = ssl.getIssuedTo().getUName();
+            String cn = ssl.getIssuedTo().getCName();
+            if (!o.isEmpty()) {
+                mSubjectPrimary = o;
+                if (!cn.isEmpty()) {
+                    mSubjectSecondary = cn;
+                } else if (!ou.isEmpty()) {
+                    mSubjectSecondary = ou;
+                }
+            } else if (!cn.isEmpty()) {
+                mSubjectPrimary = cn;
+            } else {
+                mSubjectPrimary = ssl.getIssuedTo().getDName();
+            }
+        } catch (NullPointerException ex) {
+            /* this has been seen in Play Console for certificates for which notBefore apparently
+             * can't be parsed (which SslCertificate() does) */
+            mSubjectPrimary = cert.getSubjectDN().getName();
+        }
+    }
 
-	/**
-	 * Get the secondary subject of this certificate (either CN or OU if primary
-	 * subject is O, empty otherwise)
-	 *
-	 * @return the secondary subject
-	 */
-	public String getSubjectSecondary()
-	{
-		return mSubjectSecondary;
-	}
+    /**
+     * The main subject of this certificate (O, CN or the complete DN, whatever
+     * is found first).
+     *
+     * @return the main subject
+     */
+    public String getSubjectPrimary() {
+        return mSubjectPrimary;
+    }
 
-	/**
-	 * Get a sorted list of all rfc822Name, dnSName and iPAddress subjectAltNames
-	 *
-	 * @return sorted list of selected SANs
-	 */
-	public List<String> getSubjectAltNames()
-	{
-		List<String> list = new ArrayList<>();
-		try
-		{
-			Collection<List<?>> sans = mCert.getSubjectAlternativeNames();
-			if (sans != null)
-			{
-				for (List<?> san : sans)
-				{
-					switch ((Integer)san.get(0))
-					{
-						case 1: /* rfc822Name */
-						case 2: /* dnSName */
-						case 7: /* iPAddress */
-							list.add((String)san.get(1));
-							break;
-					}
-				}
-			}
-			Collections.sort(list);
-		}
-		catch(CertificateParsingException ex)
-		{
-			ex.printStackTrace();
-		}
-		return list;
-	}
+    /**
+     * Get the secondary subject of this certificate (either CN or OU if primary
+     * subject is O, empty otherwise)
+     *
+     * @return the secondary subject
+     */
+    public String getSubjectSecondary() {
+        return mSubjectSecondary;
+    }
 
-	/**
-	 * The alias associated with this certificate.
-	 *
-	 * @return KeyStore alias of this certificate
-	 */
-	public String getAlias()
-	{
-		return mAlias;
-	}
+    /**
+     * Get a sorted list of all rfc822Name, dnSName and iPAddress subjectAltNames
+     *
+     * @return sorted list of selected SANs
+     */
+    public List<String> getSubjectAltNames() {
+        List<String> list = new ArrayList<>();
+        try {
+            Collection<List<?>> sans = mCert.getSubjectAlternativeNames();
+            if (sans != null) {
+                for (List<?> san : sans) {
+                    switch ((Integer) san.get(0)) {
+                        case 1: /* rfc822Name */
+                        case 2: /* dnSName */
+                        case 7: /* iPAddress */
+                            list.add((String) san.get(1));
+                            break;
+                    }
+                }
+            }
+            Collections.sort(list);
+        } catch (CertificateParsingException ex) {
+            ex.printStackTrace();
+        }
+        return list;
+    }
 
-	/**
-	 * The certificate.
-	 *
-	 * @return certificate
-	 */
-	public X509Certificate getCertificate()
-	{
-		return mCert;
-	}
+    /**
+     * The alias associated with this certificate.
+     *
+     * @return KeyStore alias of this certificate
+     */
+    public String getAlias() {
+        return mAlias;
+    }
 
-	@Override
-	public String toString()
-	{	/* combination of both subject lines, used for filtering lists */
-		if (mString == null)
-		{
-			mString = mSubjectPrimary;
-			if (!mSubjectSecondary.isEmpty())
-			{
-				mString += ", " + mSubjectSecondary;
-			}
-		}
-		return mString;
-	}
+    /**
+     * The certificate.
+     *
+     * @return certificate
+     */
+    public X509Certificate getCertificate() {
+        return mCert;
+    }
 
-	@Override
-	public int compareTo(TrustedCertificateEntry another)
-	{
-		int diff = mSubjectPrimary.compareToIgnoreCase(another.mSubjectPrimary);
-		if (diff == 0)
-		{
-			diff = mSubjectSecondary.compareToIgnoreCase(another.mSubjectSecondary);
-		}
-		return diff;
-	}
+    @Override
+    public String toString() {    /* combination of both subject lines, used for filtering lists */
+        if (mString == null) {
+            mString = mSubjectPrimary;
+            if (!mSubjectSecondary.isEmpty()) {
+                mString += ", " + mSubjectSecondary;
+            }
+        }
+        return mString;
+    }
+
+    @Override
+    public int compareTo(TrustedCertificateEntry another) {
+        int diff = mSubjectPrimary.compareToIgnoreCase(another.mSubjectPrimary);
+        if (diff == 0) {
+            diff = mSubjectSecondary.compareToIgnoreCase(another.mSubjectSecondary);
+        }
+        return diff;
+    }
 }

@@ -18,6 +18,7 @@ package com.ekovpn.android.di.modules
 import android.content.Context
 import androidx.room.Room
 import com.ekovpn.android.cache.room.DBClass
+import com.ekovpn.android.cache.room.dao.IkeV2ProfileDao
 import com.ekovpn.android.cache.room.dao.LocationsDao
 import com.ekovpn.android.cache.room.dao.ServersDao
 import dagger.Module
@@ -40,6 +41,11 @@ class CacheModule {
         return dBClass.serversDao()
     }
 
+    @Singleton
+    @Provides
+    fun providesIkeV2ProfileDao(dBClass: DBClass): IkeV2ProfileDao {
+        return dBClass.ikeV2ProfileDao()
+    }
 
     @Singleton
     @Provides

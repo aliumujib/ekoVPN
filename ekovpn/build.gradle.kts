@@ -32,8 +32,8 @@ android {
 
     productFlavors {
         create("ui") {
-            buildConfigField("String", "IP_STACK_API_KEY", "c1aab8424db6187a6d0e5baa164afc13")
-            buildConfigField("String", "IP_STACK_BASE_URL", "http://api.ipstack.com/")
+            buildConfigField("String", "IP_STACK_API_KEY", "\"c1aab8424db6187a6d0e5baa164afc13\"")
+            buildConfigField("String", "IP_STACK_BASE_URL", "\"http://api.ipstack.com/\"")
             buildConfigField("String", "AWS_IP_BASE_URL", "\"http://checkip.amazonaws.com/\"")
 
             setDimension("implementation")

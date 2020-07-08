@@ -19,4 +19,8 @@ interface ServersRepository {
 
     fun getCurrentLocation(): Flow<Location>
 
+    suspend fun getOVPNProfileForServer(profileUUID: String): de.blinkt.openvpn.VpnProfile?
+
+    suspend fun getIkev2ProfileForServer(alias: String): org.strongswan.android.data.VpnProfile?
+
 }

@@ -29,8 +29,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
 
-public class LocalCertificateKeyStoreSpi extends KeyStoreSpi
-{
+public class LocalCertificateKeyStoreSpi extends KeyStoreSpi {
 	private final LocalCertificateStore mStore = new LocalCertificateStore();
 
 	@Override

@@ -173,8 +173,7 @@ public class TrustedCertificateImportActivity extends AppCompatActivity
 	 */
 	private boolean storeCertificate(X509Certificate certificate)
 	{
-		try
-		{
+		try {
 			KeyStore store = KeyStore.getInstance("LocalCertificateStore");
 			store.load(null, null);
 			store.setCertificateEntry(null, certificate);

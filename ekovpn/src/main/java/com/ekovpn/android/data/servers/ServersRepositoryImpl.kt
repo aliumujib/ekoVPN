@@ -7,17 +7,23 @@ package com.ekovpn.android.data.servers
 
 import android.util.Log
 import com.ekovpn.android.BuildConfig
+import com.ekovpn.android.cache.room.dao.IkeV2ProfileDao
 import com.ekovpn.android.cache.room.dao.ServersDao
+import com.ekovpn.android.data.config.toVpnProfile
 import com.ekovpn.android.data.settings.SettingsRepository
 import com.ekovpn.android.models.Location
 import com.ekovpn.android.models.Server
 import com.ekovpn.android.remote.retrofit.AWSIPApiService
 import com.ekovpn.android.remote.retrofit.IPStackApiService
+import de.blinkt.openvpn.VpnProfile
+import de.blinkt.openvpn.core.ProfileManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 class ServersRepositoryImpl @Inject constructor(private val serversDao: ServersDao,
+                                                private val profileManager: ProfileManager,
+                                                private val ikeV2ProfileDao: IkeV2ProfileDao,
                                                 private val ipStackApiService: IPStackApiService,
                                                 private val awsipApiService: AWSIPApiService,
                                                 private val settingsRepository: SettingsRepository) : ServersRepository {
@@ -57,6 +63,14 @@ class ServersRepositoryImpl @Inject constructor(private val serversDao: ServersD
         }.map {
             Location(-1, it.city, it.country_name, it.country_code)
         }
+    }
+
+    override suspend fun getOVPNProfileForServer(profileUUID: String): VpnProfile? {
+        return profileManager.getProfile(profileUUID)
+    }
+
+    override suspend fun getIkev2ProfileForServer(alias: String): org.strongswan.android.data.VpnProfile? {
+        return ikeV2ProfileDao.getProfile(alias)?.toVpnProfile()
     }
 
 }

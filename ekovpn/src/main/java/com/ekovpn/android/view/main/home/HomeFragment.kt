@@ -21,7 +21,6 @@ import com.ekovpn.android.di.main.home.DaggerHomeComponent
 import com.ekovpn.android.di.main.home.HomeModule
 import com.ekovpn.android.models.Location
 import com.ekovpn.android.models.Server
-import com.ekovpn.android.utils.ext.getIpAddress
 import com.ekovpn.android.utils.ext.hide
 import com.ekovpn.android.utils.ext.show
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
@@ -31,13 +30,11 @@ import de.blinkt.openvpn.LaunchVPN
 import de.blinkt.openvpn.VpnProfile
 import de.blinkt.openvpn.activities.DisconnectVPN
 import de.blinkt.openvpn.core.ConnectionStatus
-import de.blinkt.openvpn.core.ProfileManager
 import de.blinkt.openvpn.core.VpnStatus
 import de.blinkt.openvpn.core.VpnStatus.StateListener
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.help
 import kotlinx.android.synthetic.main.fragment_home.privacy
-import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -75,10 +72,7 @@ class HomeFragment : Fragment(), StateListener {
                     }
 
                     override fun onLocationSelected(server: Server) {
-                        if (server is Server.OVPNServer) {
-                            startOrStopVPN(ProfileManager.get(requireContext(), server.ovpnProfileId))
-                            viewModel.connectingToServer(server)
-                        }
+                        connectToServer(server)
                     }
                 }, viewModel.state.value._serversList)
             }
@@ -90,12 +84,9 @@ class HomeFragment : Fragment(), StateListener {
 
 
         connect.setOnClickListener {
-            val currentServer = viewModel.state.value.lastUsedServer
-            if (currentServer != null) {
-                if (currentServer is Server.OVPNServer) {
-                    startOrStopVPN(ProfileManager.get(requireContext(), currentServer.ovpnProfileId))
-                    viewModel.connectingToServer(currentServer)
-                }
+            val server = viewModel.state.value.lastUsedServer
+            if (server != null) {
+                connectToServer(server)
             } else {
                 Toast.makeText(context, "Please pick a location", Toast.LENGTH_LONG).show()
             }
@@ -111,19 +102,39 @@ class HomeFragment : Fragment(), StateListener {
 
     }
 
+    private  fun connectToServer(server: Server) {
+        lifecycleScope.launchWhenResumed {
+            if (server is Server.OVPNServer) {
+                viewModel.getOVPNProfileForServer(server.ovpnProfileId)?.let {
+                    startOrStopVPN(it)
+                    viewModel.connectingToServer(server)
+                }
+            }else if(server is Server.IkeV2Server){
+                viewModel.getIkev2ProfileForServer(server.certificateAlias)?.let {
+                    //startOrStopVPN(it)
+                    viewModel.connectingToServer(server)
+                }
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         VpnStatus.addStateListener(this)
     }
 
     private fun initCurrentConnectionUI(location_: Location) {
-        selected_flag.load("https://www.countryflags.io/${location_.country_code}/flat/64.png")
-        selected_location.text = Html.fromHtml(location_.country)
+       activity?.runOnUiThread {
+           selected_flag.load("https://www.countryflags.io/${location_.country_code}/flat/64.png")
+           selected_location.text = Html.fromHtml(location_.country)
+       }
     }
 
     private fun initLastSelectedUI(server: Server) {
-        country_flag.load("https://www.countryflags.io/${server.location_.country_code}/flat/64.png")
-        location_name.text = Html.fromHtml("${server.location_.city}-${server.location_.country}")
+        activity?.runOnUiThread {
+            country_flag.load("https://www.countryflags.io/${server.location_.country_code}/flat/64.png")
+            location_name.text = Html.fromHtml("${server.location_.city}-${server.location_.country}")
+        }
     }
 
     private fun render(it: HomeState) {
