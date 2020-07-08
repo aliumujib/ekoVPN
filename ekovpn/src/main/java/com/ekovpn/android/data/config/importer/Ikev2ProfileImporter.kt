@@ -57,7 +57,7 @@ class Ikev2ProfileImporter @Inject constructor(val context: Context) {
         val vpnProfile = VpnProfile()
         vpnProfile.name = "${serverLocation.city}-${serverLocation.country}-ikeV2"
         vpnProfile.gateway = ikeV2.ip
-        vpnProfile.vpnType = VpnType.IKEV2_CERT
+        vpnProfile.vpnType = VpnType.IKEV2_EAP
         vpnProfile.password = ikeV2.password
         vpnProfile.username = ikeV2.username
 
@@ -66,19 +66,6 @@ class Ikev2ProfileImporter @Inject constructor(val context: Context) {
         val alias: String = store.getCertificateAlias(certificate)
         vpnProfile.certificateAlias = alias
         Log.d(Ikev2ProfileImporter::class.java.simpleName, "$vpnProfile , $alias")
-
-//        val certman = TrustedCertificateManager.getInstance().load()
-//        val certificates = certman.getCACertificates(TrustedCertificateManager.TrustedCertificateSource.LOCAL)
-//        val selected: MutableList<TrustedCertificateEntry>
-//
-//        selected = ArrayList()
-//        for ((key, value) in certificates) {
-//            selected.add(TrustedCertificateEntry(key, value))
-//            Log.d("WG", "$key")
-//        }
-//
-//        selected.sort()
-//        Log.d(Ikev2ProfileImporter::class.java.simpleName, "$selected")
 
         return vpnProfile
     }

@@ -5,13 +5,10 @@
 
 package com.ekovpn.android.data.config
 
-import com.ekovpn.android.cache.room.entities.IkeV2VPNProfileModel
 import com.ekovpn.android.cache.room.entities.LocationCacheModel
 import com.ekovpn.android.cache.room.entities.ServerCacheModel
 import com.ekovpn.android.models.Protocol
 import com.google.gson.annotations.SerializedName
-import org.strongswan.android.data.VpnProfile
-import org.strongswan.android.data.VpnType
 
 
 data class ServerConfig(
@@ -79,20 +76,5 @@ sealed class VPNServer(
 
 }
 
-
-fun org.strongswan.android.data.VpnProfile.toIkeV2VPNProfileModel(): IkeV2VPNProfileModel {
-    return IkeV2VPNProfileModel(name, gateway, vpnType.ordinal, password, username, certificateAlias)
-}
-
-fun IkeV2VPNProfileModel.toVpnProfile(): org.strongswan.android.data.VpnProfile {
-    val vpnProfile = VpnProfile()
-    vpnProfile.name = name
-    vpnProfile.gateway = gateWay
-    vpnProfile.vpnType = VpnType.values()[vpnType]
-    vpnProfile.password = password
-    vpnProfile.username = username
-    vpnProfile.certificateAlias = certificateAlias
-    return vpnProfile
-}
 
 

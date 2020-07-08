@@ -8,7 +8,6 @@ package com.ekovpn.android.data.config.repository
 import android.content.Context
 import android.util.Log
 import androidx.core.net.toUri
-import com.ekovpn.android.cache.room.dao.IkeV2ProfileDao
 import com.ekovpn.android.cache.room.dao.LocationsDao
 import com.ekovpn.android.cache.room.dao.ServersDao
 import com.ekovpn.android.cache.settings.SettingsPrefManager
@@ -23,6 +22,7 @@ import com.google.gson.Gson
 import de.blinkt.openvpn.core.ProfileManager
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
+import org.strongswan.android.data.VpnProfileDataSource
 import java.io.File
 import javax.inject.Inject
 
@@ -31,7 +31,7 @@ import javax.inject.Inject
 class ConfigRepositoryImpl @Inject constructor(private val context: Context,
                                                private val locationsDao: LocationsDao,
                                                private val serversDao: ServersDao,
-                                               private val ikeV2ProfileDao: IkeV2ProfileDao,
+                                               private val vpnProfileDataSource: VpnProfileDataSource,
                                                private val fileDownloader: FileDownloader,
                                                private val profileManager: ProfileManager,
                                                private val ikev2ProfileImporter: Ikev2ProfileImporter,
@@ -155,7 +155,7 @@ class ConfigRepositoryImpl @Inject constructor(private val context: Context,
     }
 
     private suspend fun saveIkeV2Profile(result: VPNServer.IkeV2Server) {
-        ikeV2ProfileDao.insert(result.ikeV2Profile.toIkeV2VPNProfileModel())
+        vpnProfileDataSource.insertProfile(result.ikeV2Profile)
         val location = locationsDao.getLocation(result.serverLocation.country, result.serverLocation.city)
         location?.let {
             val serCacheModel = result.toServerCacheModel(location)

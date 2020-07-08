@@ -352,6 +352,25 @@ public class VpnProfileDataSource
 		return mDatabase.delete(TABLE_VPNPROFILE, KEY_ID + " = " + id, null) > 0;
 	}
 
+
+	/**
+	 * Get a single VPN profile from the database.
+	 * @param certificateAlias the certificateAlias of the VPN profile
+	 * @return the profile or null, if not found
+	 */
+	public VpnProfile getVpnProfileByAlias(String certificateAlias)
+	{
+		VpnProfile profile = null;
+		Cursor cursor = mDatabase.query(TABLE_VPNPROFILE, ALL_COLUMNS,
+				KEY_CERTIFICATE + "=" + certificateAlias, null, null, null, null);
+		if (cursor.moveToFirst())
+		{
+			profile = VpnProfileFromCursor(cursor);
+		}
+		cursor.close();
+		return profile;
+	}
+
 	/**
 	 * Get a single VPN profile from the database.
 	 * @param id the ID of the VPN profile

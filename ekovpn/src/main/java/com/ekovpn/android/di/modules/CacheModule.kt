@@ -18,11 +18,12 @@ package com.ekovpn.android.di.modules
 import android.content.Context
 import androidx.room.Room
 import com.ekovpn.android.cache.room.DBClass
-import com.ekovpn.android.cache.room.dao.IkeV2ProfileDao
 import com.ekovpn.android.cache.room.dao.LocationsDao
 import com.ekovpn.android.cache.room.dao.ServersDao
 import dagger.Module
 import dagger.Provides
+import de.blinkt.openvpn.core.ProfileManager
+import org.strongswan.android.data.VpnProfileDataSource
 import javax.inject.Singleton
 
 
@@ -43,8 +44,16 @@ class CacheModule {
 
     @Singleton
     @Provides
-    fun providesIkeV2ProfileDao(dBClass: DBClass): IkeV2ProfileDao {
-        return dBClass.ikeV2ProfileDao()
+    fun providesIkeV2ProfileDao(context: Context): VpnProfileDataSource {
+        val dataSource = VpnProfileDataSource(context)
+        dataSource.open()
+        return dataSource
+    }
+
+    @Singleton
+    @Provides
+    fun providesProfileManager(context: Context): ProfileManager {
+        return ProfileManager.getInstance(context)
     }
 
     @Singleton
