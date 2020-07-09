@@ -17,12 +17,12 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(private val serversRepository: ServersRepository) : ViewModel() {
 
 
-    suspend fun getOVPNProfileForServer(profileUUID: String): de.blinkt.openvpn.VpnProfile?{
+    suspend fun getOVPNProfileForServer(profileUUID: String): de.blinkt.openvpn.VpnProfile? {
         return serversRepository.getOVPNProfileForServer(profileUUID)
     }
 
-    suspend fun getIkev2ProfileForServer(alias: String): org.strongswan.android.data.VpnProfile?{
-        return serversRepository.getIkev2ProfileForServer(alias)
+    suspend fun getIKEv2ProfileForServer(id: Long): org.strongswan.android.data.VpnProfile? {
+        return serversRepository.getIKEv2ProfileForServer(id)
     }
 
     fun connectingToServer(server: Server) {
@@ -47,7 +47,7 @@ class HomeViewModel @Inject constructor(private val serversRepository: ServersRe
         }
     }
 
-    fun fetchLocationForCurrentIP(){
+    fun fetchLocationForCurrentIP() {
         serversRepository.getCurrentLocation()
                 .catch {
                     _state.value = _state.value.copy(_error = it)
@@ -63,13 +63,7 @@ class HomeViewModel @Inject constructor(private val serversRepository: ServersRe
     val state: StateFlow<HomeState> = _state
 
     init {
-        serversRepository.getServersForCurrentProtocol()
-                .catch {
-                    _state.value = _state.value.copy(_error = it)
-                }
-                .onEach {
-                    _state.value = _state.value.copy(_serversList = it)
-                }.launchIn(viewModelScope)
+        fetchServersForCurrentProtocol()
 
         serversRepository.getLastUsedLocation()
                 .catch {
@@ -77,6 +71,17 @@ class HomeViewModel @Inject constructor(private val serversRepository: ServersRe
                 }
                 .onEach {
                     _state.value = _state.value.copy(lastUsedServer = it)
+                }.launchIn(viewModelScope)
+    }
+
+    fun fetchServersForCurrentProtocol() {
+        serversRepository.getServersForCurrentProtocol()
+                .catch {
+                    it.printStackTrace()
+                    _state.value = _state.value.copy(_error = it)
+                }
+                .onEach {
+                    _state.value = _state.value.copy(_serversList = it)
                 }.launchIn(viewModelScope)
     }
 

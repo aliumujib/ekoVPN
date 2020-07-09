@@ -10,6 +10,7 @@ import android.content.Context
 import android.os.Build
 import android.os.StrictMode
 import androidx.annotation.RequiresApi
+import com.downloader.PRDownloader
 import com.ekovpn.android.di.app.DaggerApplicationComponent
 import com.ekovpn.android.di.components.CoreComponent
 import com.ekovpn.android.di.components.DaggerCoreComponent
@@ -39,6 +40,7 @@ class ApplicationClass: ICSOpenVPNApplication() {
         initAppDependencyInjection()
         handleAndroidOStrictModeViolations()
         ContextProvider.setContext(applicationContext)
+        PRDownloader.initialize(getApplicationContext());
     }
 
 

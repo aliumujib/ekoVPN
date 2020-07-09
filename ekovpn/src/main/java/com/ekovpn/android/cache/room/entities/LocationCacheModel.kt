@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 class LocationCacheModel(
-        @PrimaryKey(autoGenerate = true)
+        @PrimaryKey
         val locationId: Int,
         val city: String,
         val country: String,

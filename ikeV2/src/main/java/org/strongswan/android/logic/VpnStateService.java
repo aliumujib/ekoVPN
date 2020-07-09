@@ -49,7 +49,7 @@ public class VpnStateService extends Service
 	private long mConnectionID = 0;
 	private Handler mHandler;
 	private VpnProfile mProfile;
-	private State mState = State.DISABLED;
+	private static State mState = State.DISABLED;
 	private ErrorState mError = ErrorState.NO_ERROR;
 	private ImcState mImcState = ImcState.UNKNOWN;
 	private final LinkedList<RemediationInstruction> mRemediationInstructions = new LinkedList<RemediationInstruction>();
@@ -87,7 +87,7 @@ public class VpnStateService extends Service
 	 */
 	public interface VpnStateListener
 	{
-		public void stateChanged();
+		public void stateChanged(State state);
 	}
 
 	/**
@@ -361,7 +361,7 @@ public class VpnStateService extends Service
 					{	/* otherwise there is no need to notify the listeners */
 						for (VpnStateListener listener : mListeners)
 						{
-							listener.stateChanged();
+							listener.stateChanged(mState);
 						}
 					}
 				}
@@ -557,7 +557,7 @@ public class VpnStateService extends Service
 
 				for (VpnStateListener listener : mService.get().mListeners)
 				{
-					listener.stateChanged();
+					listener.stateChanged(mState);
 				}
 				sendMessageAtTime(obtainMessage(RETRY_MSG), next);
 			}

@@ -15,10 +15,11 @@ data class ServerConfig(
         @SerializedName("location")
         val serverLocation: ServerLocation,
         val open_vpn: List<OpenVpn>,
-        val ikev2: IkeV2
+        @SerializedName("ikev2")
+        val iKev2: IKEv2
 )
 
-data class IkeV2(
+data class IKEv2(
         val certificate_url: String,
         val ip: String,
         val password: String,
@@ -31,8 +32,8 @@ data class ServerLocation(
         val country_code: String
 ) {
     companion object {
-        fun toLocationCacheModel(it: ServerLocation): LocationCacheModel {
-            return LocationCacheModel(city = it.city, country = it.country, country_code = it.country_code, locationId = 0)
+        fun ServerLocation.toLocationCacheModel(index: Int): LocationCacheModel {
+            return LocationCacheModel(city = this.city, country = this.country, country_code = this.country_code, locationId = index)
         }
     }
 }
@@ -50,7 +51,7 @@ sealed class ServerSetUp(val serverLocation_: ServerLocation,
                          val protocol: Protocol) : ServerSetUp(serverLocation, protocol)
 
     data class IkeV2Setup(val pemFileDir: String, val pemProfileID: String = "N/A", val serverLocation: ServerLocation,
-                          val ikeV2: IkeV2, val protocol: Protocol) : ServerSetUp(serverLocation, protocol)
+                          val ikeV2: IKEv2, val protocol: Protocol) : ServerSetUp(serverLocation, protocol)
 }
 
 
@@ -61,15 +62,15 @@ sealed class VPNServer(
     data class OVPNServer(val openVpnProfile: de.blinkt.openvpn.VpnProfile, val serverLocation: ServerLocation, val protocol: Protocol) : VPNServer(serverLocation, protocol) {
         companion object {
             fun OVPNServer.toServerCacheModel(locationCacheModel: LocationCacheModel, protocol: Protocol): ServerCacheModel {
-                return ServerCacheModel(0, location = locationCacheModel.locationId, protocol = protocol.value, ovpnProfileId = openVpnProfile.uuidString, ikeV2Alias = null)
+                return ServerCacheModel(0, location = locationCacheModel.locationId, protocol = protocol.value, ovpnProfileId = openVpnProfile.uuidString, ikeV2ProfileId = null)
             }
         }
     }
 
-    data class IkeV2Server(val ikeV2Profile: org.strongswan.android.data.VpnProfile, val serverLocation: ServerLocation) : VPNServer(serverLocation, Protocol.IKEV2) {
+    data class IkeV2Server(val ikeV2Profile: org.strongswan.android.data.VpnProfile, val serverLocation: ServerLocation) : VPNServer(serverLocation, Protocol.IKEv2) {
         companion object {
             fun IkeV2Server.toServerCacheModel(locationCacheModel: LocationCacheModel): ServerCacheModel {
-                return ServerCacheModel(0, location = locationCacheModel.locationId, protocol = Protocol.IKEV2.value, ovpnProfileId = null, ikeV2Alias = ikeV2Profile.certificateAlias)
+                return ServerCacheModel(0, location = locationCacheModel.locationId, protocol = Protocol.IKEv2.value, ovpnProfileId = null, ikeV2ProfileId = ikeV2Profile.id)
             }
         }
     }

@@ -37,4 +37,7 @@ interface LocationsDao {
     @Query("SELECT * FROM LocationCacheModel where country=:country and city=:city")
     suspend fun getLocation(country: String, city:String): LocationCacheModel?
 
+    @Query("DELETE FROM LocationCacheModel")
+    fun deleteAll()
+
 }

@@ -26,12 +26,12 @@ sealed class Server(
         }
     }
 
-    data class IkeV2Server(val certificateAlias: String,
+    data class IkeV2Server(val profileId: Long,
                            val id: Int,
-                           val location: Location) : Server(id, location, Protocol.IKEV2) {
+                           val location: Location) : Server(id, location, Protocol.IKEv2) {
         companion object {
             fun fromServerCacheModel(serverLocationModel: ServerLocationModel): IkeV2Server {
-                return IkeV2Server(serverLocationModel.serverCacheModel.ikeV2Alias!!,
+                return IkeV2Server(serverLocationModel.serverCacheModel.ikeV2ProfileId!!,
                         serverLocationModel.serverCacheModel.serverId,
                         Location.fromLocationCacheModel(serverLocationModel.locationCacheModel))
             }

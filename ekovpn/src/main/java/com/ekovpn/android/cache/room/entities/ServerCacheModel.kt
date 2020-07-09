@@ -12,12 +12,12 @@ import androidx.room.PrimaryKey
 @Entity(foreignKeys = [(ForeignKey(entity = LocationCacheModel::class,
         parentColumns = ["locationId"], childColumns = ["location"],
         onDelete = ForeignKey.CASCADE))])
-class ServerCacheModel(
+data class ServerCacheModel(
         @PrimaryKey(autoGenerate = true)
         val serverId: Int,
         val location: Int,
         val protocol: String,
         val ovpnProfileId: String?,
-        val ikeV2Alias: String?
+        val ikeV2ProfileId: Long?
 )
 

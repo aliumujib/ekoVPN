@@ -8,18 +8,18 @@
     "open_vpn": [
       {
         "protocol": "TCP",
-        "configfileurl": "https://docs.google.com/uc?export=download&id=1l5MRpdqQsexXaSekZCpUPHWkpx_gR8m3"
+        "configfileurl": "https://ekovpn07092020.s3.amazonaws.com/usa_tcp.ovpn"
       },
       {
         "protocol": "UDP",
-        "configfileurl": "https://docs.google.com/uc?export=download&id=1Ky0Lq1aMFZhKEuotG6OSu_b44XwkoFWF"
+        "configfileurl": "https://ekovpn07092020.s3.amazonaws.com/usa_udp.ovpn"
       }
     ],
-    "ikev2":{
-      "certificate_url":"https://docs.google.com/uc?export=download&id=1DJprEdjSXYiRH15dX6Kcu_gXoXMvrc47",
-      "username":"mujeeb",
-      "password":"aliumujeeb",
-      "ip":"52.212.176.155"
+    "ikev2": {
+      "certificate_url": "https://ekovpn07092020.s3.amazonaws.com/ca_cert_germany.pem",
+      "username": "mujeeb",
+      "password": "aliumujeeb",
+      "ip": "52.212.176.155"
     }
   },
   {
@@ -31,18 +31,18 @@
     "open_vpn": [
       {
         "protocol": "TCP",
-        "configfileurl": "https://docs.google.com/uc?export=download&id=1l5MRpdqQsexXaSekZCpUPHWkpx_gR8m3"
+        "configfileurl": "https://ekovpn07092020.s3.amazonaws.com/usa_tcp.ovpn"
       },
       {
         "protocol": "UDP",
-        "configfileurl": "https://docs.google.com/uc?export=download&id=1Ky0Lq1aMFZhKEuotG6OSu_b44XwkoFWF"
+        "configfileurl": "https://ekovpn07092020.s3.amazonaws.com/usa_udp.ovpn"
       }
     ],
-    "ikev2":{
-      "certificate_url":"https://docs.google.com/uc?export=download&id=1oHGrMz6HNh2ia3uLC_T3cWfhaDOzn1Rw",
-      "username":"mujeeb",
-      "password":"aliumujeeb",
-      "ip":"52.212.176.155"
+    "ikev2": {
+      "certificate_url": "https://ekovpn07092020.s3.amazonaws.com/ca_cert_ireland.pem\n\n",
+      "username": "mujeeb",
+      "password": "aliumujeeb",
+      "ip": "52.212.176.155"
     }
   },
   {
@@ -54,18 +54,18 @@
     "open_vpn": [
       {
         "protocol": "TCP",
-        "configfileurl": "https://docs.google.com/uc?export=download&id=1l5MRpdqQsexXaSekZCpUPHWkpx_gR8m3"
+        "configfileurl": "https://ekovpn07092020.s3.amazonaws.com/usa_tcp.ovpn"
       },
       {
         "protocol": "UDP",
-        "configfileurl": "https://docs.google.com/uc?export=download&id=1Ky0Lq1aMFZhKEuotG6OSu_b44XwkoFWF"
+        "configfileurl": "https://ekovpn07092020.s3.amazonaws.com/usa_udp.ovpn"
       }
     ],
-    "ikev2":{
-      "certificate_url":"https://docs.google.com/uc?export=download&id=1RC1qINpVqD1D43C2WJ9bktSfq0xsUqT2",
-      "username":"mujeeb",
-      "password":"aliumujeeb",
-      "ip":"52.212.176.155"
+    "ikev2": {
+      "certificate_url": "https://ekovpn07092020.s3.amazonaws.com/ca_cert_ontario.pem",
+      "username": "mujeeb",
+      "password": "aliumujeeb",
+      "ip": "52.212.176.155"
     }
   },
   {
@@ -77,41 +77,19 @@
     "open_vpn": [
       {
         "protocol": "TCP",
-        "configfileurl": "https://docs.google.com/uc?export=download&id=1l5MRpdqQsexXaSekZCpUPHWkpx_gR8m3"
+        "configfileurl": "https://ekovpn07092020.s3.amazonaws.com/usa_tcp.ovpn"
       },
       {
         "protocol": "UDP",
-        "configfileurl": "https://docs.google.com/uc?export=download&id=1Ky0Lq1aMFZhKEuotG6OSu_b44XwkoFWF"
+        "configfileurl": "https://ekovpn07092020.s3.amazonaws.com/usa_udp.ovpn"
       }
     ],
-    "ikev2":{
-      "certificate_url":"https://docs.google.com/uc?export=download&id=1VrXtIpCrjSTZFd30soPN6MpKYEkNaIkP",
-      "username":"mujeeb",
-      "password":"aliumujeeb",
-      "ip":"52.212.176.155"
-    }
-  },
-  {
-    "location": {
-      "city": "ZZ",
-      "country": "ZZ",
-      "country_code": "ZZ"
-    },
-    "open_vpn": [
-      {
-        "protocol": "TCP",
-        "configfileurl": "https://docs.google.com/uc?export=download&id=1l5MRpdqQsexXaSekZCpUPHWkpx_gR8m3"
-      },
-      {
-        "protocol": "UDP",
-        "configfileurl": "https://docs.google.com/uc?export=download&id=1Ky0Lq1aMFZhKEuotG6OSu_b44XwkoFWF"
-      }
-    ],
-    "ikev2":{
-      "certificate_url":"https://docs.google.com/uc?export=download&id=1VrXtIpCrjSTZFd30soPN6MpKYEkNaIkP",
-      "username":"mujeeb",
-      "password":"aliumujeeb",
-      "ip":"52.212.176.155"
+    "ikev2": {
+      "certificate_url": "https://ekovpn07092020.s3.amazonaws.com/ca_cert_sweden.pem",
+      "username": "mujeeb",
+      "password": "aliumujeeb",
+      "ip": "52.212.176.155"
     }
   }
+
 ]

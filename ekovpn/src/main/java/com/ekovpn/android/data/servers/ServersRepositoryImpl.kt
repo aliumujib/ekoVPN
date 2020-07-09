@@ -10,6 +10,7 @@ import com.ekovpn.android.BuildConfig
 import com.ekovpn.android.cache.room.dao.ServersDao
 import com.ekovpn.android.data.settings.SettingsRepository
 import com.ekovpn.android.models.Location
+import com.ekovpn.android.models.Protocol
 import com.ekovpn.android.models.Server
 import com.ekovpn.android.remote.retrofit.AWSIPApiService
 import com.ekovpn.android.remote.retrofit.IPStackApiService
@@ -30,7 +31,11 @@ class ServersRepositoryImpl @Inject constructor(private val serversDao: ServersD
     override fun getServersForCurrentProtocol(): Flow<List<Server>> {
         return serversDao.getServersForProtocol(settingsRepository.getSelectedProtocol().value).map {
             it.map { server ->
-                Server.OVPNServer.fromServerCacheModel(server)
+                if (server.serverCacheModel.protocol == Protocol.TCP.value || server.serverCacheModel.protocol == Protocol.UDP.value) {
+                    Server.OVPNServer.fromServerCacheModel(server)
+                } else {
+                    Server.IkeV2Server.fromServerCacheModel(server)
+                }
             }
         }
     }
@@ -68,8 +73,8 @@ class ServersRepositoryImpl @Inject constructor(private val serversDao: ServersD
         return profileManager.getProfile(profileUUID)
     }
 
-    override suspend fun getIkev2ProfileForServer(alias: String): org.strongswan.android.data.VpnProfile? {
-        return vpnProfileDataSource.getVpnProfileByAlias(alias)
+    override suspend fun getIKEv2ProfileForServer(id: Long): org.strongswan.android.data.VpnProfile? {
+        return vpnProfileDataSource.getVpnProfile(id)
     }
 
 }

@@ -13,6 +13,5 @@ interface ConfigRepository {
     fun fetchAndConfigureServers(): Flow<Result<Unit>>
 
     fun hasConfiguredServers(): Boolean
-    fun configureOVPNServers(serverConfig: Array<ServerConfig>): Flow<Result<Unit>>
-    fun configureIkeV2Servers(serverConfig: Array<ServerConfig>): Flow<Result<Unit>>
+
 }
