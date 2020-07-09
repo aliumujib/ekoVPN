@@ -21,7 +21,11 @@ class SplashViewModel @Inject constructor(private val configRepository: ConfigRe
     val state: StateFlow<SetUpState> = _state
 
     init {
-        if(configRepository.hasConfiguredServers().not()){
+        runSetupIfNeeded()
+    }
+
+     fun runSetupIfNeeded() {
+        if (configRepository.hasConfiguredServers().not()) {
             configRepository.fetchAndConfigureServers()
                     .flowOn(Dispatchers.IO)
                     .onStart {
@@ -29,18 +33,23 @@ class SplashViewModel @Inject constructor(private val configRepository: ConfigRe
                     }
                     .onEach {
                         if (it.isSuccess) {
-                            Log.d(SplashActivity::class.java.simpleName, "Success")
+                            Log.d(SplashViewModel::class.java.simpleName, "Success")
                         } else {
                             _state.value = SetUpState.Failed
-                            Log.d(SplashActivity::class.java.simpleName, "Error")
+                            Log.d(SplashViewModel::class.java.simpleName, "Error")
                         }
                     }.onCompletion {
-                        _state.value = SetUpState.Finished
+                        if(it != null){
+                            _state.value = SetUpState.Failed
+                        }else{
+                            _state.value = SetUpState.Finished
+                        }
                     }.catch {
-                        Log.d(SplashActivity::class.java.simpleName, it.message)
+                        Log.d(SplashViewModel::class.java.simpleName, "${it.message}")
+                        _state.value = SetUpState.Failed
                     }
                     .launchIn(viewModelScope)
-        }else{
+        } else {
             _state.value = SetUpState.Finished
         }
     }

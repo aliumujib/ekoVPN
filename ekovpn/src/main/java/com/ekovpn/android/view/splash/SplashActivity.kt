@@ -6,8 +6,10 @@
 package com.ekovpn.android.view.splash
 
 import android.content.Intent
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.ekovpn.android.ApplicationClass.Companion.coreComponent
@@ -28,28 +30,33 @@ import javax.inject.Inject
 class SplashActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var splashViewModel: SplashViewModel
+    lateinit var viewModel: SplashViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         injectDependencies()
         setContentView(R.layout.activity_splash)
 
-        splashViewModel
+        viewModel
                 .state
                 .onEach {
                     delay(1000)
                     render(it)
                 }
                 .launchIn(lifecycleScope)
+
+        retry.setOnClickListener {
+            viewModel.runSetupIfNeeded()
+        }
     }
 
 
     private fun render(state: SetUpState) {
         when (state) {
             SetUpState.Working -> {
-                progressBar.show()
-                setup_text_.show()
+                progressBar.visibility = View.VISIBLE
+                setup_text_.visibility = View.VISIBLE
+                retry.visibility = View.GONE
                 setup_text_.setText(R.string.wait_while_we_set_up)
             }
             SetUpState.Finished -> {
@@ -58,12 +65,15 @@ class SplashActivity : AppCompatActivity() {
                 this@SplashActivity.finish()
             }
             SetUpState.Failed -> {
+                retry.visibility = View.VISIBLE
+                progressBar.visibility = View.INVISIBLE
                 setup_text_.setText(R.string.an_error_occured)
                 Log.d(SplashActivity::class.java.simpleName, "Error")
             }
             else -> {
-                progressBar.hide()
-                setup_text_.hide()
+                retry.visibility = View.VISIBLE
+                progressBar.visibility = View.INVISIBLE
+                setup_text_.visibility = View.INVISIBLE
             }
         }
     }

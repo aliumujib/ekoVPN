@@ -16,17 +16,15 @@ import kotlinx.coroutines.flow.flow
 import org.strongswan.android.data.VpnProfile
 import org.strongswan.android.data.VpnType
 import org.strongswan.android.logic.TrustedCertificateManager
-import org.strongswan.android.security.TrustedCertificateEntry
 import java.io.FileNotFoundException
 import java.io.InputStream
 import java.security.KeyStore
-import java.security.cert.CertificateException
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
-import java.util.*
 import javax.inject.Inject
+import java.io.File
 
-class Ikev2ProfileImporter @Inject constructor(val context: Context) {
+class Ikev2CertificateImporter @Inject constructor(val context: Context) {
 
     fun importServerConfig(fileUri: Uri, location: ServerLocation, ikeV2: IkeV2): Flow<Result<VPNServer>> {
         return flow {
@@ -34,11 +32,9 @@ class Ikev2ProfileImporter @Inject constructor(val context: Context) {
                 val result = parseCertificate(fileUri)
                 val alias = "${location.city}-${location.country}"
                 if (result != null) {
-                    if (storeCertificate(alias, result)) {
-                        emit(Result.success(VPNServer.IkeV2Server(makeProfile(result, location, ikeV2), location)))
-                    } else {
-                        emit(Result.failure<VPNServer>(Exception("An error occurred, error code $CONFIG_PARSING_ERROR")))
-                    }
+                    storeCertificate(alias, result)
+                    File(fileUri.path).delete()
+                    emit(Result.success(VPNServer.IkeV2Server(makeProfile(result, location, ikeV2), location)))
                 } else {
                     emit(Result.failure<VPNServer>(Exception("An error occurred, error code $CONFIG_PARSING_ERROR")))
                 }
@@ -65,7 +61,7 @@ class Ikev2ProfileImporter @Inject constructor(val context: Context) {
         store.load(null, null)
         val alias: String = store.getCertificateAlias(certificate)
         vpnProfile.certificateAlias = alias
-        Log.d(Ikev2ProfileImporter::class.java.simpleName, "$vpnProfile , $alias")
+        Log.d(Ikev2CertificateImporter::class.java.simpleName, "$vpnProfile , $alias")
 
         return vpnProfile
     }
@@ -73,16 +69,9 @@ class Ikev2ProfileImporter @Inject constructor(val context: Context) {
 
     private fun parseCertificate(uri: Uri): X509Certificate? {
         var certificate: X509Certificate? = null
-        try {
-            val factory = CertificateFactory.getInstance("X.509")
-            val `in`: InputStream = context.contentResolver.openInputStream(uri)!!
-            certificate = factory.generateCertificate(`in`) as X509Certificate
-            /* we don't check whether it's actually a CA certificate or not */
-        } catch (e: CertificateException) {
-            e.printStackTrace()
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-        }
+        val factory = CertificateFactory.getInstance("X.509")
+        val `in`: InputStream = context.contentResolver.openInputStream(uri)!!
+        certificate = factory.generateCertificate(`in`) as X509Certificate
         return certificate
     }
 
@@ -93,17 +82,11 @@ class Ikev2ProfileImporter @Inject constructor(val context: Context) {
      * @param certificate
      * @return whether it was successfully stored
      */
-    private fun storeCertificate(alias: String, certificate: X509Certificate): Boolean {
-        return try {
-            val store = KeyStore.getInstance("LocalCertificateStore")
-            store.load(null, null)
-            store.setCertificateEntry(alias, certificate)
-            TrustedCertificateManager.getInstance().reset()
-            true
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace()
-            false
-        }
+    private fun storeCertificate(alias: String, certificate: X509Certificate) {
+        val store = KeyStore.getInstance("LocalCertificateStore")
+        store.load(null, null)
+        store.setCertificateEntry(alias, certificate)
+        TrustedCertificateManager.getInstance().reset()
     }
 
     companion object {

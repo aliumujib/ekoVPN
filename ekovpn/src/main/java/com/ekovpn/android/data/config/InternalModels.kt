@@ -15,7 +15,8 @@ data class ServerConfig(
         @SerializedName("location")
         val serverLocation: ServerLocation,
         val open_vpn: List<OpenVpn>,
-        val ikev2: IkeV2
+        @SerializedName("ikev2")
+        val iKev2: IkeV2
 )
 
 data class IkeV2(
@@ -31,8 +32,8 @@ data class ServerLocation(
         val country_code: String
 ) {
     companion object {
-        fun toLocationCacheModel(it: ServerLocation): LocationCacheModel {
-            return LocationCacheModel(city = it.city, country = it.country, country_code = it.country_code, locationId = 0)
+        fun ServerLocation.toLocationCacheModel(index: Int): LocationCacheModel {
+            return LocationCacheModel(city = this.city, country = this.country, country_code = this.country_code, locationId = index)
         }
     }
 }

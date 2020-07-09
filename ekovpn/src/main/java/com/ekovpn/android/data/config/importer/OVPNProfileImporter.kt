@@ -5,7 +5,6 @@
 
 package com.ekovpn.android.data.config.importer
 
-import android.content.Context
 import android.net.Uri
 import androidx.core.net.toFile
 import de.blinkt.openvpn.VpnProfile
@@ -43,20 +42,14 @@ class OVPNProfileImporter @Inject constructor() {
 
 
     private fun doImport(inputStream: InputStream): VpnProfile? {
-        val cp = ConfigParser()
+        val configParser = ConfigParser()
         val result: VpnProfile?
-        try {
-            val isr = InputStreamReader(inputStream)
-            cp.parseConfig(isr)
-            result = cp.convertProfile()
-            return result
 
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace()
-        } finally {
-            inputStream.close()
-        }
-        return null
+        val inputStreamReader = InputStreamReader(inputStream)
+        configParser.parseConfig(inputStreamReader)
+        result = configParser.convertProfile()
+        inputStream.close()
+        return result
     }
 
 

@@ -354,6 +354,18 @@ public class VpnProfileDataSource
 
 
 	/**
+	 * Delete the given VPN profile from the database.
+	 */
+	public void deleteAllVpnProfiles()
+	{
+		for (VpnProfile allVpnProfile : getAllVpnProfiles()) {
+			long id = allVpnProfile.getId();
+			mDatabase.delete(TABLE_VPNPROFILE, KEY_ID + " = " + id, null);
+		}
+	}
+
+
+	/**
 	 * Get a single VPN profile from the database.
 	 * @param certificateAlias the certificateAlias of the VPN profile
 	 * @return the profile or null, if not found
