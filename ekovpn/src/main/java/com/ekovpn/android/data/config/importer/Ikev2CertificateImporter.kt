@@ -8,15 +8,12 @@ package com.ekovpn.android.data.config.importer
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import com.ekovpn.android.data.config.IkeV2
+import com.ekovpn.android.data.config.IKEv2
 import com.ekovpn.android.data.config.ServerLocation
 import com.ekovpn.android.data.config.VPNServer
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import org.strongswan.android.data.VpnProfile
 import org.strongswan.android.data.VpnType
 import org.strongswan.android.logic.TrustedCertificateManager
-import java.io.FileNotFoundException
 import java.io.InputStream
 import java.security.KeyStore
 import java.security.cert.CertificateFactory
@@ -26,30 +23,16 @@ import java.io.File
 
 class Ikev2CertificateImporter @Inject constructor(val context: Context) {
 
-    fun importServerConfig(fileUri: Uri, location: ServerLocation, ikeV2: IkeV2): Flow<Result<VPNServer>> {
-        return flow {
-            try {
-                val result = parseCertificate(fileUri)
-                val alias = "${location.city}-${location.country}"
-                if (result != null) {
-                    storeCertificate(alias, result)
-                    File(fileUri.path).delete()
-                    emit(Result.success(VPNServer.IkeV2Server(makeProfile(result, location, ikeV2), location)))
-                } else {
-                    emit(Result.failure<VPNServer>(Exception("An error occurred, error code $CONFIG_PARSING_ERROR")))
-                }
-            } catch (e: FileNotFoundException) {
-                e.printStackTrace()
-                emit(Result.failure<VPNServer>(e))
-            } catch (e: Exception) {
-                e.printStackTrace()
-                emit(Result.failure<VPNServer>(e))
-            }
-        }
+    fun importServerConfig(fileUri: Uri, location: ServerLocation, ikeV2: IKEv2): VPNServer {
+        val result = parseCertificate(fileUri)
+        val alias = "${location.city}-${location.country}"
+        storeCertificate(alias, result!!)
+        File(fileUri.path).delete()
+        return VPNServer.IkeV2Server(makeProfile(result, location, ikeV2), location)
     }
 
 
-    private fun makeProfile(certificate: X509Certificate, serverLocation: ServerLocation, ikeV2: IkeV2): VpnProfile {
+    private fun makeProfile(certificate: X509Certificate, serverLocation: ServerLocation, ikeV2: IKEv2): VpnProfile {
         val vpnProfile = VpnProfile()
         vpnProfile.name = "${serverLocation.city}-${serverLocation.country}-ikeV2"
         vpnProfile.gateway = ikeV2.ip

@@ -7,7 +7,7 @@ package com.ekovpn.android.utils.ext
 
 import kotlinx.coroutines.flow.*
 
-inline fun <reified K, V> buildMap(keys: Set<K>, crossinline valueFunc: (K) -> Flow<V>): Flow<Map<K, V>> = flow {
+inline fun <reified K, V> runOnAll(keys: Set<K>, crossinline valueFunc: (K) -> Flow<V>): Flow<Map<K, V>> = flow {
     val keysSize = keys.size
     val valuesMap = HashMap<K, V>(keys.size)
     flowOf(*keys.toTypedArray())

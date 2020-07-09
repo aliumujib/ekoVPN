@@ -11,7 +11,7 @@ import android.util.Log
 import androidx.core.content.ContextCompat
 import com.downloader.OnDownloadListener
 import com.downloader.PRDownloader
-import com.ekovpn.android.data.config.IkeV2
+import com.ekovpn.android.data.config.IKEv2
 import com.ekovpn.android.data.config.ServerLocation
 import com.ekovpn.android.data.config.ServerSetUp
 import com.ekovpn.android.models.Protocol
@@ -38,7 +38,7 @@ class FileDownloader @Inject constructor(private val context: Context) {
         }
     }
 
-    fun downloadIKev2Certificate(serverLocation: ServerLocation, ikeV2: IkeV2): Flow<Result<ServerSetUp>> {
+    fun downloadIKev2Certificate(serverLocation: ServerLocation, ikeV2: IKEv2): Flow<Result<ServerSetUp>> {
         return downloadConfigFile(serverLocation, Protocol.IKEV2, ikeV2.certificate_url, ikeV2)
     }
 
@@ -87,7 +87,7 @@ class FileDownloader @Inject constructor(private val context: Context) {
 //    }
 
 
-    private fun downloadConfigFile(serverLocation: ServerLocation, protocol: Protocol, configFileURL: String, ikeV2: IkeV2? = null): Flow<Result<ServerSetUp>> {
+    private fun downloadConfigFile(serverLocation: ServerLocation, protocol: Protocol, configFileURL: String, ikeV2: IKEv2? = null): Flow<Result<ServerSetUp>> {
         val fileName = if (protocol == Protocol.TCP || protocol == Protocol.UDP) {
             "${serverLocation.city}_${serverLocation.country}_${protocol.value}.ovpn"
         } else {

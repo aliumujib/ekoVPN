@@ -18,28 +18,11 @@ import javax.inject.Inject
 
 class OVPNProfileImporter @Inject constructor() {
 
-    fun importServerConfig(fileUri: Uri):Flow<Result<VpnProfile>> {
-        return flow {
-            try {
-                val inputStream: InputStream = fileUri.toFile().inputStream()
-                val result = doImport(inputStream)
-                if (result != null) {
-                    emit(Result.success(result))
-                } else {
-                    emit(Result.failure<VpnProfile>(Exception("An error occurred, error code $CONFIG_PARSING_ERROR")))
-                }
-            } catch (e: FileNotFoundException){
-                e.printStackTrace()
-                emit(Result.failure<VpnProfile>(e))
-            } catch (e: Exception) {
-                e.printStackTrace()
-                emit(Result.failure<VpnProfile>(e))
-            }
-        }
+    fun importServerConfig(fileUri: Uri): VpnProfile {
+        val inputStream: InputStream = fileUri.toFile().inputStream()
+        val result = doImport(inputStream)
+        return result!!
     }
-
-
-
 
     private fun doImport(inputStream: InputStream): VpnProfile? {
         val configParser = ConfigParser()

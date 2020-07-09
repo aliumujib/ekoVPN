@@ -90,28 +90,6 @@
       "password": "aliumujeeb",
       "ip": "52.212.176.155"
     }
-  },
-  {
-    "location": {
-      "city": "ZZ",
-      "country": "ZZ",
-      "country_code": "ZZ"
-    },
-    "open_vpn": [
-      {
-        "protocol": "TCP",
-        "configfileurl": "https://ekovpn07092020.s3.amazonaws.com/usa_tcp.ovpn"
-      },
-      {
-        "protocol": "UDP",
-        "configfileurl": "https://ekovpn07092020.s3.amazonaws.com/usa_udp.ovpn"
-      }
-    ],
-    "ikev2": {
-      "certificate_url": "https://ekovpn07092020.s3.amazonaws.com/ca_cert_sweden.pem",
-      "username": "mujeeb",
-      "password": "aliumujeeb",
-      "ip": "52.212.176.155"
-    }
   }
+
 ]

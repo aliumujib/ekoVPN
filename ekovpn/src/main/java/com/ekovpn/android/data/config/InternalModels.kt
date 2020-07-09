@@ -16,10 +16,10 @@ data class ServerConfig(
         val serverLocation: ServerLocation,
         val open_vpn: List<OpenVpn>,
         @SerializedName("ikev2")
-        val iKev2: IkeV2
+        val iKev2: IKEv2
 )
 
-data class IkeV2(
+data class IKEv2(
         val certificate_url: String,
         val ip: String,
         val password: String,
@@ -51,7 +51,7 @@ sealed class ServerSetUp(val serverLocation_: ServerLocation,
                          val protocol: Protocol) : ServerSetUp(serverLocation, protocol)
 
     data class IkeV2Setup(val pemFileDir: String, val pemProfileID: String = "N/A", val serverLocation: ServerLocation,
-                          val ikeV2: IkeV2, val protocol: Protocol) : ServerSetUp(serverLocation, protocol)
+                          val ikeV2: IKEv2, val protocol: Protocol) : ServerSetUp(serverLocation, protocol)
 }
 
 

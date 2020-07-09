@@ -13,7 +13,6 @@ import com.ekovpn.android.data.config.*
 import com.ekovpn.android.data.config.ServerLocation.Companion.toLocationCacheModel
 import com.google.gson.Gson
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
@@ -42,31 +41,35 @@ class ConfigRepositoryImpl @Inject constructor(private val context: Context,
 
     override fun fetchAndConfigureServers(): Flow<Result<Unit>> {
 
-        val configList = loadJSonData()
-        configList.sortBy { it.serverLocation.city }
+        val serverConfigurations = loadJSonData()
+        serverConfigurations.sortBy { it.serverLocation.city }
 
         val setOfLocations = mutableSetOf<ServerLocation>()
 
-        configList.forEach {
+        serverConfigurations.forEach {
             setOfLocations.add(it.serverLocation)
         }
 
-        Log.d(ConfigRepositoryImpl::class.java.simpleName, configList.toString())
+        Log.d(ConfigRepositoryImpl::class.java.simpleName, serverConfigurations.toString())
 
         val listOfCachedLocations = setOfLocations.mapIndexed { index, serverLocation ->
             serverLocation.toLocationCacheModel(index + 1)
         }.toList()
 
+        val configurationOperations = listOf(openVpnConfigurator.configureOVPNServers(serverConfigurations),
+                iKev2CertificateImporter.configureIkeV2Servers(serverConfigurations))
 
-        return listOf(openVpnConfigurator.configureOVPNServers(configList),
-                iKev2CertificateImporter.configureIkeV2Servers(configList))
+        return configurationOperations
                 .merge()
                 .onStart {
                     locationsDao.insert(listOfCachedLocations)
                 }
                 .onCompletion {
                     settingsPrefManager.setHasCompletedSetup()
-                }
+                }.map {
+                    Log.d(ConfigRepositoryImpl::class.java.simpleName, "List $it")
+                    Result.success(Unit)
+                }.take(configurationOperations.size)
     }
 
 
