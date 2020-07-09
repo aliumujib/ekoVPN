@@ -100,12 +100,14 @@ public class VpnStateFragment extends Fragment implements VpnStateListener
 		View view = inflater.inflate(R.layout.vpn_state_fragment, null);
 
 		mActionButton = (Button)view.findViewById(R.id.action);
+
 		mActionButton.setOnClickListener(v -> {
 			if (mService != null)
 			{
 				mService.disconnect();
 			}
 		});
+
 		enableActionButton(null);
 
 		mErrorView = view.findViewById(R.id.vpn_error);
@@ -124,6 +126,7 @@ public class VpnStateFragment extends Fragment implements VpnStateListener
 				mService.reconnect();
 			}
 		});
+
 		mShowLog.setOnClickListener(v -> {
 			Intent intent = new Intent(getActivity(), LogActivity.class);
 			startActivity(intent);
@@ -166,7 +169,7 @@ public class VpnStateFragment extends Fragment implements VpnStateListener
 	}
 
 	@Override
-	public void stateChanged()
+	public void stateChanged(State state)
 	{
 		updateView();
 	}

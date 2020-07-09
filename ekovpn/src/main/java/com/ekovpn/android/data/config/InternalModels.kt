@@ -62,15 +62,15 @@ sealed class VPNServer(
     data class OVPNServer(val openVpnProfile: de.blinkt.openvpn.VpnProfile, val serverLocation: ServerLocation, val protocol: Protocol) : VPNServer(serverLocation, protocol) {
         companion object {
             fun OVPNServer.toServerCacheModel(locationCacheModel: LocationCacheModel, protocol: Protocol): ServerCacheModel {
-                return ServerCacheModel(0, location = locationCacheModel.locationId, protocol = protocol.value, ovpnProfileId = openVpnProfile.uuidString, ikeV2Alias = null)
+                return ServerCacheModel(0, location = locationCacheModel.locationId, protocol = protocol.value, ovpnProfileId = openVpnProfile.uuidString, ikeV2ProfileId = null)
             }
         }
     }
 
-    data class IkeV2Server(val ikeV2Profile: org.strongswan.android.data.VpnProfile, val serverLocation: ServerLocation) : VPNServer(serverLocation, Protocol.IKEV2) {
+    data class IkeV2Server(val ikeV2Profile: org.strongswan.android.data.VpnProfile, val serverLocation: ServerLocation) : VPNServer(serverLocation, Protocol.IKEv2) {
         companion object {
             fun IkeV2Server.toServerCacheModel(locationCacheModel: LocationCacheModel): ServerCacheModel {
-                return ServerCacheModel(0, location = locationCacheModel.locationId, protocol = Protocol.IKEV2.value, ovpnProfileId = null, ikeV2Alias = ikeV2Profile.certificateAlias)
+                return ServerCacheModel(0, location = locationCacheModel.locationId, protocol = Protocol.IKEv2.value, ovpnProfileId = null, ikeV2ProfileId = ikeV2Profile.id)
             }
         }
     }

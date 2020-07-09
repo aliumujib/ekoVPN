@@ -9,7 +9,6 @@ import android.content.ActivityNotFoundException
 import android.content.ClipDescription
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -71,7 +70,7 @@ class SettingsFragment : Fragment() {
                     viewModel.selectProtocol(Protocol.UDP)
                 }
                 R.id.ikev2 -> {
-                    viewModel.selectProtocol(Protocol.IKEV2)
+                    viewModel.selectProtocol(Protocol.IKEv2)
                 }
                 else -> {
                     viewModel.selectProtocol(Protocol.WIREGUARD)
@@ -179,7 +178,7 @@ class SettingsFragment : Fragment() {
             Protocol.UDP -> {
                 protocol_group.check(R.id.tcp)
             }
-            Protocol.IKEV2 -> {
+            Protocol.IKEv2 -> {
                 protocol_group.check(R.id.ikev2)
             }
             Protocol.WIREGUARD -> {

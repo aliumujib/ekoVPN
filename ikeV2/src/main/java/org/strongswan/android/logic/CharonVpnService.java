@@ -514,7 +514,7 @@ public class CharonVpnService extends VpnService implements Runnable, VpnStateSe
 	}
 
 	@Override
-	public void stateChanged() {
+	public void stateChanged(State state) {
 		if (mShowNotification)
 		{
 			NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

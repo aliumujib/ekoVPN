@@ -8,7 +8,7 @@ package com.ekovpn.android.models
 enum class Protocol(val value: String) {
     TCP("TCP"),
     UDP("UDP"),
-    IKEV2("IKEv2"),
+    IKEv2("IKEv2"),
     WIREGUARD("WIREGUARD");
 
     companion object {

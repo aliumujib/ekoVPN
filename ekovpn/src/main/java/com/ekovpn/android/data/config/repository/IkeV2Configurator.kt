@@ -66,7 +66,8 @@ class IkeV2Configurator @Inject constructor(
         var serverCacheModel: ServerCacheModel? = null
         location?.let {
             serverCacheModel = result.toServerCacheModel(location)
-            vpnProfileDataSource.insertProfile(result.ikeV2Profile)
+            val savedProfile = vpnProfileDataSource.insertProfile(result.ikeV2Profile)
+            serverCacheModel = serverCacheModel?.copy(ikeV2ProfileId = savedProfile.id)
             serverCacheModel?.let {
                 serversDao.insert(it)
             } ?: throw IllegalStateException("Error saving null IKEv2 server $serverCacheModel")

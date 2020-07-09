@@ -21,6 +21,6 @@ interface ServersRepository {
 
     suspend fun getOVPNProfileForServer(profileUUID: String): de.blinkt.openvpn.VpnProfile?
 
-    suspend fun getIkev2ProfileForServer(alias: String): org.strongswan.android.data.VpnProfile?
+    suspend fun getIKEv2ProfileForServer(id: Long): org.strongswan.android.data.VpnProfile?
 
 }

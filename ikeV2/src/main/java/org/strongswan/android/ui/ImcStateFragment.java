@@ -185,7 +185,7 @@ public class ImcStateFragment extends Fragment implements VpnStateListener
 	}
 
 	@Override
-	public void stateChanged()
+	public void stateChanged(VpnStateService.State state)
 	{
 		updateView();
 	}

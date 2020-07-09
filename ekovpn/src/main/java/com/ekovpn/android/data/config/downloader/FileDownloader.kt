@@ -39,7 +39,7 @@ class FileDownloader @Inject constructor(private val context: Context) {
     }
 
     fun downloadIKev2Certificate(serverLocation: ServerLocation, ikeV2: IKEv2): Flow<Result<ServerSetUp>> {
-        return downloadConfigFile(serverLocation, Protocol.IKEV2, ikeV2.certificate_url, ikeV2)
+        return downloadConfigFile(serverLocation, Protocol.IKEv2, ikeV2.certificate_url, ikeV2)
     }
 
     fun downloadOVPNConfig(serverLocation: ServerLocation, protocol: Protocol, configFileURL: String): Flow<Result<ServerSetUp>> {

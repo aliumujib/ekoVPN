@@ -5,8 +5,12 @@
 
 package com.ekovpn.android.view.main.home
 
+import android.app.Service
+import android.content.ComponentName
 import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.IBinder
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
@@ -33,18 +37,32 @@ import de.blinkt.openvpn.core.ConnectionStatus
 import de.blinkt.openvpn.core.VpnStatus
 import de.blinkt.openvpn.core.VpnStatus.StateListener
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_home.help
-import kotlinx.android.synthetic.main.fragment_home.privacy
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.strongswan.android.logic.VpnStateService
+import org.strongswan.android.logic.VpnStateService.LocalBinder
+import org.strongswan.android.ui.VpnProfileControlActivity
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-class HomeFragment : Fragment(), StateListener {
+class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener {
 
     @Inject
     lateinit var viewModel: HomeViewModel
+
+    private var iKEv2Service: VpnStateService? = null
+
+    private val mServiceConnection: ServiceConnection = object : ServiceConnection {
+        override fun onServiceDisconnected(name: ComponentName) {
+            iKEv2Service = null
+        }
+
+        override fun onServiceConnected(name: ComponentName, service: IBinder) {
+            iKEv2Service = (service as LocalBinder).service
+            iKEv2Service?.registerListener(this@HomeFragment)
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -55,6 +73,24 @@ class HomeFragment : Fragment(), StateListener {
         super.onCreate(savedInstanceState)
 
         injectDependencies()
+        bindToIKEv2StatusService()
+    }
+
+    private fun bindToIKEv2StatusService() {
+        /* bind to the service only seems to work from the ApplicationContext */
+        val context = requireActivity().applicationContext
+        context.bindService(Intent(context, VpnStateService::class.java), mServiceConnection, Service.BIND_AUTO_CREATE)
+    }
+
+
+    override fun onStart() {
+        super.onStart()
+        iKEv2Service?.registerListener(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        iKEv2Service?.unregisterListener(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -78,9 +114,11 @@ class HomeFragment : Fragment(), StateListener {
             }
         }
 
-        viewModel.state.onEach {
-            render(it)
-        }.launchIn(lifecycleScope)
+        lifecycleScope.launchWhenResumed {
+            viewModel.state.onEach {
+                render(it)
+            }.launchIn(this)
+        }
 
 
         connect.setOnClickListener {
@@ -102,32 +140,41 @@ class HomeFragment : Fragment(), StateListener {
 
     }
 
-    private  fun connectToServer(server: Server) {
+    private fun connectToServer(server: Server) {
         lifecycleScope.launchWhenResumed {
             if (server is Server.OVPNServer) {
                 viewModel.getOVPNProfileForServer(server.ovpnProfileId)?.let {
-                    startOrStopVPN(it)
+                    startOrStopOpenVPN(it)
                     viewModel.connectingToServer(server)
                 }
-            }else if(server is Server.IkeV2Server){
-                viewModel.getIkev2ProfileForServer(server.certificateAlias)?.let {
+            } else if (server is Server.IkeV2Server) {
+                viewModel.getIKEv2ProfileForServer(server.profileId)?.let {
                     //startOrStopVPN(it)
+                    startOrStopIKEv2(it)
                     viewModel.connectingToServer(server)
                 }
             }
         }
     }
 
+    private fun startOrStopIKEv2(profile: org.strongswan.android.data.VpnProfile) {
+        val intent = Intent(requireContext(), VpnProfileControlActivity::class.java)
+        intent.action = VpnProfileControlActivity.START_PROFILE
+        intent.putExtra(VpnProfileControlActivity.EXTRA_VPN_PROFILE_ID, profile.uuid.toString())
+        startActivity(intent)
+    }
+
     override fun onResume() {
         super.onResume()
         VpnStatus.addStateListener(this)
+        viewModel.fetchServersForCurrentProtocol()
     }
 
     private fun initCurrentConnectionUI(location_: Location) {
-       activity?.runOnUiThread {
-           selected_flag.load("https://www.countryflags.io/${location_.country_code}/flat/64.png")
-           selected_location.text = Html.fromHtml(location_.country)
-       }
+        activity?.runOnUiThread {
+            selected_flag.load("https://www.countryflags.io/${location_.country_code}/flat/64.png")
+            selected_location.text = Html.fromHtml(location_.country)
+        }
     }
 
     private fun initLastSelectedUI(server: Server) {
@@ -188,7 +235,7 @@ class HomeFragment : Fragment(), StateListener {
     }
 
 
-    private fun startOrStopVPN(profile: VpnProfile) {
+    private fun startOrStopOpenVPN(profile: VpnProfile) {
         if (VpnStatus.isVPNActive() && profile.uuidString == VpnStatus.getLastConnectedVPNProfile()) {
             val disconnectVPN = Intent(activity, DisconnectVPN::class.java)
             startActivity(disconnectVPN)
@@ -228,6 +275,23 @@ class HomeFragment : Fragment(), StateListener {
 
     override fun setConnectedVPN(uuid: String?) {
 
+    }
+
+    override fun stateChanged(state: VpnStateService.State) {
+        when (state) {
+            VpnStateService.State.DISABLED -> {
+                viewModel.setDisconnected()
+            }
+            VpnStateService.State.CONNECTING -> {
+
+            }
+            VpnStateService.State.CONNECTED -> {
+                viewModel.setConnected()
+            }
+            VpnStateService.State.DISCONNECTING -> {
+
+            }
+        }
     }
 
 }
