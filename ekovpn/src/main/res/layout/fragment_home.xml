@@ -254,6 +254,21 @@
 
     </androidx.cardview.widget.CardView>
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/test_connection"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/safe_guard"
+        app:iconTint="@color/white"
+        android:letterSpacing="0"
+        android:text="@string/test_vpn_connection"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:layout_marginTop="@dimen/two_spaces"
+        app:layout_constraintEnd_toEndOf="@+id/select_location_card"
+        app:layout_constraintStart_toStartOf="@+id/select_location_card"
+        app:layout_constraintTop_toBottomOf="@+id/select_location_card" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/privacy"
@@ -263,10 +278,11 @@
         android:textAllCaps="false"
         android:text="@string/privacy_policy"
         android:letterSpacing="0"
+        android:layout_marginBottom="@dimen/two_spaces"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="@+id/select_location_card"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/select_location_card" />
+         />
 
 
     <com.google.android.material.button.MaterialButton

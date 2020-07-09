@@ -41,5 +41,6 @@
     <string name="time_left">Time left</string>
     <string name="get_more_time">Get More Time</string>
     <string name="retry">RETRY</string>
+    <string name="test_vpn_connection">Test VPN Connection</string>
 
 </resources>

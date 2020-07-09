@@ -120,7 +120,6 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
             }.launchIn(this)
         }
 
-
         connect.setOnClickListener {
             val server = viewModel.state.value.lastUsedServer
             if (server != null) {
@@ -132,6 +131,10 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
 
         privacy.setOnClickListener {
             WebViewDialog.display(childFragmentManager, "https://www.ekovpn.com/privacy-policy", null)
+        }
+
+        test_connection.setOnClickListener {
+            WebViewDialog.display(childFragmentManager, "http://ipleak.net", null)
         }
 
         help.setOnClickListener {
