@@ -8,6 +8,7 @@ package com.ekovpn.android.data.servers
 import android.util.Log
 import com.ekovpn.android.BuildConfig
 import com.ekovpn.android.cache.room.dao.ServersDao
+import com.ekovpn.android.data.config.IKEv2
 import com.ekovpn.android.data.settings.SettingsRepository
 import com.ekovpn.android.models.Location
 import com.ekovpn.android.models.Protocol
@@ -48,8 +49,12 @@ class ServersRepositoryImpl @Inject constructor(private val serversDao: ServersD
         return serversDao.getServersForProtocol(settingsRepository.getSelectedProtocol().value).map {
             it.filter {
                 it.serverCacheModel.serverId == settingsRepository.getLastServerId()
-            }.map {
-                Server.OVPNServer.fromServerCacheModel(it)
+            }.map { serverLocationModel ->
+                if (serverLocationModel.serverCacheModel.protocol == Protocol.IKEv2.value) {
+                    Server.IkeV2Server.fromServerCacheModel(serverLocationModel)
+                } else {
+                    Server.OVPNServer.fromServerCacheModel(serverLocationModel)
+                }
             }.firstOrNull()
         }.filter {
             it != null

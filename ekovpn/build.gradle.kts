@@ -3,6 +3,8 @@ plugins {
     id("checkstyle")
     id("kotlin-android")
     id("kotlin-android-extensions")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
     id("kotlin-kapt")
     id("androidx.navigation.safeargs.kotlin")
     kotlin("android")
@@ -49,9 +51,12 @@ android {
         }
     }
 
+    //dataBinding.isEnabled = true
+
 }
 
 dependencies {
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
     // https://maven.google.com/web/index.html
     // https://developer.android.com/jetpack/androidx/releases/core
     val preferenceVersion = "1.1.1"
@@ -65,7 +70,7 @@ dependencies {
     val dagger = "2.27"
     val okhttp3LoggingInterceptorVersion = "3.9.0"
     val retrofitGsonVersion = "2.3.0"
-
+    val streamsupportVersion = "1.7.2"
 
     implementation("androidx.annotation:annotation:1.1.0")
     implementation("androidx.core:core:$coreVersion")
@@ -104,14 +109,19 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.mindorks.android:prdownloader:0.6.0")
 
-    //implementation("com.liulishuo.okdownload:okdownload:${okDownload}")
+    implementation("net.sourceforge.streamsupport:android-retrofuture:$streamsupportVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.7")
     implementation("com.google.code.gson:gson:2.8.6")
     implementation("io.cabriole:decorator:1.0.0")
+    implementation("com.wireguard.android:tunnel:1.0.20200407")
+    implementation("com.google.firebase:firebase-analytics:17.4.4")
+    implementation("com.google.firebase:firebase-crashlytics:17.1.1")
+   // implementation("com.google.android.gms:play-services-ads:19.2.0")
 
     dependencies.add("uiImplementation", project(":openvpn"))
     dependencies.add("skeletonImplementation", project(":openvpn"))
     implementation(project(":ikeV2"))
+    //implementation(project(":wireguard"))
 
     testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.72")
     testImplementation("junit:junit:4.13")

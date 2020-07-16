@@ -22,6 +22,8 @@ import com.ekovpn.android.data.servers.ServersRepository
 import com.ekovpn.android.data.servers.ServersRepositoryImpl
 import com.ekovpn.android.data.settings.SettingsRepository
 import com.ekovpn.android.data.settings.SettingsRepositoryImpl
+import com.ekovpn.android.data.user.UserRepository
+import com.ekovpn.android.data.user.UserRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import de.blinkt.openvpn.core.ProfileManager
@@ -46,6 +48,12 @@ class DataModule {
     @Provides
     fun providesSettingsRepository(settingsRepositoryImpl: SettingsRepositoryImpl): SettingsRepository {
         return settingsRepositoryImpl
+    }
+
+    @Singleton
+    @Provides
+    fun providesUserRepository(userRepositoryImpl: UserRepositoryImpl): UserRepository {
+        return userRepositoryImpl
     }
 
 }

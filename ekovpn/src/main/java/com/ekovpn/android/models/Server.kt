@@ -5,17 +5,22 @@
 
 package com.ekovpn.android.models
 
+import android.os.Parcelable
 import com.ekovpn.android.cache.room.entities.ServerLocationModel
+import kotlinx.android.parcel.Parcelize
 
-sealed class Server(
+
+@Parcelize
+open class Server(
         val id_: Int,
         val location_: Location,
-        val protocol_: Protocol) {
+        val protocol_: Protocol) : Parcelable {
 
+    @Parcelize
     data class OVPNServer(val ovpnProfileId: String,
                           val id: Int,
                           val location: Location,
-                          val protocol: Protocol) : Server(id, location, protocol) {
+                          val protocol: Protocol) : Server(id, location, protocol), Parcelable {
         companion object {
             fun fromServerCacheModel(serverLocationModel: ServerLocationModel): OVPNServer {
                 return OVPNServer(serverLocationModel.serverCacheModel.ovpnProfileId!!,
@@ -26,9 +31,10 @@ sealed class Server(
         }
     }
 
+    @Parcelize
     data class IkeV2Server(val profileId: Long,
                            val id: Int,
-                           val location: Location) : Server(id, location, Protocol.IKEv2) {
+                           val location: Location) : Server(id, location, Protocol.IKEv2), Parcelable {
         companion object {
             fun fromServerCacheModel(serverLocationModel: ServerLocationModel): IkeV2Server {
                 return IkeV2Server(serverLocationModel.serverCacheModel.ikeV2ProfileId!!,

@@ -1,8 +1,8 @@
 build/
-main/libs/
-main/ovpnlibs/
-main/obj/
-main/.cxx/
+openvpn/libs/
+openvpn/ovpnlibs/
+openvpn/obj/
+openvpn/.cxx/
 .DS_Store
 .navigation
 google-breakpad/
@@ -19,8 +19,8 @@ cache.properties
 *.iml
 *.apk
 
-main/openvpn3
+openvpn/openvpn3
 
-main/src/ovpn3/java/net/openvpn/ovpn3
-main/.externalNativeBuild
-main/.cxx
+openvpn/src/ovpn3/java/net/openvpn/ovpn3
+openvpn/.externalNativeBuild
+openvpn/.cxx

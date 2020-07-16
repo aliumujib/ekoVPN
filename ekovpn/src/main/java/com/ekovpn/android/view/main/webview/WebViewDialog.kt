@@ -114,7 +114,6 @@ class WebViewDialog : DialogFragment() {
                 override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
                     super.onReceivedError(view, request, error)
                     onCloseClickListener?.onClose()
-                    dismiss()
                 }
             }
         }

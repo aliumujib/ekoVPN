@@ -42,5 +42,10 @@
     <string name="get_more_time">Get More Time</string>
     <string name="retry">RETRY</string>
     <string name="test_vpn_connection">Test VPN Connection</string>
+    <string name="out_of_time">You\'ve run out of time</string>
+    <string name="out_of_time_desc">View more ads to get more time or subscribe to our premium service</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ads_fragment_label">Ads</string>
 
 </resources>

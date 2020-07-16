@@ -8,13 +8,15 @@ package com.ekovpn.android.view.main.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ekovpn.android.data.servers.ServersRepository
+import com.ekovpn.android.data.user.UserRepository
 import com.ekovpn.android.models.Server
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-class HomeViewModel @Inject constructor(private val serversRepository: ServersRepository) : ViewModel() {
+class HomeViewModel @Inject constructor(private val serversRepository: ServersRepository,
+                                        private val userRepository: UserRepository) : ViewModel() {
 
 
     suspend fun getOVPNProfileForServer(profileUUID: String): de.blinkt.openvpn.VpnProfile? {
@@ -31,7 +33,7 @@ class HomeViewModel @Inject constructor(private val serversRepository: ServersRe
 
     fun setDisconnected() {
         saveLastUsedLocation()
-        _state.value = state.value.copy(connectionStatus = HomeState.ConnectionStatus.DISCONNECTED)
+        _state.value = state.value.copy(connectionStatus = HomeState.ConnectionStatus.DISCONNECTED, timeLeft = userRepository.getTimeLeft())
     }
 
 
@@ -41,8 +43,13 @@ class HomeViewModel @Inject constructor(private val serversRepository: ServersRe
     }
 
     private fun saveLastUsedLocation() {
-        _state.value = state.value.copy(lastUsedServer = state.value.currentConnectionServer)
-        state.value.currentConnectionServer?.let {
+        val lastUsedServer = if (state.value.currentConnectionServer != null) {
+            state.value.currentConnectionServer
+        } else {
+            state.value.lastUsedServer
+        }
+        _state.value = state.value.copy(lastUsedServer = lastUsedServer)
+        state.value.lastUsedServer?.let {
             serversRepository.saveLastUsedServer(it.id_)
         }
     }
@@ -83,6 +90,10 @@ class HomeViewModel @Inject constructor(private val serversRepository: ServersRe
                 .onEach {
                     _state.value = _state.value.copy(_serversList = it)
                 }.launchIn(viewModelScope)
+    }
+
+    fun storeTimeLeft(timeLeftMillis: Long) {
+        userRepository.setTimeLeft(timeLeftMillis)
     }
 
 }

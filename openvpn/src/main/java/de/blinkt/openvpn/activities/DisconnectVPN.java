@@ -12,8 +12,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.util.Log;
+
+import androidx.annotation.Nullable;
 
 import de.blinkt.openvpn.LaunchVPN;
 import de.blinkt.openvpn.R;
@@ -26,15 +30,15 @@ import de.blinkt.openvpn.core.VpnStatus;
  * Created by arne on 13.10.13.
  */
 public class DisconnectVPN extends Activity implements DialogInterface.OnClickListener, DialogInterface.OnCancelListener {
-    private IOpenVPNServiceInternal mService;
-    private ServiceConnection mConnection = new ServiceConnection() {
 
+    private IOpenVPNServiceInternal mService;
+
+    private ServiceConnection mConnection = new ServiceConnection() {
 
 
         @Override
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
-
             mService = IOpenVPNServiceInternal.Stub.asInterface(service);
         }
 
@@ -44,6 +48,13 @@ public class DisconnectVPN extends Activity implements DialogInterface.OnClickLi
         }
 
     };
+
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
 
     @Override
     protected void onResume() {
@@ -67,6 +78,7 @@ public class DisconnectVPN extends Activity implements DialogInterface.OnClickLi
         builder.setNegativeButton(android.R.string.cancel, this);
         builder.setPositiveButton(R.string.cancel_connection, this);
         builder.setNeutralButton(R.string.reconnect, this);
+        builder.setCancelable(false);
         builder.setOnCancelListener(this);
 
         builder.show();
@@ -76,9 +88,12 @@ public class DisconnectVPN extends Activity implements DialogInterface.OnClickLi
     public void onClick(DialogInterface dialog, int which) {
         if (which == DialogInterface.BUTTON_POSITIVE) {
             ProfileManager.setConntectedVpnProfileDisconnected(this);
+            Log.d(DisconnectVPN.class.getName(), "service is" + mService);
             if (mService != null) {
                 try {
-                    mService.stopVPN(false);
+                    Log.d(DisconnectVPN.class.getName(), "trying to stop");
+                    boolean success = mService.stopVPN(false);
+                    Log.d(DisconnectVPN.class.getName(), "success on stop: " + success);
                 } catch (RemoteException e) {
                     VpnStatus.logException(e);
                 }
@@ -96,4 +111,5 @@ public class DisconnectVPN extends Activity implements DialogInterface.OnClickLi
     public void onCancel(DialogInterface dialog) {
         finish();
     }
+
 }

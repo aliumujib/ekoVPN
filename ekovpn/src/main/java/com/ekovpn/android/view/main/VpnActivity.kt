@@ -7,6 +7,7 @@ package com.ekovpn.android.view.main
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -57,7 +58,13 @@ class VpnActivity : AppCompatActivity() {
         settings_btn.setOnClickListener {
             navController.navigate(R.id.action_HomeFragment_to_SettingsFragment)
         }
+
+        if (intent?.action?.equals(VIEW_MORE_ADS_ACTION) == true) {
+            findNavController(this@VpnActivity, R.id.nav_host_fragment).navigate(R.id.AdsFragment)
+        }
+
     }
+
 
     private fun injectDependencies() {
         vpnComponent = DaggerVPNComponent
@@ -79,6 +86,10 @@ class VpnActivity : AppCompatActivity() {
          */
         @JvmStatic
         fun vpnComponent(activity: Activity) = (activity as VpnActivity).vpnComponent
+
+
+        const val VIEW_MORE_ADS_ACTION = "VIEW_MORE_ADS_ACTION"
+
     }
 
 }
