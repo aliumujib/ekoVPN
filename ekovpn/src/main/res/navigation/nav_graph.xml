@@ -18,6 +18,7 @@
         <action
             android:id="@+id/action_HomeFragment_to_SettingsFragment"
             app:destination="@id/SettingsFragment" />
+
     </fragment>
 
     <fragment
@@ -25,5 +26,11 @@
         android:name="com.ekovpn.android.view.main.settings.SettingsFragment"
         android:label="@string/settings_fragment_label"
         tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/AdsFragment"
+        android:name="com.ekovpn.android.view.main.ads.AdFragment"
+        android:label="@string/ads_fragment_label"
+        tools:layout="@layout/fragment_ad" />
 
 </navigation>

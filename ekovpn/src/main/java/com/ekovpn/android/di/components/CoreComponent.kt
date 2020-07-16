@@ -19,6 +19,7 @@ import android.content.Context
 import com.ekovpn.android.data.config.repository.ConfigRepository
 import com.ekovpn.android.data.servers.ServersRepository
 import com.ekovpn.android.data.settings.SettingsRepository
+import com.ekovpn.android.data.user.UserRepository
 import com.ekovpn.android.di.modules.*
 import com.ekovpn.android.di.scopes.AppScope
 import com.ekovpn.android.utils.flow.PostExecutionThread
@@ -48,6 +49,8 @@ interface CoreComponent {
     fun serversRepository(): ServersRepository
 
     fun settingsRepository(): SettingsRepository
+
+    fun userRepository(): UserRepository
 
     fun postExecutionThread(): PostExecutionThread
 

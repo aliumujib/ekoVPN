@@ -16,10 +16,10 @@
       }
     ],
     "ikev2": {
-      "certificate_url": "https://ekovpn07092020.s3.amazonaws.com/ca_cert_germany.pem",
-      "username": "mujeeb",
-      "password": "aliumujeeb",
-      "ip": "52.212.176.155"
+      "certificate_url": "https://docs.google.com/uc?export=download&id=1geqIDNXHmp0Jl71zID-DvVq_EtKoBswu",
+      "username": "afeez",
+      "password": "afeez1234@",
+      "ip": "52.55.151.42"
     }
   },
   {
@@ -39,7 +39,7 @@
       }
     ],
     "ikev2": {
-      "certificate_url": "https://ekovpn07092020.s3.amazonaws.com/ca_cert_ireland.pem\n\n",
+      "certificate_url": "https://ekovpn07092020.s3.amazonaws.com/ca_cert_ireland.pem",
       "username": "mujeeb",
       "password": "aliumujeeb",
       "ip": "52.212.176.155"

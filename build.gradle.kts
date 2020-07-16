@@ -5,7 +5,6 @@
 
 
 buildscript {
-    val kotlin_version by extra("1.3.61")
     repositories {
         google()
         jcenter()
@@ -13,7 +12,9 @@ buildscript {
     dependencies {
         classpath("com.android.tools.build:gradle:3.5.3")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.72")
+        classpath ("com.google.gms:google-services:4.3.3")
         classpath ("androidx.navigation:navigation-safe-args-gradle-plugin:2.3.0")
+        classpath ("com.google.firebase:firebase-crashlytics-gradle:2.2.0")
     }
 }
 

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.ekovpn.android" >
+    package="com.ekovpn.android">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-
 
 
     <application
@@ -16,17 +15,22 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Icsopenvpn" >
+        android:theme="@style/Theme.Icsopenvpn">
 
         <activity
             android:name=".view.main.VpnActivity"
             android:label="@string/title_activity_vpn"
-            android:theme="@style/Theme.Icsopenvpn.NoActionBar" >
-        </activity>
+            android:theme="@style/Theme.Icsopenvpn.NoActionBar" />
+
+        <service android:name=".service.EkoVPNMgrService" />
+        
+        <service
+            android:name="org.strongswan.android.logic.VpnStateService"
+            android:exported="false" />
 
         <activity
             android:name=".view.splash.SplashActivity"
-            android:theme="@style/Theme.IcsopenvpnNoActionBar" >
+            android:theme="@style/Theme.IcsopenvpnNoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

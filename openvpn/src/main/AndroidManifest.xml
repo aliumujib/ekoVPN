@@ -14,8 +14,8 @@
         tools:ignore="UnusedAttribute">
 
         <activity
-                android:name="de.blinkt.openvpn.activities.CredentialsPopup"
-                android:theme="@style/blinkt.dialog" />
+            android:name="de.blinkt.openvpn.activities.CredentialsPopup"
+            android:theme="@style/blinkt.dialog" />
 
         <meta-data
             android:name="android.content.APP_RESTRICTIONS"
@@ -25,6 +25,7 @@
             android:name="de.blinkt.openvpn.activities.VPNPreferences"
             android:exported="false"
             android:windowSoftInputMode="stateHidden" />
+
         <activity
             android:name="de.blinkt.openvpn.activities.DisconnectVPN"
             android:autoRemoveFromRecents="true"
@@ -32,6 +33,7 @@
             android:noHistory="true"
             android:taskAffinity=".DisconnectVPN"
             android:theme="@style/blinkt.dialog" />
+
         <activity
             android:name="de.blinkt.openvpn.activities.LogWindow"
             android:allowTaskReparenting="true"

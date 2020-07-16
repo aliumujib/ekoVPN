@@ -19,6 +19,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.PRIVATE
 import com.ekovpn.android.data.servers.ServersRepository
 import com.ekovpn.android.data.settings.SettingsRepository
+import com.ekovpn.android.data.user.UserRepository
 import com.ekovpn.android.di.scopes.FragmentScope
 import com.ekovpn.android.utils.ext.viewModel
 import com.ekovpn.android.view.main.home.HomeFragment
@@ -41,8 +42,8 @@ class HomeModule(@VisibleForTesting(otherwise = PRIVATE) val fragment: HomeFragm
 
     @FragmentScope
     @Provides
-    fun providesViewModel(serversRepository: ServersRepository) = fragment.viewModel {
-        HomeViewModel(serversRepository)
+    fun providesViewModel(serversRepository: ServersRepository, userRepository: UserRepository) = fragment.viewModel {
+        HomeViewModel(serversRepository, userRepository)
     }
 
 }

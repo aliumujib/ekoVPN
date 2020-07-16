@@ -12,10 +12,12 @@ import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
 import android.text.Html
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -25,6 +27,7 @@ import com.ekovpn.android.di.main.home.DaggerHomeComponent
 import com.ekovpn.android.di.main.home.HomeModule
 import com.ekovpn.android.models.Location
 import com.ekovpn.android.models.Server
+import com.ekovpn.android.service.EkoVPNMgrService
 import com.ekovpn.android.utils.ext.hide
 import com.ekovpn.android.utils.ext.show
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
@@ -46,14 +49,16 @@ import org.strongswan.android.ui.VpnProfileControlActivity
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener {
+class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener, EkoVPNMgrService.TimeLeftListener {
 
     @Inject
     lateinit var viewModel: HomeViewModel
 
     private var iKEv2Service: VpnStateService? = null
+    private var ekoVpnMgrService: EkoVPNMgrService? = null
 
-    private val mServiceConnection: ServiceConnection = object : ServiceConnection {
+
+    private val mIKEv2ServiceConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceDisconnected(name: ComponentName) {
             iKEv2Service = null
         }
@@ -61,8 +66,23 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         override fun onServiceConnected(name: ComponentName, service: IBinder) {
             iKEv2Service = (service as LocalBinder).service
             iKEv2Service?.registerListener(this@HomeFragment)
+            checkForExistingConnection()
         }
     }
+
+
+    private val mTimerServiceConnection: ServiceConnection = object : ServiceConnection {
+        override fun onServiceDisconnected(name: ComponentName) {
+            ekoVpnMgrService = null
+        }
+
+        override fun onServiceConnected(name: ComponentName, service: IBinder) {
+            ekoVpnMgrService = (service as EkoVPNMgrService.VPNTimerLocalBinder).getService()
+            ekoVpnMgrService?.registerListener(this@HomeFragment)
+            checkForExistingConnection()
+        }
+    }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -73,55 +93,56 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         super.onCreate(savedInstanceState)
 
         injectDependencies()
-        bindToIKEv2StatusService()
+        bindToServices()
     }
 
-    private fun bindToIKEv2StatusService() {
+    private fun bindToServices() {
         /* bind to the service only seems to work from the ApplicationContext */
-        val context = requireActivity().applicationContext
-        context.bindService(Intent(context, VpnStateService::class.java), mServiceConnection, Service.BIND_AUTO_CREATE)
+        val context = requireContext().applicationContext
+        context.bindService(Intent(context, VpnStateService::class.java), mIKEv2ServiceConnection, Service.BIND_AUTO_CREATE)
+        context.bindService(Intent(context, EkoVPNMgrService::class.java), mTimerServiceConnection, Service.BIND_AUTO_CREATE)
     }
 
+    override fun onTimeUpdate(timeLeftMillis: Long, timeLeftFormatted: String) {
+        timer_view.text = timeLeftFormatted
+        if ((timeLeftMillis % 60000) == 0L) { // then its been a minute
+            viewModel.storeTimeLeft(timeLeftMillis)
+        }
+        Log.d(HomeFragment::class.java.simpleName, "$timeLeftMillis, $timeLeftFormatted")
+    }
 
     override fun onStart() {
         super.onStart()
         iKEv2Service?.registerListener(this)
+        ekoVpnMgrService?.registerListener(this)
     }
 
     override fun onStop() {
         super.onStop()
         iKEv2Service?.unregisterListener(this)
+        ekoVpnMgrService?.unregisterListener(this)
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        requireActivity().applicationContext.unbindService(mTimerServiceConnection)
+        requireActivity().applicationContext.unbindService(mIKEv2ServiceConnection)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        select_location_card.children.forEach {
-            it.setOnClickListener {
-                LocationSelectorDialog.display(childFragmentManager, object : LocationSelectorDialog.ClicksListener {
-                    override fun onClose() {
+        initLocationPicker()
+        viewModel.fetchLocationForCurrentIP()
+        observeStates()
+        initButtonClickListeners()
+    }
 
-                    }
-
-                    override fun onBackPressed() {
-
-                    }
-
-                    override fun onLocationSelected(server: Server) {
-                        connectToServer(server)
-                    }
-                }, viewModel.state.value._serversList)
-            }
-        }
-
-        lifecycleScope.launchWhenResumed {
-            viewModel.state.onEach {
-                render(it)
-            }.launchIn(this)
-        }
-
+    private fun initButtonClickListeners() {
         connect.setOnClickListener {
             val server = viewModel.state.value.lastUsedServer
+            Log.d(HomeFragment::class.java.simpleName, "${viewModel.state.value}")
             if (server != null) {
                 connectToServer(server)
             } else {
@@ -140,7 +161,43 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         help.setOnClickListener {
             WebViewDialog.display(childFragmentManager, "https://www.ekovpn.com/what-is-a-vpn", null)
         }
+    }
 
+    private fun observeStates() {
+        lifecycleScope.launchWhenResumed {
+            viewModel.state.onEach {
+                render(it)
+            }.launchIn(this)
+        }
+    }
+
+    private fun initLocationPicker() {
+        select_location_card.children.forEach {
+            it.setOnClickListener {
+                LocationSelectorDialog.display(childFragmentManager, object : LocationSelectorDialog.ClicksListener {
+                    override fun onClose() {
+
+                    }
+
+                    override fun onBackPressed() {
+
+                    }
+
+                    override fun onLocationSelected(server: Server) {
+                        connectToServer(server)
+                    }
+                }, viewModel.state.value._serversList)
+            }
+        }
+    }
+
+    private fun checkForExistingConnection() {
+        val currentServer: Server? = ekoVpnMgrService?.server
+        Log.d(HomeFragment::class.java.simpleName, currentServer.toString())
+        currentServer?.let {
+            viewModel.setConnected()
+            initCurrentConnectionUI(it.location_)
+        }
     }
 
     private fun connectToServer(server: Server) {
@@ -152,7 +209,6 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                 }
             } else if (server is Server.IkeV2Server) {
                 viewModel.getIKEv2ProfileForServer(server.profileId)?.let {
-                    //startOrStopVPN(it)
                     startOrStopIKEv2(it)
                     viewModel.connectingToServer(server)
                 }
@@ -188,6 +244,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
     }
 
     private fun render(it: HomeState) {
+        //Log.d(HomeFragment::class.java.simpleName, "state: $it")
         when (it.connectionStatus) {
             HomeState.ConnectionStatus.DISCONNECTED -> {
                 connect.setStrokeColorResource(R.color.eko_red_light)
@@ -197,10 +254,14 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                 time_left_label.hide()
                 progressBar.visibility = View.GONE
                 timer_view.hide()
-                timer_view.pauseCountDownTimer()
+                selected_title.text = resources.getString(R.string.current_location)
                 connection_status_.setIconTintResource(R.color.eko_red_light)
                 get_more_time.hide()
                 divider_view.show()
+                it.currentLocation?.let {
+                    initCurrentConnectionUI(it)
+                }
+                stopCountDownTimerService()
             }
             HomeState.ConnectionStatus.CONNECTING -> {
                 connection_status_.text = resources.getString(R.string.connecting_status_)
@@ -212,21 +273,20 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
             }
             HomeState.ConnectionStatus.CONNECTED -> {
                 connection_status_.text = resources.getString(R.string.connected_status_)
+                selected_title.text = resources.getString(R.string.selected_location)
                 connect.setStrokeColorResource(R.color.connected_green)
                 time_left_label.show()
                 connection_status_.setIconTintResource(R.color.connected_green)
                 timer_view.show()
                 progressBar.visibility = View.GONE
-                timer_view.startCountDown(600000, 1)
                 get_more_time.show()
                 divider_view.hide()
                 connect.isEnabled = true
                 connect.isClickable = true
+                it.currentConnectionServer?.let {
+                    initCurrentConnectionUI(it.location_)
+                }
             }
-        }
-
-        it.currentLocation?.let {
-            initCurrentConnectionUI(it)
         }
 
         it.lastUsedServer?.let {
@@ -237,18 +297,30 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         }
     }
 
+    private fun startCountDownTimerService(state: HomeState) {
+        val timerServiceIntent = Intent(requireContext(), EkoVPNMgrService::class.java)
+        timerServiceIntent.putExtra(EkoVPNMgrService.TIMER_SERVICE_VPN_PROFILE, state.currentConnectionServer)
+        timerServiceIntent.putExtra(EkoVPNMgrService.TIMER_SERVICE_TIME_LEFT, state.timeLeft)
+        ContextCompat.startForegroundService(requireContext(), timerServiceIntent)
+    }
+
+    private fun stopCountDownTimerService() {
+        val timerServiceIntent = Intent(requireContext(), EkoVPNMgrService::class.java)
+        requireContext().stopService(timerServiceIntent)
+    }
+
 
     private fun startOrStopOpenVPN(profile: VpnProfile) {
         if (VpnStatus.isVPNActive() && profile.uuidString == VpnStatus.getLastConnectedVPNProfile()) {
             val disconnectVPN = Intent(activity, DisconnectVPN::class.java)
             startActivity(disconnectVPN)
         } else {
-            startVPN(profile)
+            startOpenVPN(profile)
         }
     }
 
 
-    private fun startVPN(profile: VpnProfile) {
+    private fun startOpenVPN(profile: VpnProfile) {
         val intent = Intent(activity, LaunchVPN::class.java)
         intent.putExtra(LaunchVPN.EXTRA_KEY, profile.uuid.toString())
         intent.action = Intent.ACTION_MAIN
@@ -267,9 +339,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
     override fun updateState(state: String?, logmessage: String?, localizedResId: Int, level: ConnectionStatus?, Intent: Intent?) {
         if (level == ConnectionStatus.LEVEL_CONNECTED) {
             viewModel.setConnected()
-            viewModel.state.value.currentConnectionServer?.let {
-                initCurrentConnectionUI(it.location_)
-            }
+            startCountDownTimerService(viewModel.state.value)
         } else if (level == ConnectionStatus.LEVEL_NOTCONNECTED) {
             viewModel.setDisconnected()
             viewModel.fetchLocationForCurrentIP()
@@ -289,12 +359,17 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
 
             }
             VpnStateService.State.CONNECTED -> {
+                startCountDownTimerService(viewModel.state.value)
                 viewModel.setConnected()
             }
             VpnStateService.State.DISCONNECTING -> {
 
             }
         }
+    }
+
+    companion object {
+
     }
 
 }

@@ -408,8 +408,7 @@ public class CharonVpnService extends VpnService implements Runnable, VpnStateSe
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 		{
 			NotificationChannel channel;
-			channel = new NotificationChannel(NOTIFICATION_CHANNEL, getString(R.string.permanent_notification_name),
-											  NotificationManager.IMPORTANCE_LOW);
+			channel = new NotificationChannel(NOTIFICATION_CHANNEL, getString(R.string.permanent_notification_name), NotificationManager.IMPORTANCE_LOW);
 			channel.setDescription(getString(R.string.permanent_notification_description));
 			channel.setLockscreenVisibility(Notification.VISIBILITY_SECRET);
 			channel.setShowBadge(false);

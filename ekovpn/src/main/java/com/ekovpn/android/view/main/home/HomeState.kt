@@ -14,7 +14,8 @@ data class HomeState(
         val lastUsedServer: Server? = null,
         val currentConnectionServer: Server? = null,
         val currentLocation: Location? = null,
-        val _error: Throwable? = null
+        val _error: Throwable? = null,
+        val timeLeft: Long  = 0L
 ) {
     enum class ConnectionStatus(val status: Int) {
         CONNECTED(1),

@@ -768,7 +768,6 @@ public class VpnProfile implements Serializable, Cloneable {
 
     public Intent getStartServiceIntent(Context context) {
         String prefix = context.getPackageName();
-
         Intent intent = new Intent(context, OpenVPNService.class);
         intent.putExtra(prefix + ".profileUUID", mUuid.toString());
         intent.putExtra(prefix + ".profileVersion", mVersion);
