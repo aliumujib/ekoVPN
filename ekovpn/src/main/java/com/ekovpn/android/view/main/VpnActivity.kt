@@ -89,6 +89,7 @@ class VpnActivity : AppCompatActivity() {
 
 
         const val VIEW_MORE_ADS_ACTION = "VIEW_MORE_ADS_ACTION"
+        const val BUY_PREMIUM_ACTION = "BUY_PREMIUM_ACTION"
 
     }
 

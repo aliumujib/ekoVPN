@@ -106,9 +106,6 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
 
     override fun onTimeUpdate(timeLeftMillis: Long, timeLeftFormatted: String) {
         timer_view.text = timeLeftFormatted
-        if ((timeLeftMillis % 60000) == 0L) { // then its been a minute
-            viewModel.storeTimeLeft(timeLeftMillis)
-        }
         Log.d(HomeFragment::class.java.simpleName, "$timeLeftMillis, $timeLeftFormatted")
     }
 
