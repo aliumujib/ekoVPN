@@ -191,7 +191,7 @@ class EkoVPNMgrService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        server = null
+        disconnectCurrentVPN()
     }
 
 
@@ -213,6 +213,11 @@ class EkoVPNMgrService : Service() {
     @Nullable
     override fun onBind(intent: Intent?): IBinder? {
         return binder
+    }
+
+    fun stopTimer() {
+        server = null
+        countDownTimer?.cancel()
     }
 
     inner class VPNTimerLocalBinder : Binder() {
