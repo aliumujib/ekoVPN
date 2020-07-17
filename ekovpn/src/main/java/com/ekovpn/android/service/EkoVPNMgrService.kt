@@ -20,8 +20,11 @@ import android.util.Log
 import android.widget.RemoteViews
 import androidx.annotation.Nullable
 import androidx.core.app.NotificationCompat
+import com.ekovpn.android.ApplicationClass
 import com.ekovpn.android.ApplicationClass.Companion.EKO_NOTIFICATION_CHANNEL_ID
 import com.ekovpn.android.R
+import com.ekovpn.android.data.user.UserRepository
+import com.ekovpn.android.di.service.DaggerCountDownTimerComponent
 import com.ekovpn.android.models.Server
 import com.ekovpn.android.utils.ext.isNOrLater
 import com.ekovpn.android.view.countdowntimer.TimeMilliParser
@@ -31,6 +34,7 @@ import de.blinkt.openvpn.core.OpenVPNService
 import de.blinkt.openvpn.core.VpnStatus
 import org.strongswan.android.logic.VpnStateService
 import org.strongswan.android.logic.VpnStateService.LocalBinder
+import javax.inject.Inject
 
 // pub-7604868220609576.
 
@@ -45,9 +49,17 @@ class EkoVPNMgrService : Service() {
     var server: Server? = null
     private val binder = VPNTimerLocalBinder()
 
+    @Inject
+    lateinit var userRepository: UserRepository
+
 
     override fun onCreate() {
         super.onCreate()
+        DaggerCountDownTimerComponent
+                .builder()
+                .coreComponent((application as ApplicationClass).coreComponent)
+                .build()
+                .inject(this)
     }
 
     fun registerListener(timeLeftListener: TimeLeftListener) {
@@ -76,6 +88,9 @@ class EkoVPNMgrService : Service() {
             override fun onTick(millisUntilFinished: Long) {
                 if ((millisUntilFinished % 1000L) == 0L) {
                     listeners.forEach {
+                        if ((millisUntilFinished % 60000) == 0L) { // then its been a minute
+                            userRepository.setTimeLeft(millisUntilFinished)
+                        }
                         it.onTimeUpdate(millisUntilFinished, timeMilliParser.parseTimeInMilliSeconds(millisUntilFinished))
                     }
                 }
@@ -90,13 +105,18 @@ class EkoVPNMgrService : Service() {
     fun showViewAdsNotification() {
         val viewMoreAdsIntent = Intent(this, VpnActivity::class.java)
         viewMoreAdsIntent.action = VpnActivity.VIEW_MORE_ADS_ACTION
-        val pendingIntent = PendingIntent.getActivity(this, 0, viewMoreAdsIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val viewMoreAdsPendingIntent = PendingIntent.getActivity(this, 0, viewMoreAdsIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        val buyPremiumIntent = Intent(this, VpnActivity::class.java)
+        buyPremiumIntent.action = VpnActivity.BUY_PREMIUM_ACTION
+        val buyPremiumPendingIntent = PendingIntent.getActivity(this, 0, buyPremiumIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val builder: NotificationCompat.Builder = NotificationCompat.Builder(this, EKO_NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.eko_notifications)
                 .setContentTitle(getString(R.string.out_of_time))
                 .setContentText(getString(R.string.out_of_time_desc))
-                .addAction(R.drawable.eko_notifications, getString(R.string.get_more_time), pendingIntent)
+                .addAction(R.drawable.eko_notifications, getString(R.string.get_more_time), viewMoreAdsPendingIntent)
+                .addAction(R.drawable.eko_notifications, getString(R.string.buy_premimum), buyPremiumPendingIntent)
                 .setAutoCancel(true)
 
         val notification = builder.build()
@@ -191,6 +211,7 @@ class EkoVPNMgrService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+        stopTimer()
         disconnectCurrentVPN()
     }
 
