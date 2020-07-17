@@ -19,7 +19,6 @@ class UserPrefManager @Inject constructor(val context: Context) : CoreSharedPref
         return getPref(TIME_LEFT, 600000L)
     }
 
-
     companion object {
         const val TIME_LEFT = "TIME_LEFT"
     }

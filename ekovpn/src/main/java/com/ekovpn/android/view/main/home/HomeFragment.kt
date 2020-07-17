@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import coil.api.load
 import com.ekovpn.android.R
 import com.ekovpn.android.di.main.home.DaggerHomeComponent
@@ -148,6 +149,10 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
             } else {
                 Toast.makeText(context, "Please pick a location", Toast.LENGTH_LONG).show()
             }
+        }
+
+        get_more_time.setOnClickListener {
+            findNavController().navigate(R.id.action_HomeFragment_to_AdsFragment)
         }
 
         privacy.setOnClickListener {
@@ -305,8 +310,8 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
     }
 
     private fun stopCountDownTimerService() {
-        val timerServiceIntent = Intent(requireContext(), EkoVPNMgrService::class.java)
-        requireContext().stopService(timerServiceIntent)
+        ekoVpnMgrService?.stopTimer()
+        ekoVpnMgrService?.stopForeground(true)
     }
 
 
