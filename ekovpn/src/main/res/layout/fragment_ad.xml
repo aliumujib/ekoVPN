@@ -1,19 +1,51 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2012-2020 Abdul-Mujeeb Aliu for ekoVPN
-  ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
-  -->
+  ~ Distributed under the GNU GPL v2 with additional terms.
+  For full terms see the file doc/LICENSE.txt-->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:paddingBottom="@dimen/two_spaces"
+    android:paddingTop="?actionBarSize"
     android:layout_height="match_parent"
-    tools:context=".view.main.ads.AdFragment">
+    tools:context=".view.main.ads.AdsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/time_left_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/time_left"
+        android:layout_marginTop="@dimen/two_spaces"
+        android:layout_marginStart="@dimen/two_spaces"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/timer_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/one_space"
+        android:layout_marginEnd="@dimen/two_spaces"
+        android:text="@string/time_left"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toEndOf="@id/time_left_label"
+        app:layout_constraintTop_toTopOf="@+id/time_left_label" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ads_types"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/two_spaces"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/time_left_label" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

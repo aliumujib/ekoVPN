@@ -40,7 +40,7 @@
 
     <fragment
         android:id="@+id/AdsFragment"
-        android:name="com.ekovpn.android.view.main.ads.AdFragment"
+        android:name="com.ekovpn.android.view.main.ads.AdsFragment"
         android:label="@string/ads_fragment_label"
         tools:layout="@layout/fragment_ad" />
 

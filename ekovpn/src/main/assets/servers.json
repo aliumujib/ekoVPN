@@ -62,10 +62,10 @@
       }
     ],
     "ikev2": {
-      "certificate_url": "https://ekovpn07092020.s3.amazonaws.com/ca_cert_ontario.pem",
+      "certificate_url": "https://docs.google.com/uc?export=download&id=1kVog-P_5rJL3BzHjYOcJ2ECYHsOGBUrL",
       "username": "mujeeb",
       "password": "aliumujeeb",
-      "ip": "52.212.176.155"
+      "ip": "107.22.51.126"
     }
   },
   {

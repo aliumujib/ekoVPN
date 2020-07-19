@@ -16,6 +16,7 @@
 package com.ekovpn.android.di.components
 
 import android.content.Context
+import com.ekovpn.android.data.ads.AdsRepository
 import com.ekovpn.android.data.config.repository.ConfigRepository
 import com.ekovpn.android.data.servers.ServersRepository
 import com.ekovpn.android.data.settings.SettingsRepository
@@ -51,6 +52,8 @@ interface CoreComponent {
     fun settingsRepository(): SettingsRepository
 
     fun userRepository(): UserRepository
+
+    fun adsRepository (): AdsRepository
 
     fun postExecutionThread(): PostExecutionThread
 
