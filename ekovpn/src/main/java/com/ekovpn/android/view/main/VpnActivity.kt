@@ -28,6 +28,7 @@ import com.ekovpn.android.utils.ext.hide
 import com.ekovpn.android.utils.ext.show
 import com.ekovpn.android.utils.ext.slideDown
 import com.ekovpn.android.utils.ext.slideUp
+import com.google.android.gms.ads.MobileAds
 import kotlinx.android.synthetic.main.activity_vpn.*
 
 class VpnActivity : AppCompatActivity() {

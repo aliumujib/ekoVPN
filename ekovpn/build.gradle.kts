@@ -37,7 +37,7 @@ android {
             buildConfigField("String", "IP_STACK_API_KEY", "\"c1aab8424db6187a6d0e5baa164afc13\"")
             buildConfigField("String", "IP_STACK_BASE_URL", "\"http://api.ipstack.com/\"")
             buildConfigField("String", "AWS_IP_BASE_URL", "\"http://checkip.amazonaws.com/\"")
-
+            buildConfigField("String", "ADMOB_APP_ID", "\"ca-app-pub-7604868220609576~8057365177\"")
             setDimension("implementation")
             matchingFallbacks = mutableListOf("uiRelease")
         }
@@ -45,7 +45,7 @@ android {
             buildConfigField("String", "IP_STACK_API_KEY", "\"c1aab8424db6187a6d0e5baa164afc13\"")
             buildConfigField("String", "IP_STACK_BASE_URL", "\"http://api.ipstack.com/\"")
             buildConfigField("String", "AWS_IP_BASE_URL", "\"http://checkip.amazonaws.com/\"")
-
+            buildConfigField("String", "ADMOB_APP_ID", "\"ca-app-pub-7604868220609576~8057365177\"")
             setDimension("implementation")
             matchingFallbacks = mutableListOf("skeletonRelease")
         }
@@ -107,7 +107,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.2.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.mindorks.android:prdownloader:0.6.0")
+    implementation("com.mindorks.android:prdownloader:0.6.0")
 
     implementation("net.sourceforge.streamsupport:android-retrofuture:$streamsupportVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.7")
@@ -116,7 +116,7 @@ dependencies {
     implementation("com.wireguard.android:tunnel:1.0.20200407")
     implementation("com.google.firebase:firebase-analytics:17.4.4")
     implementation("com.google.firebase:firebase-crashlytics:17.1.1")
-   // implementation("com.google.android.gms:play-services-ads:19.2.0")
+    implementation("com.google.android.gms:play-services-ads:19.2.0")
 
     dependencies.add("uiImplementation", project(":openvpn"))
     dependencies.add("skeletonImplementation", project(":openvpn"))

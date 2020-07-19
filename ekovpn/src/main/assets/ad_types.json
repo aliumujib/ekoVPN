@@ -1,0 +1,32 @@
+[
+  {
+    "type": 2,
+    "count": 1,
+    "timeAddition": 600000
+  },
+  {
+    "type": 1,
+    "count": 1,
+    "timeAddition": 1800000
+  },
+  {
+    "type": 1,
+    "count": 2,
+    "timeAddition": 3600000
+  },
+  {
+    "type": 1,
+    "count": 4,
+    "timeAddition": 10800000
+  },
+  {
+    "type": 1,
+    "count": 6,
+    "timeAddition": 21600000
+  },
+  {
+    "type": 1,
+    "count": 12,
+    "timeAddition": 43200000
+  }
+]

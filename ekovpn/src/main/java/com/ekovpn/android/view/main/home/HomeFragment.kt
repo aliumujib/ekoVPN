@@ -31,9 +31,12 @@ import com.ekovpn.android.models.Server
 import com.ekovpn.android.service.EkoVPNMgrService
 import com.ekovpn.android.utils.ext.hide
 import com.ekovpn.android.utils.ext.show
+import com.ekovpn.android.view.countdowntimer.TimeMilliParser
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
 import com.ekovpn.android.view.main.locationselector.LocationSelectorDialog
 import com.ekovpn.android.view.main.webview.WebViewDialog
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
 import de.blinkt.openvpn.LaunchVPN
 import de.blinkt.openvpn.VpnProfile
 import de.blinkt.openvpn.activities.DisconnectVPN
@@ -135,6 +138,12 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         viewModel.fetchLocationForCurrentIP()
         observeStates()
         initButtonClickListeners()
+        initAdControls()
+    }
+
+    private fun initAdControls() {
+        val adRequest = AdRequest.Builder().build()
+        adView.loadAd(adRequest)
     }
 
     private fun initButtonClickListeners() {
@@ -247,19 +256,18 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
 
     private fun render(it: HomeState) {
         //Log.d(HomeFragment::class.java.simpleName, "state: $it")
+         val timeMilliParser = TimeMilliParser()
         when (it.connectionStatus) {
             HomeState.ConnectionStatus.DISCONNECTED -> {
                 connect.setStrokeColorResource(R.color.eko_red_light)
                 connection_status_.text = resources.getString(R.string.disconnected_status_)
                 connect.isEnabled = true
                 connect.isClickable = true
-                time_left_label.hide()
                 progressBar.visibility = View.GONE
-                timer_view.hide()
+                timer_view.text = timeMilliParser.parseTimeInMilliSeconds(it.timeLeft)
                 selected_title.text = resources.getString(R.string.current_location)
                 connection_status_.setIconTintResource(R.color.eko_red_light)
-                get_more_time.hide()
-                divider_view.show()
+                divider_view.hide()
                 it.currentLocation?.let {
                     initCurrentConnectionUI(it)
                 }
@@ -277,12 +285,8 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                 connection_status_.text = resources.getString(R.string.connected_status_)
                 selected_title.text = resources.getString(R.string.selected_location)
                 connect.setStrokeColorResource(R.color.connected_green)
-                time_left_label.show()
                 connection_status_.setIconTintResource(R.color.connected_green)
-                timer_view.show()
                 progressBar.visibility = View.GONE
-                get_more_time.show()
-                divider_view.hide()
                 connect.isEnabled = true
                 connect.isClickable = true
                 it.currentConnectionServer?.let {

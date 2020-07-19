@@ -13,36 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ekovpn.android.di.main
+package com.ekovpn.android.di.main.ads
 
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.PRIVATE
-import com.ekovpn.android.di.scopes.ActivityScope
+import com.ekovpn.android.data.ads.AdsRepository
+import com.ekovpn.android.data.user.UserRepository
+import com.ekovpn.android.di.scopes.FragmentScope
 import com.ekovpn.android.utils.ext.viewModel
-import com.ekovpn.android.view.main.VPNViewModel
-import com.ekovpn.android.view.main.VpnActivity
+import com.ekovpn.android.view.main.ads.AdsFragment
+import com.ekovpn.android.view.main.ads.AdsViewModel
 import dagger.Module
 import dagger.Provides
-import kotlinx.android.parcel.Parcelize
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /**
- * Class that contributes to the object graph [VPNComponent].
+ * Class that contributes to the object graph [AdsComponent].
  *
  * @see Module
  */
+@ExperimentalCoroutinesApi
 @Module
-class VPNModule(@VisibleForTesting(otherwise = PRIVATE)
-    val activity: VpnActivity) {
+class AdsModule(@VisibleForTesting(otherwise = PRIVATE) val fragment: AdsFragment) {
 
 
-    @ActivityScope
+    @FragmentScope
     @Provides
-    fun providesVPNModel(
-
-    ) = activity.viewModel {
-        VPNViewModel(
-
-        )
+    fun providesViewModel(adsRepository: AdsRepository, userRepository: UserRepository) = fragment.viewModel {
+        AdsViewModel(adsRepository, userRepository)
     }
 
 }

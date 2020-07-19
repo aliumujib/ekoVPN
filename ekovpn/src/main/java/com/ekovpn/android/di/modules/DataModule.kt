@@ -15,7 +15,8 @@
  */
 package com.ekovpn.android.di.modules
 
-import android.content.Context
+import com.ekovpn.android.data.ads.AdsRepository
+import com.ekovpn.android.data.ads.AdsRepositoryImpl
 import com.ekovpn.android.data.config.repository.ConfigRepository
 import com.ekovpn.android.data.config.repository.ConfigRepositoryImpl
 import com.ekovpn.android.data.servers.ServersRepository
@@ -26,7 +27,6 @@ import com.ekovpn.android.data.user.UserRepository
 import com.ekovpn.android.data.user.UserRepositoryImpl
 import dagger.Module
 import dagger.Provides
-import de.blinkt.openvpn.core.ProfileManager
 import javax.inject.Singleton
 
 @Module
@@ -56,4 +56,9 @@ class DataModule {
         return userRepositoryImpl
     }
 
+    @Singleton
+    @Provides
+    fun providesAdsRepository(adsRepository: AdsRepositoryImpl): AdsRepository {
+        return adsRepository
+    }
 }
