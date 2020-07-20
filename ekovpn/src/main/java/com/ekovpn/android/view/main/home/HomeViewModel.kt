@@ -33,7 +33,7 @@ class HomeViewModel @Inject constructor(private val serversRepository: ServersRe
 
     fun setDisconnected() {
         saveLastUsedLocation()
-        _state.value = state.value.copy(connectionStatus = HomeState.ConnectionStatus.DISCONNECTED, timeLeft = userRepository.getTimeLeft())
+        fetchTimeLeft()
     }
 
 
@@ -90,6 +90,10 @@ class HomeViewModel @Inject constructor(private val serversRepository: ServersRe
                 .onEach {
                     _state.value = _state.value.copy(_serversList = it)
                 }.launchIn(viewModelScope)
+    }
+
+    fun fetchTimeLeft() {
+        _state.value = state.value.copy(connectionStatus = HomeState.ConnectionStatus.DISCONNECTED, timeLeft = userRepository.getTimeLeft())
     }
 
     fun storeTimeLeft(timeLeftMillis: Long) {

@@ -13,7 +13,7 @@ import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.item_ad.view.*
 
 @Parcelize
-class Ad(val type: AdType, val count: Int, private val timeAddition: Long) : Parcelable {
+data class Ad(val type: AdType, val count: Int,  val timeAddition: Long) : Parcelable {
 
 
     enum class AdType(val value: Int) {

@@ -38,4 +38,7 @@ interface ServersDao {
     @Query("SELECT ServerCacheModel.*,  LocationCacheModel.* FROM ServerCacheModel LEFT OUTER JOIN LocationCacheModel on ServerCacheModel.location == LocationCacheModel.locationId where protocol=:protocol")
     fun getServersForProtocol(protocol: String): Flow<List<ServerLocationModel>>
 
+    @Query("DELETE FROM ServerCacheModel")
+    fun deleteAll()
+
 }

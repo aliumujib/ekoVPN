@@ -6,7 +6,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
-
     <application
         android:name=".ApplicationClass"
         android:allowBackup="true"
@@ -15,10 +14,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Icsopenvpn">
+        <activity android:name=".view.main.ads.AdViewingActivity"
+            android:theme="@style/Theme.Icsopenvpn.NoActionBar"/>
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-7604868220609576~8057365177"/>
+            android:value="ca-app-pub-7604868220609576~8057365177" />
 
         <activity
             android:name=".view.main.VpnActivity"
@@ -26,7 +27,6 @@
             android:theme="@style/Theme.Icsopenvpn.NoActionBar" />
 
         <service android:name=".service.EkoVPNMgrService" />
-        
         <service
             android:name="org.strongswan.android.logic.VpnStateService"
             android:exported="false" />

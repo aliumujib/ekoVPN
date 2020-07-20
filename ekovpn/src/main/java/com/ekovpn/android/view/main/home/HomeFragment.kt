@@ -9,6 +9,7 @@ import android.app.Service
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
+import android.net.Uri
 import android.os.Bundle
 import android.os.IBinder
 import android.text.Html
@@ -35,7 +36,6 @@ import com.ekovpn.android.view.countdowntimer.TimeMilliParser
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
 import com.ekovpn.android.view.main.locationselector.LocationSelectorDialog
 import com.ekovpn.android.view.main.webview.WebViewDialog
-import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import de.blinkt.openvpn.LaunchVPN
 import de.blinkt.openvpn.VpnProfile
@@ -149,11 +149,16 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
     private fun initButtonClickListeners() {
         connect.setOnClickListener {
             val server = viewModel.state.value.lastUsedServer
+            val hasTimeLeft = viewModel.state.value.timeLeft > 0
             Log.d(HomeFragment::class.java.simpleName, "${viewModel.state.value}")
-            if (server != null) {
-                connectToServer(server)
-            } else {
-                Toast.makeText(context, "Please pick a location", Toast.LENGTH_LONG).show()
+            if (hasTimeLeft) {
+                if (server != null) {
+                    connectToServer(server)
+                } else {
+                    Toast.makeText(context, "Please pick a location", Toast.LENGTH_LONG).show()
+                }
+            }else{
+                Toast.makeText(context, "Please view some ads or buy premium", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -166,7 +171,10 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         }
 
         test_connection.setOnClickListener {
-            WebViewDialog.display(childFragmentManager, "http://ipleak.net", null)
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse("http://ipleak.net")
+            startActivity(intent)
+            //WebViewDialog.display(childFragmentManager, "http://ipleak.net", null)
         }
 
         help.setOnClickListener {
@@ -238,6 +246,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         super.onResume()
         VpnStatus.addStateListener(this)
         viewModel.fetchServersForCurrentProtocol()
+        viewModel.fetchTimeLeft()
     }
 
     private fun initCurrentConnectionUI(location_: Location) {
@@ -256,7 +265,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
 
     private fun render(it: HomeState) {
         //Log.d(HomeFragment::class.java.simpleName, "state: $it")
-         val timeMilliParser = TimeMilliParser()
+        val timeMilliParser = TimeMilliParser()
         when (it.connectionStatus) {
             HomeState.ConnectionStatus.DISCONNECTED -> {
                 connect.setStrokeColorResource(R.color.eko_red_light)
@@ -278,6 +287,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                 connect.setStrokeColorResource(R.color.white)
                 connection_status_.setIconTintResource(R.color.grey)
                 progressBar.visibility = View.VISIBLE
+                divider_view.hide()
                 connect.isEnabled = false
                 connect.isClickable = false
             }
@@ -287,6 +297,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                 connect.setStrokeColorResource(R.color.connected_green)
                 connection_status_.setIconTintResource(R.color.connected_green)
                 progressBar.visibility = View.GONE
+                divider_view.hide()
                 connect.isEnabled = true
                 connect.isClickable = true
                 it.currentConnectionServer?.let {

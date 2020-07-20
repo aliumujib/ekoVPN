@@ -89,9 +89,9 @@ class FileDownloader @Inject constructor(private val context: Context) {
 
     private fun downloadConfigFile(serverLocation: ServerLocation, protocol: Protocol, configFileURL: String, ikeV2: IKEv2? = null): Flow<Result<ServerSetUp>> {
         val fileName = if (protocol == Protocol.TCP || protocol == Protocol.UDP) {
-            "${serverLocation.city}_${serverLocation.country}_${protocol.value}.ovpn"
+            "${serverLocation.city}_${serverLocation.country}_${protocol.value}.ovpn".replace(" ", "_")
         } else {
-            "${serverLocation.city}_${serverLocation.country}_${protocol.value}.pem"
+            "${serverLocation.city}_${serverLocation.country}_${protocol.value}.pem".replace(" ", "_")
         }
         val channel = ConflatedBroadcastChannel<Result<ServerSetUp>>()
 
@@ -104,7 +104,7 @@ class FileDownloader @Inject constructor(private val context: Context) {
                 .start(object : OnDownloadListener {
                     override fun onDownloadComplete() {
                         GlobalScope.launch(Dispatchers.IO) {
-                            Log.d(FileDownloader::class.java.simpleName, "Downloaded: ${filePath}")
+                            Log.d(FileDownloader::class.java.simpleName, "Downloaded: $filePath")
                             if (protocol == Protocol.UDP || protocol == Protocol.TCP) {
                                 val result = ServerSetUp.OVPNSetup(File(filePath).toURI().toString(), serverLocation = serverLocation, protocol = protocol)
                                 channel.send(Result.success(result))

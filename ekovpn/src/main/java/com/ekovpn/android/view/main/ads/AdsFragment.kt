@@ -5,24 +5,32 @@
 
 package com.ekovpn.android.view.main.ads
 
+import android.app.Service
+import android.content.ComponentName
+import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.IBinder
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.autochek.android.ui.commons.adapters.SelectionListener
 import com.ekovpn.android.R
 import com.ekovpn.android.di.main.ads.AdsModule
 import com.ekovpn.android.di.main.ads.DaggerAdsComponent
 import com.ekovpn.android.models.Ad
+import com.ekovpn.android.service.EkoVPNMgrService
 import com.ekovpn.android.utils.ext.dpToPx
 import com.ekovpn.android.view.countdowntimer.TimeMilliParser
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
 import com.ekovpn.android.view.main.ads.adapter.AdAdapter
+import com.ekovpn.android.view.main.ads.adapter.SelectionListener
 import io.cabriole.decorator.ColumnProvider
 import io.cabriole.decorator.GridMarginDecoration
 import kotlinx.android.synthetic.main.fragment_ad.*
@@ -31,18 +39,53 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 
-class AdsFragment : Fragment(), SelectionListener<Ad> {
+class AdsFragment : Fragment(), SelectionListener<Ad>, EkoVPNMgrService.TimeLeftListener {
 
     @Inject
     lateinit var viewModel: AdsViewModel
+
+    private var ekoVpnMgrService: EkoVPNMgrService? = null
+
+    private val viewAdsCall =
+            registerForActivityResult(ViewAdsContract()) { result ->
+                if (result != null) {
+                    viewModel.saveAddedTime(result.timeAddition)
+                } else {
+                    Toast.makeText(requireContext(), "You cancelled the ad and won't get a reward", Toast.LENGTH_LONG).show()
+                }
+            }
+
+    private val timerServiceConnection: ServiceConnection = object : ServiceConnection {
+        override fun onServiceDisconnected(name: ComponentName) {
+            ekoVpnMgrService = null
+        }
+
+        override fun onServiceConnected(name: ComponentName, service: IBinder) {
+            ekoVpnMgrService = (service as EkoVPNMgrService.VPNTimerLocalBinder).getService()
+            ekoVpnMgrService?.registerListener(this@AdsFragment)
+        }
+    }
 
     private val adAdapter by lazy {
         AdAdapter(this)
     }
 
+
+    override fun onStart() {
+        super.onStart()
+        ekoVpnMgrService?.registerListener(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        ekoVpnMgrService?.unregisterListener(this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         injectDependencies()
+        context?.bindService(Intent(context, EkoVPNMgrService::class.java), timerServiceConnection, Service.BIND_AUTO_CREATE)
     }
 
     private fun injectDependencies() {
@@ -52,6 +95,7 @@ class AdsFragment : Fragment(), SelectionListener<Ad> {
                 .build()
                 .inject(this)
     }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -85,15 +129,22 @@ class AdsFragment : Fragment(), SelectionListener<Ad> {
         adAdapter.all = it.ads
         adAdapter.notifyDataSetChanged()
         timer_view.text = TimeMilliParser().parseTimeInMilliSeconds(it.timeLeft)
-
     }
 
     override fun select(item: Ad) {
-
+        Log.d(AdsFragment::class.java.simpleName, "$item")
+        ekoVpnMgrService?.stopTimer()
+        ekoVpnMgrService?.stopForeground(true)
+        viewAdsCall.launch(item)
     }
 
     override fun deselect(item: Ad) {
 
     }
+
+    override fun onTimeUpdate(timeLeftMillis: Long, timeLeftFormatted: String) {
+        timer_view.text = timeLeftFormatted
+    }
+
 
 }

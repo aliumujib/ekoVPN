@@ -40,8 +40,20 @@ class IkeV2Configurator @Inject constructor(
             pemConfigs.add(Pair(server.serverLocation, server.iKev2))
         }
 
-        return flowOf(pemConfigs).flatMapLatest { ids -> runOnAll(ids.toSet(), ::configureIkeV2Server as (Pair<ServerLocation, IKEv2>) -> Flow<ServerCacheModel>) }
-                .map { m -> m.values.toList() }
+//        return flowOf(pemConfigs).flatMapLatest { ids -> runOnAll(ids.toSet(), ::configureIkeV2Server as (Pair<ServerLocation, IKEv2>) -> Flow<ServerCacheModel>) }
+//                .map { m -> m.values.toList() }
+
+        return channelFlow{
+            flowOf(pemConfigs).collectLatest { ids ->
+                combine(
+                        ids.map { id -> configureIkeV2Server(id) }
+                ) {
+                    it.toList()
+                }.collect {
+                    send(it)
+                }
+            }
+        }
     }
 
 

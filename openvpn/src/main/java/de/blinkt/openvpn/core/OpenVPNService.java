@@ -571,7 +571,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         ProfileManager.setConnectedVpnProfile(this, mProfile);
         VpnStatus.setConnectedVPNProfile(mProfile.getUUIDString());
 
-        return START_STICKY;
+        return START_NOT_STICKY;
     }
 
     @RequiresApi(Build.VERSION_CODES.N_MR1)

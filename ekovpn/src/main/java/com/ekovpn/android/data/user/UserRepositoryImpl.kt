@@ -18,4 +18,10 @@ class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPr
         userPrefManager.setTimeLeft(timeLeft)
     }
 
+    override fun addToTimeLeft(newTime: Long) {
+        val original = getTimeLeft()
+        val new = original + newTime
+        setTimeLeft(new)
+    }
+
 }

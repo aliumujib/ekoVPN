@@ -38,7 +38,6 @@ import javax.inject.Inject
 
 // pub-7604868220609576.
 
-
 class EkoVPNMgrService : Service() {
 
     private val timeMilliParser = TimeMilliParser()
@@ -82,6 +81,7 @@ class EkoVPNMgrService : Service() {
                 server = null
                 showViewAdsNotification()
                 stopForeground(true)
+                userRepository.setTimeLeft(0)
             }
 
 
