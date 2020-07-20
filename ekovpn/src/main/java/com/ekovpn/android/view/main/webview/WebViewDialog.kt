@@ -2,6 +2,7 @@ package com.ekovpn.android.view.main.webview
 
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import androidx.fragment.app.FragmentManager
 import com.ekovpn.android.R
 import com.ekovpn.android.utils.ext.hide
 import com.ekovpn.android.utils.ext.show
+import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.web_view_dialog.*
 import kotlinx.android.synthetic.main.web_view_dialog.view.*
 
@@ -49,9 +51,9 @@ class WebViewDialog : DialogFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
@@ -88,15 +90,15 @@ class WebViewDialog : DialogFragment() {
             dismiss()
         }
 
-        val url = arguments?.getString(URL)
+        val url = arguments?.getParcelable<WebUrl>(URL)
         Log.d(WebViewDialog::class.java.simpleName, "$url trying to open")
-        toolbar?.title = url
+        toolbar?.title = url?.title
 
 
         url?.let {
             //view.webview.settings.javaScriptEnabled = true
             view.webview.settings.domStorageEnabled = true
-            view.webview.loadUrl(url)
+            view.webview.loadUrl(url.url)
             view.webview.webViewClient = object : WebViewClient() {
 
                 override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
@@ -124,15 +126,18 @@ class WebViewDialog : DialogFragment() {
         private const val TAG: String = "web_view_dialog"
         private const val URL: String = "_URL_TO_OPEN"
 
+        @Parcelize
+        data class WebUrl(val url: String, val title: String) : Parcelable
+
         fun display(
-            fragmentManager: FragmentManager,
-            url: String,
-            onCloseClicked: OnCloseClickListener? = null
+                fragmentManager: FragmentManager,
+                url: WebUrl,
+                onCloseClicked: OnCloseClickListener? = null
         ): WebViewDialog {
             val webViewDialog = WebViewDialog()
             webViewDialog.onCloseClickListener = onCloseClicked
             webViewDialog.arguments = Bundle().apply {
-                putString(URL, url)
+                putParcelable(URL, url)
             }
             webViewDialog.show(fragmentManager, TAG)
             return webViewDialog

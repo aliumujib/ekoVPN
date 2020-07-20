@@ -44,8 +44,6 @@ class AdsFragment : Fragment(), SelectionListener<Ad>, EkoVPNMgrService.TimeLeft
     @Inject
     lateinit var viewModel: AdsViewModel
 
-    private var ekoVpnMgrService: EkoVPNMgrService? = null
-
     private val viewAdsCall =
             registerForActivityResult(ViewAdsContract()) { result ->
                 if (result != null) {
@@ -55,37 +53,16 @@ class AdsFragment : Fragment(), SelectionListener<Ad>, EkoVPNMgrService.TimeLeft
                 }
             }
 
-    private val timerServiceConnection: ServiceConnection = object : ServiceConnection {
-        override fun onServiceDisconnected(name: ComponentName) {
-            ekoVpnMgrService = null
-        }
-
-        override fun onServiceConnected(name: ComponentName, service: IBinder) {
-            ekoVpnMgrService = (service as EkoVPNMgrService.VPNTimerLocalBinder).getService()
-            ekoVpnMgrService?.registerListener(this@AdsFragment)
-        }
-    }
 
     private val adAdapter by lazy {
         AdAdapter(this)
     }
 
 
-    override fun onStart() {
-        super.onStart()
-        ekoVpnMgrService?.registerListener(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        ekoVpnMgrService?.unregisterListener(this)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         injectDependencies()
-        context?.bindService(Intent(context, EkoVPNMgrService::class.java), timerServiceConnection, Service.BIND_AUTO_CREATE)
     }
 
     private fun injectDependencies() {
@@ -133,8 +110,6 @@ class AdsFragment : Fragment(), SelectionListener<Ad>, EkoVPNMgrService.TimeLeft
 
     override fun select(item: Ad) {
         Log.d(AdsFragment::class.java.simpleName, "$item")
-        ekoVpnMgrService?.stopTimer()
-        ekoVpnMgrService?.stopForeground(true)
         viewAdsCall.launch(item)
     }
 

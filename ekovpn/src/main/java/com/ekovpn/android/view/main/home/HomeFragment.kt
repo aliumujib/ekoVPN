@@ -163,11 +163,13 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         }
 
         get_more_time.setOnClickListener {
+            stopCountDownTimerService()
+            viewModel.setDisconnected()
             findNavController().navigate(R.id.action_HomeFragment_to_AdsFragment)
         }
 
         privacy.setOnClickListener {
-            WebViewDialog.display(childFragmentManager, "https://www.ekovpn.com/privacy-policy", null)
+            WebViewDialog.display(childFragmentManager, WebViewDialog.Companion.WebUrl("https://www.ekovpn.com/privacy-policy", "Privacy Policy"), null)
         }
 
         test_connection.setOnClickListener {
@@ -178,7 +180,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         }
 
         help.setOnClickListener {
-            WebViewDialog.display(childFragmentManager, "https://www.ekovpn.com/what-is-a-vpn", null)
+            WebViewDialog.display(childFragmentManager, WebViewDialog.Companion.WebUrl("https://www.ekovpn.com/what-is-a-vpn", "Help"), null)
         }
     }
 
@@ -290,6 +292,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                 divider_view.hide()
                 connect.isEnabled = false
                 connect.isClickable = false
+                timer_view.text = timeMilliParser.parseTimeInMilliSeconds(it.timeLeft)
             }
             HomeState.ConnectionStatus.CONNECTED -> {
                 connection_status_.text = resources.getString(R.string.connected_status_)
@@ -299,6 +302,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                 progressBar.visibility = View.GONE
                 divider_view.hide()
                 connect.isEnabled = true
+                timer_view.text = timeMilliParser.parseTimeInMilliSeconds(it.timeLeft)
                 connect.isClickable = true
                 it.currentConnectionServer?.let {
                     initCurrentConnectionUI(it.location_)
@@ -322,6 +326,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
     }
 
     private fun stopCountDownTimerService() {
+        ekoVpnMgrService?.disconnectCurrentVPN()
         ekoVpnMgrService?.stopTimer()
         ekoVpnMgrService?.stopForeground(true)
     }
