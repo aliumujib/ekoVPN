@@ -1,32 +1,32 @@
 [
   {
-    "type": 2,
+    "type": 1,
     "count": 1,
-    "timeAddition": 600000
+    "timeAddition": 600001
   },
   {
     "type": 1,
     "count": 1,
-    "timeAddition": 1800000
+    "timeAddition": 1800001
   },
   {
     "type": 1,
     "count": 2,
-    "timeAddition": 3600000
+    "timeAddition": 3600001
   },
   {
     "type": 1,
     "count": 4,
-    "timeAddition": 10800000
+    "timeAddition": 10800001
   },
   {
     "type": 1,
     "count": 6,
-    "timeAddition": 21600000
+    "timeAddition": 21600001
   },
   {
     "type": 1,
     "count": 12,
-    "timeAddition": 43200000
+    "timeAddition": 43200001
   }
 ]

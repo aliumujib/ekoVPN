@@ -11,4 +11,6 @@ interface UserRepository {
 
     fun setTimeLeft(timeLeft: Long)
 
+    fun addToTimeLeft(newTime: Long)
+
 }

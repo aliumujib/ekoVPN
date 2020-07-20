@@ -8,6 +8,7 @@ package com.ekovpn.android.data.config.repository
 import android.content.Context
 import android.util.Log
 import com.ekovpn.android.cache.room.dao.LocationsDao
+import com.ekovpn.android.cache.room.dao.ServersDao
 import com.ekovpn.android.cache.settings.SettingsPrefManager
 import com.ekovpn.android.data.config.*
 import com.ekovpn.android.data.config.ServerLocation.Companion.toLocationCacheModel
@@ -20,6 +21,7 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 class ConfigRepositoryImpl @Inject constructor(private val context: Context,
                                                private val locationsDao: LocationsDao,
+                                               private val serversDao: ServersDao,
                                                private val openVpnConfigurator: OpenVpnConfigurator,
                                                private val iKev2CertificateImporter: IkeV2Configurator,
                                                private val settingsPrefManager: SettingsPrefManager) : ConfigRepository {
@@ -62,7 +64,11 @@ class ConfigRepositoryImpl @Inject constructor(private val context: Context,
         return configurationOperations
                 .merge()
                 .onStart {
+                    locationsDao.deleteAll()
+                    serversDao.deleteAll()
                     locationsDao.insert(listOfCachedLocations)
+                }.catch {
+                    it.printStackTrace()
                 }
                 .onCompletion {
                     settingsPrefManager.setHasCompletedSetup()
@@ -74,7 +80,7 @@ class ConfigRepositoryImpl @Inject constructor(private val context: Context,
 
 
     companion object {
-        const val FILE_NAME = "servers.json"
+        const val FILE_NAME = "servers_new.json"
     }
 
 }

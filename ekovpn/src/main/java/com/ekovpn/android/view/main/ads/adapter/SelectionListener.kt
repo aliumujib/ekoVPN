@@ -1,4 +1,4 @@
-package com.autochek.android.ui.commons.adapters
+package com.ekovpn.android.view.main.ads.adapter
 
 interface SelectionListener<T> {
 

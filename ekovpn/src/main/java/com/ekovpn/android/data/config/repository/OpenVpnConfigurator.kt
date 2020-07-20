@@ -21,7 +21,7 @@ import com.ekovpn.android.data.config.importer.OVPNProfileImporter
 import com.ekovpn.android.models.Protocol
 import com.ekovpn.android.utils.ext.runOnAll
 import de.blinkt.openvpn.core.ProfileManager
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import java.io.File
 import java.lang.IllegalStateException
@@ -49,31 +49,33 @@ class OpenVpnConfigurator @Inject constructor(
             }
         }
 
-        return flowOf(listOfConfigurationParameters).flatMapLatest { ids -> runOnAll(ids.toSet(), ::configureOVPNServer as (Triple<ServerLocation, Protocol, String>) -> Flow<ServerCacheModel>) }
-                .map { m -> m.values.toList() }
+//        return flowOf(listOfConfigurationParameters).flatMapLatest { ids -> runOnAll(ids.toSet(), ::configureOVPNServer as (Triple<ServerLocation, Protocol, String>) -> Flow<ServerCacheModel>) }
+//                .map { m -> m.values.toList() }
+
+
+
+        return channelFlow{
+            flowOf(listOfConfigurationParameters).collectLatest { ids ->
+                combine(
+                        ids.map { id -> configureOVPNServer(id) }
+                ) {
+                    it.toList()
+                }.collect {
+                    send(it)
+                }
+            }
+        }
     }
 
     private fun configureOVPNServer(configDetails: Triple<ServerLocation, Protocol, String>): Flow<ServerCacheModel> {
-
-        Log.d(OpenVpnConfigurator::class.java.simpleName, "OPEN VPN ${configDetails.first}")
-
         return fileDownloader.downloadOVPNConfig(configDetails.first, configDetails.second, configDetails.third)
                 .map {
-                    if (it.isSuccess) {
-                        Log.d(OpenVpnConfigurator::class.java.simpleName, "Configuring OVPN: ${it.getOrNull()}")
-                        configureOVPNProfileForServer(it.getOrNull() as ServerSetUp.OVPNSetup)
-                    } else {
-                        Log.d(OpenVpnConfigurator::class.java.simpleName, "Failed to configure OVPN: ${it.getOrNull()}")
-                    }
+                    Log.d(OpenVpnConfigurator::class.java.simpleName, "Configuring OVPN: ${it.getOrNull()}")
+                    configureOVPNProfileForServer(it.getOrNull() as ServerSetUp.OVPNSetup)
                 }.map { server ->
-                    if (server is VPNServer) {
-                        Log.d(OpenVpnConfigurator::class.java.simpleName, "Saving OVPN: $server")
-                        val serverCacheModel = saveOVPNProfile(server as VPNServer.OVPNServer)
-                        serverCacheModel!!
-                    } else {
-                        Log.d(OpenVpnConfigurator::class.java.simpleName, "Failed Saving OVPN: $server")
-                        throw Exception("An error occurred for config ${configDetails.first}")
-                    }
+                    Log.d(OpenVpnConfigurator::class.java.simpleName, "Saving OVPN: $server")
+                    val serverCacheModel = saveOVPNProfile(server as VPNServer.OVPNServer)
+                    serverCacheModel!!
                 }
     }
 
@@ -87,9 +89,11 @@ class OpenVpnConfigurator @Inject constructor(
     private suspend fun saveOVPNProfile(result: VPNServer.OVPNServer): ServerCacheModel? {
         val profile = result.openVpnProfile
         profile.mName = "${result.serverLocation.city}-${result.serverLocation.country}-${result.protocol.value}"
-        profileManager.addProfile(profile)
-        profileManager.saveProfile(context, profile)
-        profileManager.saveProfileList(context)
+        GlobalScope.launch(Dispatchers.Main) {
+            profileManager.addProfile(profile)
+            profileManager.saveProfile(context, profile)
+            profileManager.saveProfileList(context)
+        }
         var serverCacheModel: ServerCacheModel? = null
         val location = locationsDao.getLocation(result.serverLocation.country, result.serverLocation.city)
         location?.let {

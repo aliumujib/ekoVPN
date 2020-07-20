@@ -4,12 +4,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.autochek.android.ui.commons.adapters.SelectionListener
 import com.ekovpn.android.R
 import com.ekovpn.android.models.Ad
 import com.ekovpn.android.models.Ad.Companion.getIcon
 import com.ekovpn.android.models.Ad.Companion.getMinutes
 import com.ekovpn.android.models.Ad.Companion.getQuantityDescription
+import com.ekovpn.android.utils.ext.recursivelyApplyToChildren
 import kotlinx.android.synthetic.main.item_ad.view.*
 
 
@@ -37,6 +37,11 @@ class AdAdapter(private val selectionListener: SelectionListener<Ad>? = null) : 
             itemView.value.text = advert.getMinutes(itemView.context.resources)
             itemView.quantity.text = advert.getQuantityDescription(itemView.context.resources)
             itemView.quantity.setCompoundDrawablesWithIntrinsicBounds(advert.getIcon(), 0, 0, 0)
+            (itemView as ViewGroup).recursivelyApplyToChildren {child->
+                child.setOnClickListener {
+                    selectionListener?.select(advert)
+                }
+            }
             itemView.setOnClickListener {
                 selectionListener?.select(advert)
             }
