@@ -169,7 +169,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         }
 
         privacy.setOnClickListener {
-            WebViewDialog.display(childFragmentManager, "https://www.ekovpn.com/privacy-policy", null)
+            WebViewDialog.display(childFragmentManager, WebViewDialog.Companion.WebUrl("https://www.ekovpn.com/privacy-policy", "Privacy Policy"), null)
         }
 
         test_connection.setOnClickListener {
@@ -180,7 +180,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         }
 
         help.setOnClickListener {
-            WebViewDialog.display(childFragmentManager, "https://www.ekovpn.com/what-is-a-vpn", null)
+            WebViewDialog.display(childFragmentManager, WebViewDialog.Companion.WebUrl("https://www.ekovpn.com/what-is-a-vpn", "Help"), null)
         }
     }
 

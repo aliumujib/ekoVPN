@@ -111,11 +111,11 @@ class SettingsFragment : Fragment() {
         }
 
         privacy.setOnClickListener {
-            WebViewDialog.display(childFragmentManager, "https://www.ekovpn.com/privacy-policy", null)
+            WebViewDialog.display(childFragmentManager, WebViewDialog.Companion.WebUrl("https://www.ekovpn.com/privacy-policy", "Privacy Policy"), null)
         }
 
         help.setOnClickListener {
-            WebViewDialog.display(childFragmentManager, "https://www.ekovpn.com/what-is-a-vpn", null)
+            WebViewDialog.display(childFragmentManager, WebViewDialog.Companion.WebUrl("https://www.ekovpn.com/what-is-a-vpn", "Privacy Policy"), null)
         }
 
         app_version.text = resources.getString(R.string.app_version, BuildConfig.VERSION_NAME)
