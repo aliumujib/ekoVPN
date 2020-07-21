@@ -89,7 +89,10 @@ class HomeViewModel @Inject constructor(private val serversRepository: ServersRe
                     _state.value = _state.value.copy(_error = it)
                 }
                 .onEach {
-                    _state.value = _state.value.copy(_serversList = it)
+                    val sortedList = it.sortedBy { server ->
+                        server.location_.country
+                    }
+                    _state.value = _state.value.copy(_serversList = sortedList)
                 }.launchIn(viewModelScope)
     }
 

@@ -14,6 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Icsopenvpn">
+
         <activity android:name=".view.main.ads.AdViewingActivity"
             android:theme="@style/Theme.Icsopenvpn.NoActionBar"/>
 
@@ -27,6 +28,7 @@
             android:theme="@style/Theme.Icsopenvpn.NoActionBar" />
 
         <service android:name=".service.EkoVPNMgrService" />
+
         <service
             android:name="org.strongswan.android.logic.VpnStateService"
             android:exported="false" />
