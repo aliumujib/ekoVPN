@@ -53,7 +53,7 @@
 
     <string name="tcp_open_vpn_title_explanantion"> <![CDATA[<b>TCP (OpenVPN)</b> works on most networks but might be slow ]]></string>
     <string name="udp_open_vpn_title_explanantion"> <![CDATA[<b>UDP (OpenVPN)</b> is fast and more secure but may not work on most networks.]]></string>
-    <string name="ikev2_title_explanantion"> <![CDATA[<b>IKEv2 (OpenVPN)</b> is faster but may not work on most networks.]]></string>
+    <string name="ikev2_title_explanantion"> <![CDATA[<b>IKEv2 (OpenVPN)</b> is faster but may not work on most networks. (not yet available on android 11)]]></string>
     <string name="wireguard_title_explanantion"> <![CDATA[<b>Wireguard</b> is the fastest but may not work on most networks.]]></string>
 
     <plurals name="plural_videos">

@@ -9,6 +9,7 @@ import android.content.ActivityNotFoundException
 import android.content.ClipDescription
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
@@ -35,6 +36,7 @@ class SettingsFragment : Fragment() {
 
     @Inject
     lateinit var viewModel: SettingsViewModel
+
 
 
     override fun onCreateView(
@@ -84,6 +86,10 @@ class SettingsFragment : Fragment() {
                     viewModel.selectProtocol(Protocol.WIREGUARD)
                 }
             }
+        }
+
+        if (Build.VERSION.SDK_INT>Build.VERSION_CODES.Q){
+            ikev2.isEnabled = false
         }
 
         star_ratings.children.forEach {
