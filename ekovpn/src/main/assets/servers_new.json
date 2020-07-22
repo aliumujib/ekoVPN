@@ -16,10 +16,10 @@
       }
     ],
     "ikev2": {
-      "certificate_url": "https://ekovpn07092020.s3.amazonaws.com/ca_cert_sweden.pem",
-      "username": "afeez",
-      "password": "afeez1234@",
-      "ip": "52.55.151.42"
+      "certificate_url": "https://docs.google.com/uc?export=download&id=1kVog-P_5rJL3BzHjYOcJ2ECYHsOGBUrL",
+      "username": "mujeeb",
+      "password": "aliumujeeb",
+      "ip": "107.22.51.126"
     }
   },
   {
@@ -39,10 +39,10 @@
       }
     ],
     "ikev2": {
-      "certificate_url": "https://ekovpn07092020.s3.amazonaws.com/ca_cert_sweden.pem",
-      "username": "afeez",
-      "password": "afeez1234@",
-      "ip": "52.55.151.42"
+      "certificate_url": "https://docs.google.com/uc?export=download&id=1kVog-P_5rJL3BzHjYOcJ2ECYHsOGBUrL",
+      "username": "mujeeb",
+      "password": "aliumujeeb",
+      "ip": "107.22.51.126"
     }
   },
   {
@@ -62,10 +62,10 @@
       }
     ],
     "ikev2": {
-      "certificate_url": "https://ekovpn07092020.s3.amazonaws.com/ca_cert_sweden.pem",
-      "username": "afeez",
-      "password": "afeez1234@",
-      "ip": "52.55.151.42"
+      "certificate_url": "https://docs.google.com/uc?export=download&id=1kVog-P_5rJL3BzHjYOcJ2ECYHsOGBUrL",
+      "username": "mujeeb",
+      "password": "aliumujeeb",
+      "ip": "107.22.51.126"
     }
   },
   {
@@ -141,7 +141,7 @@
     "location": {
       "city": "Cape Town",
       "country": "South Africa",
-      "country_code": "SA"
+      "country_code": "ZA"
     },
     "open_vpn": [
       {
@@ -348,7 +348,7 @@
     "location": {
       "city": "London",
       "country": "United Kingdom",
-      "country_code": "UK"
+      "country_code": "GB"
     },
     "open_vpn": [
       {

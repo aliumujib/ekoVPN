@@ -70,35 +70,38 @@ class EkoVPNMgrService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        server = intent.getParcelableExtra(TIMER_SERVICE_VPN_PROFILE)
-        timeLeft = intent.getLongExtra(TIMER_SERVICE_TIME_LEFT, 0L)
-        Log.d(EkoVPNMgrService::class.java.simpleName, "Server: ${server.toString()}")
+        intent.getParcelableExtra<Server>(TIMER_SERVICE_VPN_PROFILE)?.let {
 
-        countDownTimer = object : CountDownTimer(timeLeft, interval) {
+            server = intent.getParcelableExtra(TIMER_SERVICE_VPN_PROFILE)
+            timeLeft = intent.getLongExtra(TIMER_SERVICE_TIME_LEFT, 0L)
 
-            override fun onFinish() {
-                disconnectCurrentVPN()
-                server = null
-                showViewAdsNotification()
-                stopForeground(true)
-                userRepository.setTimeLeft(0)
-            }
+            Log.d(EkoVPNMgrService::class.java.simpleName, "Server: ${server.toString()}")
+
+            countDownTimer = object : CountDownTimer(timeLeft, interval) {
+
+                override fun onFinish() {
+                    disconnectCurrentVPN()
+                    server = null
+                    showViewAdsNotification()
+                    userRepository.setTimeLeft(0)
+                    stopForeground(true)
+                }
 
 
-            override fun onTick(millisUntilFinished: Long) {
-                if ((millisUntilFinished % 1000L) == 0L) {
-                    listeners.forEach {
-                        if ((millisUntilFinished % 60000) == 0L) { // then its been a minute
-                            userRepository.setTimeLeft(millisUntilFinished)
+                override fun onTick(millisUntilFinished: Long) {
+                    if ((millisUntilFinished % 1000L) == 0L) {
+                        listeners.forEach {
+                            if ((millisUntilFinished % 60000) == 0L) { // then its been a minute
+                                userRepository.setTimeLeft(millisUntilFinished)
+                            }
+                            it.onTimeUpdate(millisUntilFinished, timeMilliParser.parseTimeInMilliSeconds(millisUntilFinished))
                         }
-                        it.onTimeUpdate(millisUntilFinished, timeMilliParser.parseTimeInMilliSeconds(millisUntilFinished))
                     }
                 }
             }
+            countDownTimer?.start()
+            runNotification()
         }
-        countDownTimer?.start()
-        runNotification()
-
         return START_NOT_STICKY
     }
 

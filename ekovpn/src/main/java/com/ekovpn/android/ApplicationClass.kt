@@ -33,6 +33,11 @@ class ApplicationClass: ICSOpenVPNApplication(), SharedPreferences.OnSharedPrefe
 
     lateinit var coreComponent: CoreComponent
 
+
+    init {
+        instance = this
+    }
+
     init {
         Security.addProvider(LocalCertificateKeyStoreProvider())
         System.loadLibrary("androidbridge")
@@ -62,7 +67,7 @@ class ApplicationClass: ICSOpenVPNApplication(), SharedPreferences.OnSharedPrefe
         initNotificationChannels()
         handleAndroidOStrictModeViolations()
         ContextProvider.setContext(applicationContext)
-        PRDownloader.initialize(getApplicationContext());
+        PRDownloader.initialize(applicationContext)
         initAdmob()
         //WireGuardInitializer.onCreate(this)
         //WireGuardInitializer.getSharedPreferences().registerOnSharedPreferenceChangeListener(this)
@@ -122,6 +127,12 @@ class ApplicationClass: ICSOpenVPNApplication(), SharedPreferences.OnSharedPrefe
     }
 
     companion object {
+
+        private var instance: ApplicationClass? = null
+
+        fun getInstance(): Context? {
+            return instance?.applicationContext
+        }
 
         /**
          * Obtain core dagger component.

@@ -6,30 +6,21 @@
 package com.ekovpn.android.view.main
 
 import android.app.Activity
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.os.CountDownTimer
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.ekovpn.android.ApplicationClass
 import com.ekovpn.android.R
-import com.ekovpn.android.di.components.CoreComponent
 import com.ekovpn.android.di.main.DaggerVPNComponent
 import com.ekovpn.android.di.main.VPNComponent
 import com.ekovpn.android.di.main.VPNModule
-import com.ekovpn.android.di.splash.DaggerSplashComponent
-import com.ekovpn.android.di.splash.SplashModule
 import com.ekovpn.android.utils.ext.hide
 import com.ekovpn.android.utils.ext.show
-import com.ekovpn.android.utils.ext.slideDown
-import com.ekovpn.android.utils.ext.slideUp
-import com.google.android.gms.ads.MobileAds
 import kotlinx.android.synthetic.main.activity_vpn.*
+
 
 class VpnActivity : AppCompatActivity() {
 
@@ -56,8 +47,9 @@ class VpnActivity : AppCompatActivity() {
             }
         }
 
-        settings_btn.setOnClickListener {
-            navController.navigate(R.id.action_HomeFragment_to_SettingsFragment)
+        toolbar.setNavigationOnClickListener {
+            Log.d(VpnActivity::class.java.simpleName, "Back pressed")
+            navController.navigateUp() || super.onSupportNavigateUp()
         }
 
         if (intent?.action?.equals(VIEW_MORE_ADS_ACTION) == true) {
@@ -65,6 +57,8 @@ class VpnActivity : AppCompatActivity() {
         }
 
     }
+
+
 
 
     private fun injectDependencies() {

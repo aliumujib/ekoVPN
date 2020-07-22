@@ -9,7 +9,9 @@ import android.content.ActivityNotFoundException
 import android.content.ClipDescription
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +36,7 @@ class SettingsFragment : Fragment() {
 
     @Inject
     lateinit var viewModel: SettingsViewModel
+
 
 
     override fun onCreateView(
@@ -61,6 +64,13 @@ class SettingsFragment : Fragment() {
                 .launchIn(lifecycleScope)
 
 
+        tcp.text = Html.fromHtml(getString(R.string.tcp_open_vpn_title_explanantion))
+        udp.text = Html.fromHtml(getString(R.string.udp_open_vpn_title_explanantion))
+        ikev2.text = Html.fromHtml(getString(R.string.ikev2_title_explanantion))
+        wire_guard.text = Html.fromHtml(getString(R.string.wireguard_title_explanantion))
+
+
+
         protocol_group.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
                 R.id.tcp -> {
@@ -76,6 +86,10 @@ class SettingsFragment : Fragment() {
                     viewModel.selectProtocol(Protocol.WIREGUARD)
                 }
             }
+        }
+
+        if (Build.VERSION.SDK_INT>Build.VERSION_CODES.Q){
+            ikev2.isEnabled = false
         }
 
         star_ratings.children.forEach {

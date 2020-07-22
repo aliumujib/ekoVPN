@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import coil.api.load
+import com.ekovpn.android.ApplicationClass
 import com.ekovpn.android.R
 import com.ekovpn.android.di.main.home.DaggerHomeComponent
 import com.ekovpn.android.di.main.home.HomeModule
@@ -43,6 +44,7 @@ import de.blinkt.openvpn.activities.DisconnectVPN
 import de.blinkt.openvpn.core.ConnectionStatus
 import de.blinkt.openvpn.core.VpnStatus
 import de.blinkt.openvpn.core.VpnStatus.StateListener
+import kotlinx.android.synthetic.main.activity_vpn.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
@@ -51,6 +53,7 @@ import org.strongswan.android.logic.VpnStateService
 import org.strongswan.android.logic.VpnStateService.LocalBinder
 import org.strongswan.android.ui.VpnProfileControlActivity
 import javax.inject.Inject
+
 
 @ExperimentalCoroutinesApi
 class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener, EkoVPNMgrService.TimeLeftListener {
@@ -102,9 +105,10 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
 
     private fun bindToServices() {
         /* bind to the service only seems to work from the ApplicationContext */
-        val context = requireContext().applicationContext
-        context.bindService(Intent(context, VpnStateService::class.java), mIKEv2ServiceConnection, Service.BIND_AUTO_CREATE)
-        context.bindService(Intent(context, EkoVPNMgrService::class.java), mTimerServiceConnection, Service.BIND_AUTO_CREATE)
+        ApplicationClass.getInstance()?.let {
+            it.bindService(Intent(it, VpnStateService::class.java), mIKEv2ServiceConnection, Service.BIND_AUTO_CREATE)
+            it.bindService(Intent(it, EkoVPNMgrService::class.java), mTimerServiceConnection, Service.BIND_AUTO_CREATE)
+        }
     }
 
     override fun onTimeUpdate(timeLeftMillis: Long, timeLeftFormatted: String) {
@@ -127,8 +131,10 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
 
     override fun onDestroy() {
         super.onDestroy()
-        requireActivity().applicationContext.unbindService(mTimerServiceConnection)
-        requireActivity().applicationContext.unbindService(mIKEv2ServiceConnection)
+        ApplicationClass.getInstance()?.let {
+            it.unbindService(mTimerServiceConnection)
+            it.unbindService(mIKEv2ServiceConnection)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -157,9 +163,14 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                 } else {
                     Toast.makeText(context, "Please pick a location", Toast.LENGTH_LONG).show()
                 }
-            }else{
+            } else {
                 Toast.makeText(context, "Please view some ads or buy premium", Toast.LENGTH_LONG).show()
             }
+        }
+
+
+        activity?.findViewById<View>(R.id.settings_btn)?.setOnClickListener {
+            findNavController().navigate(R.id.SettingsFragment)
         }
 
         get_more_time.setOnClickListener {
@@ -238,7 +249,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
     }
 
     private fun startOrStopIKEv2(profile: org.strongswan.android.data.VpnProfile) {
-        val intent = Intent(requireContext(), VpnProfileControlActivity::class.java)
+        val intent = Intent(activity, VpnProfileControlActivity::class.java)
         intent.action = VpnProfileControlActivity.START_PROFILE
         intent.putExtra(VpnProfileControlActivity.EXTRA_VPN_PROFILE_ID, profile.uuid.toString())
         startActivity(intent)
@@ -319,10 +330,12 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
     }
 
     private fun startCountDownTimerService(state: HomeState) {
-        val timerServiceIntent = Intent(requireContext(), EkoVPNMgrService::class.java)
-        timerServiceIntent.putExtra(EkoVPNMgrService.TIMER_SERVICE_VPN_PROFILE, state.currentConnectionServer)
-        timerServiceIntent.putExtra(EkoVPNMgrService.TIMER_SERVICE_TIME_LEFT, state.timeLeft)
-        ContextCompat.startForegroundService(requireContext(), timerServiceIntent)
+        ApplicationClass.getInstance()?.let {
+            val timerServiceIntent = Intent(it, EkoVPNMgrService::class.java)
+            timerServiceIntent.putExtra(EkoVPNMgrService.TIMER_SERVICE_VPN_PROFILE, state.currentConnectionServer)
+            timerServiceIntent.putExtra(EkoVPNMgrService.TIMER_SERVICE_TIME_LEFT, state.timeLeft)
+            ContextCompat.startForegroundService(it, timerServiceIntent)
+        }
     }
 
     private fun stopCountDownTimerService() {
