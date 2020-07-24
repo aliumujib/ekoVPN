@@ -101,13 +101,6 @@ class LocationSelectorDialog : DialogFragment() {
         })
 
         countries.apply {
-            addItemDecoration(LinearMarginDecoration(
-                    leftMargin = resources.dpToPx(16),
-                    topMargin = resources.dpToPx(32),
-                    rightMargin = resources.dpToPx(16),
-                    bottomMargin = resources.dpToPx(32),
-                    orientation = RecyclerView.VERTICAL
-            ))
 
             addItemDecoration(LinearDividerDecoration.create(
                     color = ContextCompat.getColor(context, R.color.grey),

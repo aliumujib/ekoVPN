@@ -17,7 +17,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
@@ -44,7 +47,6 @@ import de.blinkt.openvpn.activities.DisconnectVPN
 import de.blinkt.openvpn.core.ConnectionStatus
 import de.blinkt.openvpn.core.VpnStatus
 import de.blinkt.openvpn.core.VpnStatus.StateListener
-import kotlinx.android.synthetic.main.activity_vpn.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
@@ -112,7 +114,13 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
     }
 
     override fun onTimeUpdate(timeLeftMillis: Long, timeLeftFormatted: String) {
+        stopBlinkingAnimation()
         timer_view.text = timeLeftFormatted
+        if (timeLeftMillis < 120000) {
+            startBlinkingAnimation()
+        } else if(timeLeftMillis <= 1L) {
+            stopBlinkingAnimation()
+        }
         Log.d(HomeFragment::class.java.simpleName, "$timeLeftMillis, $timeLeftFormatted")
     }
 
@@ -126,7 +134,11 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         super.onStop()
         iKEv2Service?.unregisterListener(this)
         ekoVpnMgrService?.unregisterListener(this)
+    }
 
+    override fun onPause() {
+        super.onPause()
+        stopBlinkingAnimation()
     }
 
     override fun onDestroy() {
@@ -170,17 +182,11 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
 
 
         activity?.findViewById<View>(R.id.settings_btn)?.setOnClickListener {
-            findNavController().navigate(R.id.SettingsFragment)
+            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToSettingsFragment())
         }
 
         get_more_time.setOnClickListener {
-            stopCountDownTimerService()
-            viewModel.setDisconnected()
-            findNavController().navigate(R.id.action_HomeFragment_to_AdsFragment)
-        }
-
-        privacy.setOnClickListener {
-            WebViewDialog.display(childFragmentManager, WebViewDialog.Companion.WebUrl("https://www.ekovpn.com/privacy-policy", "Privacy Policy"), null)
+            goToViewAdsScreen()
         }
 
         test_connection.setOnClickListener {
@@ -190,9 +196,24 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
             //WebViewDialog.display(childFragmentManager, "http://ipleak.net", null)
         }
 
-        help.setOnClickListener {
-            WebViewDialog.display(childFragmentManager, WebViewDialog.Companion.WebUrl("https://www.ekovpn.com/what-is-a-vpn", "Help"), null)
+    }
+
+    private fun startBlinkingAnimation() {
+        if(timer_view.animation==null){
+            val anim: Animation = AlphaAnimation(0.0f, 1.0f)
+            anim.duration = 500 //You can manage the blinking time with this parameter
+            anim.repeatMode = Animation.REVERSE
+            anim.repeatCount = Animation.INFINITE
+            timer_view.startAnimation(anim)
         }
+    }
+
+    private fun stopBlinkingAnimation() {
+        timer_view.clearAnimation()
+    }
+
+    private fun goToViewAdsScreen() {
+        findNavController().navigate(R.id.action_HomeFragment_to_AdsFragment)
     }
 
     private fun observeStates() {
@@ -289,7 +310,6 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                 timer_view.text = timeMilliParser.parseTimeInMilliSeconds(it.timeLeft)
                 selected_title.text = resources.getString(R.string.current_location)
                 connection_status_.setIconTintResource(R.color.eko_red_light)
-                divider_view.hide()
                 it.currentLocation?.let {
                     initCurrentConnectionUI(it)
                 }
@@ -300,7 +320,6 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                 connect.setStrokeColorResource(R.color.white)
                 connection_status_.setIconTintResource(R.color.grey)
                 progressBar.visibility = View.VISIBLE
-                divider_view.hide()
                 connect.isEnabled = false
                 connect.isClickable = false
                 timer_view.text = timeMilliParser.parseTimeInMilliSeconds(it.timeLeft)
@@ -311,7 +330,6 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                 connect.setStrokeColorResource(R.color.connected_green)
                 connection_status_.setIconTintResource(R.color.connected_green)
                 progressBar.visibility = View.GONE
-                divider_view.hide()
                 connect.isEnabled = true
                 timer_view.text = timeMilliParser.parseTimeInMilliSeconds(it.timeLeft)
                 connect.isClickable = true

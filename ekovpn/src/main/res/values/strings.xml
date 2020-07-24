@@ -46,15 +46,18 @@
     <string name="out_of_time_desc">View more ads to get more time or subscribe to our premium service</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="ads_fragment_label">Ads</string>
+    <string name="ads_fragment_label">Get More time</string>
     <string name="buy_premimum">Buy Premium</string>
     <string name="quantity_hours">Get %1$d hours</string>
     <string name="quantity_minutes">Get %1$d minutes</string>
 
     <string name="tcp_open_vpn_title_explanantion"> <![CDATA[<b>TCP (OpenVPN)</b> works on most networks but might be slow ]]></string>
     <string name="udp_open_vpn_title_explanantion"> <![CDATA[<b>UDP (OpenVPN)</b> is fast and more secure but may not work on most networks.]]></string>
-    <string name="ikev2_title_explanantion"> <![CDATA[<b>IKEv2 (OpenVPN)</b> is faster but may not work on most networks. (not yet available on android 11)]]></string>
+    <string name="ikev2_title_explanantion"> <![CDATA[<b>IKEv2</b> is faster but may not work on most networks. (not yet available on android 11)]]></string>
     <string name="wireguard_title_explanantion"> <![CDATA[<b>Wireguard</b> is the fastest but may not work on most networks.]]></string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="disconnect_to_get_more_time">We\'d have to disconnect you to get more time, do you want to proceed?</string>
 
     <plurals name="plural_videos">
         <item quantity="one">Watch %d video</item>

@@ -96,7 +96,7 @@ class WebViewDialog : DialogFragment() {
 
 
         url?.let {
-            //view.webview.settings.javaScriptEnabled = true
+            view.webview.settings.javaScriptEnabled = true
             view.webview.settings.domStorageEnabled = true
             view.webview.loadUrl(url.url)
             view.webview.webViewClient = object : WebViewClient() {

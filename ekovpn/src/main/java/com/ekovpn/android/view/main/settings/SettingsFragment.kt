@@ -15,15 +15,18 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.ekovpn.android.BuildConfig
 import com.ekovpn.android.R
 import com.ekovpn.android.models.Protocol
 import com.ekovpn.android.di.main.settings.DaggerSettingsComponent
 import com.ekovpn.android.di.main.settings.SettingsModule
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
+import com.ekovpn.android.view.main.home.HomeFragmentDirections
 import com.ekovpn.android.view.main.webview.WebViewDialog
 import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.coroutines.delay
@@ -39,10 +42,7 @@ class SettingsFragment : Fragment() {
 
 
 
-    override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_settings, container, false)
     }
@@ -54,7 +54,6 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         viewModel.state
                 .onEach {
@@ -69,9 +68,7 @@ class SettingsFragment : Fragment() {
         ikev2.text = Html.fromHtml(getString(R.string.ikev2_title_explanantion))
         wire_guard.text = Html.fromHtml(getString(R.string.wireguard_title_explanantion))
 
-
-
-        protocol_group.setOnCheckedChangeListener { group, checkedId ->
+        protocol_group.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.tcp -> {
                     viewModel.selectProtocol(Protocol.TCP)
