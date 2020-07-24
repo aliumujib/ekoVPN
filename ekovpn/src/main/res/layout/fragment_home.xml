@@ -147,21 +147,11 @@
             android:layout_height="wrap_content"
             android:text="@string/time_left"
             android:id="@+id/timer_view"
-            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textColor="@color/white"
             android:layout_marginTop="@dimen/half_space"
             app:layout_constraintStart_toStartOf="@id/time_left_label"
             app:layout_constraintTop_toBottomOf="@+id/time_left_label" />
-
-        <View
-            android:id="@+id/divider_view"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:background="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
 
         <com.google.android.material.button.MaterialButton
@@ -265,12 +255,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/two_spaces"
-        app:adSize="SMART_BANNER"
+        app:adSize="MEDIUM_RECTANGLE"
         app:adUnitId="ca-app-pub-3940256099942544/6300978111"
-        app:layout_constraintBottom_toTopOf="@+id/privacy"
-        app:layout_constraintEnd_toEndOf="@+id/help"
-        app:layout_constraintStart_toStartOf="@+id/privacy"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/test_connection" />
 
     <com.google.android.material.button.MaterialButton
@@ -289,32 +278,5 @@
         app:layout_constraintStart_toStartOf="@+id/select_location_card"
         app:layout_constraintTop_toBottomOf="@+id/select_location_card" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/privacy"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAllCaps="false"
-        android:text="@string/privacy_policy"
-        android:letterSpacing="0"
-        android:layout_marginBottom="@dimen/two_spaces"
-        android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="@+id/select_location_card"
-        app:layout_constraintBottom_toBottomOf="parent"
-         />
-
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/help"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="end"
-        android:text="@string/help"
-        android:textAllCaps="false"
-        android:letterSpacing="0"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="@+id/select_location_card"
-        app:layout_constraintTop_toTopOf="@id/privacy" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

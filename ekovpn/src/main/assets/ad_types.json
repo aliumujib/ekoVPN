@@ -6,27 +6,27 @@
   },
   {
     "type": 1,
-    "count": 1,
+    "count": 3,
     "timeAddition": 1800001
   },
   {
     "type": 1,
-    "count": 2,
+    "count": 6,
     "timeAddition": 3600001
   },
   {
     "type": 1,
-    "count": 4,
+    "count": 10,
     "timeAddition": 10800001
   },
   {
     "type": 1,
-    "count": 6,
+    "count": 15,
     "timeAddition": 21600001
   },
   {
     "type": 1,
-    "count": 12,
+    "count": 20,
     "timeAddition": 43200001
   }
 ]

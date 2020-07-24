@@ -18,9 +18,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ekovpn.android.ApplicationClass
 import com.ekovpn.android.R
 import com.ekovpn.android.di.main.ads.AdsModule
 import com.ekovpn.android.di.main.ads.DaggerAdsComponent
@@ -44,14 +44,43 @@ class AdsFragment : Fragment(), SelectionListener<Ad>, EkoVPNMgrService.TimeLeft
     @Inject
     lateinit var viewModel: AdsViewModel
 
+    private var ekoVpnMgrService: EkoVPNMgrService? = null
+
+    private val mTimerServiceConnection: ServiceConnection = object : ServiceConnection {
+        override fun onServiceDisconnected(name: ComponentName) {
+            ekoVpnMgrService = null
+        }
+
+        override fun onServiceConnected(name: ComponentName, service: IBinder) {
+            ekoVpnMgrService = (service as EkoVPNMgrService.VPNTimerLocalBinder).getService()
+            ekoVpnMgrService?.registerListener(this@AdsFragment)
+        }
+    }
+
+
     private val viewAdsCall =
             registerForActivityResult(ViewAdsContract()) { result ->
                 if (result != null) {
-                    viewModel.saveAddedTime(result.timeAddition)
+                    addMoreTime(result)
                 } else {
                     Toast.makeText(requireContext(), "You cancelled the ad and won't get a reward", Toast.LENGTH_LONG).show()
                 }
             }
+
+    private fun addMoreTime(result: Ad) {
+        if (ekoVpnMgrService?.server == null) {
+            Log.d(AdsFragment::class.java.simpleName, "Added via viewmodel $ekoVpnMgrService")
+            viewModel.saveAddedTime(result.timeAddition)
+        } else {
+            ApplicationClass.getInstance()?.let {
+                Log.d(AdsFragment::class.java.simpleName, "Added via service $ekoVpnMgrService")
+                val serviceIntent = Intent(it, ekoVpnMgrService!!::class.java)
+                serviceIntent.action = EkoVPNMgrService.TIMER_SERVICE_INCREASE_TIME_LEFT_ACTION
+                serviceIntent.putExtra(EkoVPNMgrService.TIMER_SERVICE_INCREMENT, result.timeAddition)
+                it.startService(serviceIntent)
+            }
+        }
+    }
 
 
     private val adAdapter by lazy {
@@ -63,6 +92,13 @@ class AdsFragment : Fragment(), SelectionListener<Ad>, EkoVPNMgrService.TimeLeft
         super.onCreate(savedInstanceState)
 
         injectDependencies()
+        bindToTimerService()
+    }
+
+    private fun bindToTimerService() {
+        ApplicationClass.getInstance()?.let {
+            it.bindService(Intent(it, EkoVPNMgrService::class.java), mTimerServiceConnection, Service.BIND_AUTO_CREATE)
+        }
     }
 
     private fun injectDependencies() {
@@ -73,6 +109,23 @@ class AdsFragment : Fragment(), SelectionListener<Ad>, EkoVPNMgrService.TimeLeft
                 .inject(this)
     }
 
+
+    override fun onStart() {
+        super.onStart()
+        ekoVpnMgrService?.registerListener(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        ekoVpnMgrService?.unregisterListener(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        ApplicationClass.getInstance()?.let {
+            it.unbindService(mTimerServiceConnection)
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {

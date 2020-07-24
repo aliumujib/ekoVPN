@@ -70,39 +70,64 @@ class EkoVPNMgrService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        if(intent.action == TIMER_SERVICE_INCREASE_TIME_LEFT_ACTION){
+            increaseTimeLeft(intent)
+        }else{
+            timeVPNConnection(intent)
+        }
+        return START_NOT_STICKY
+    }
+
+    private fun increaseTimeLeft(intent: Intent) {
+        intent.getLongExtra(TIMER_SERVICE_INCREMENT, 0L).let {
+            if (it > 0L) {
+                countDownTimer?.cancel()
+
+                Log.d(EkoVPNMgrService::class.java.simpleName, "Server: ${server.toString()}")
+                userRepository.addToTimeLeft(it)
+                timeLeft = userRepository.getTimeLeft()
+                runCountDownTimer()
+                runNotification()
+            }
+        }
+    }
+
+    private fun timeVPNConnection(intent: Intent) {
         intent.getParcelableExtra<Server>(TIMER_SERVICE_VPN_PROFILE)?.let {
+            disconnectCurrentVPN()
+            countDownTimer?.cancel()
 
             server = intent.getParcelableExtra(TIMER_SERVICE_VPN_PROFILE)
             timeLeft = intent.getLongExtra(TIMER_SERVICE_TIME_LEFT, 0L)
 
             Log.d(EkoVPNMgrService::class.java.simpleName, "Server: ${server.toString()}")
+            runCountDownTimer()
+            runNotification()
+        }
+    }
 
-            countDownTimer = object : CountDownTimer(timeLeft, interval) {
+    private fun runCountDownTimer() {
+        countDownTimer = object : CountDownTimer(timeLeft, interval) {
 
-                override fun onFinish() {
-                    disconnectCurrentVPN()
-                    server = null
-                    showViewAdsNotification()
-                    userRepository.setTimeLeft(0)
-                    stopForeground(true)
-                }
+            override fun onFinish() {
+                disconnectCurrentVPN()
+                server = null
+                showViewAdsNotification()
+                userRepository.setTimeLeft(0)
+                stopForeground(true)
+            }
 
 
-                override fun onTick(millisUntilFinished: Long) {
-                    if ((millisUntilFinished % 1000L) == 0L) {
-                        listeners.forEach {
-                            if ((millisUntilFinished % 60000) == 0L) { // then its been a minute
-                                userRepository.setTimeLeft(millisUntilFinished)
-                            }
-                            it.onTimeUpdate(millisUntilFinished, timeMilliParser.parseTimeInMilliSeconds(millisUntilFinished))
-                        }
+            override fun onTick(millisUntilFinished: Long) {
+                if ((millisUntilFinished % 1000L) == 0L) {
+                    listeners.forEach {
+                        userRepository.setTimeLeft(millisUntilFinished)
+                        it.onTimeUpdate(millisUntilFinished, timeMilliParser.parseTimeInMilliSeconds(millisUntilFinished))
                     }
                 }
             }
-            countDownTimer?.start()
-            runNotification()
         }
-        return START_NOT_STICKY
+        countDownTimer?.start()
     }
 
     fun showViewAdsNotification() {
@@ -256,6 +281,10 @@ class EkoVPNMgrService : Service() {
 
         const val TIMER_SERVICE_VPN_PROFILE = "TIMER_SERVICE_VPN_PROFILE"
         const val TIMER_SERVICE_TIME_LEFT = "TIMER_SERVICE_TIME_LEFT"
+
+        const val TIMER_SERVICE_INCREASE_TIME_LEFT_ACTION = "TIMER_SERVICE_INCREASE_TIME_LEFT_ACTION"
+        const val TIMER_SERVICE_INCREMENT = "TIMER_SERVICE_INCREMENT"
+
         const val TIMER_GROUP = "TIMER_GROUP"
         const val TIMER_SERVICE_NOTIFICATION = 1234
 
