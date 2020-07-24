@@ -83,9 +83,6 @@ class EkoVPNMgrService : Service() {
             if (it > 0L) {
                 countDownTimer?.cancel()
 
-                server = intent.getParcelableExtra(TIMER_SERVICE_VPN_PROFILE)
-                timeLeft = intent.getLongExtra(TIMER_SERVICE_TIME_LEFT, 0L)
-
                 Log.d(EkoVPNMgrService::class.java.simpleName, "Server: ${server.toString()}")
                 userRepository.addToTimeLeft(it)
                 timeLeft = userRepository.getTimeLeft()
