@@ -302,65 +302,55 @@
 
             </androidx.cardview.widget.CardView>
 
-            <com.google.android.material.button.MaterialButton
+            <TextView
                 android:id="@+id/contact_support"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
+                style="@style/TextAppearance.AppCompat.Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/two_spaces"
                 android:letterSpacing="0"
-                android:src="@drawable/contact_support"
+                android:lineSpacingMultiplier="1.2"
+                android:drawableTop="@drawable/contact_support"
                 android:text="@string/contact_support"
+                android:drawablePadding="@dimen/half_space"
                 android:textAllCaps="false"
-
                 android:textColor="@color/white"
-                app:icon="@drawable/contact_support"
-                app:iconTint="@color/white"
                 app:layout_constraintEnd_toEndOf="@+id/social"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toStartOf="@id/social"
                 app:layout_constraintTop_toBottomOf="@+id/social" />
 
 
-            <View
-                android:id="@+id/divider"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginTop="@dimen/two_spaces"
-                android:alpha="0.5"
-                android:background="@color/white"
-                app:layout_constraintEnd_toEndOf="@id/social"
-                app:layout_constraintStart_toStartOf="@+id/social"
-                app:layout_constraintTop_toBottomOf="@id/contact_support" />
-
-
-            <com.google.android.material.button.MaterialButton
+            <TextView
                 android:id="@+id/privacy"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/two_spaces"
+                android:lineSpacingMultiplier="1.2"
                 android:letterSpacing="0"
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:drawablePadding="@dimen/half_space"
                 android:text="@string/privacy_policy"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                app:layout_constraintStart_toStartOf="@+id/divider"
-                app:layout_constraintTop_toBottomOf="@id/divider" />
+                android:drawableTop="@drawable/privacy_policy_icon"
+                app:layout_constraintStart_toStartOf="@+id/social"
+                app:layout_constraintTop_toTopOf="@id/contact_support" />
 
 
-            <com.google.android.material.button.MaterialButton
+            <TextView
                 android:id="@+id/help"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
+                style="@style/TextAppearance.AppCompat.Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="end"
                 android:letterSpacing="0"
+                android:lineSpacingMultiplier="1.2"
+                android:drawablePadding="@dimen/half_space"
                 android:text="@string/help"
                 android:textAllCaps="false"
+                android:drawableTop="@drawable/help_icon"
                 android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="@+id/divider"
+                app:layout_constraintStart_toEndOf="@+id/privacy"
+                app:layout_constraintEnd_toStartOf="@+id/contact_support"
                 app:layout_constraintTop_toTopOf="@id/privacy" />
 
 

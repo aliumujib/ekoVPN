@@ -187,7 +187,7 @@ class SettingsFragment : Fragment() {
                 protocol_group.check(R.id.tcp)
             }
             Protocol.UDP -> {
-                protocol_group.check(R.id.tcp)
+                protocol_group.check(R.id.udp)
             }
             Protocol.IKEv2 -> {
                 protocol_group.check(R.id.ikev2)
