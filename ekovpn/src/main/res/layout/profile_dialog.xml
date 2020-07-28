@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white"
+            android:paddingStart="6dp"
+            android:paddingEnd="16dp"
+            app:contentInsetStartWithNavigation="0dp"
+            app:navigationIcon="@drawable/close_btn_eko"
+            app:titleTextColor="?colorAccent" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/countries"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.ekovpn.android.view.profileactionview.ProfileActionView
+                android:id="@+id/account_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:action_button_text="Copy"
+                app:action_icon="@drawable/ic_user"
+                app:action_subtitle="1232 9876 8020 7729"
+                app:action_title="Account Number"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.ekovpn.android.view.profileactionview.ProfileActionView
+                android:id="@+id/account_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:action_button_text="Upgrade"
+                app:action_icon="@drawable/ic_dollar"
+                app:action_subtitle="Unpaid User"
+                app:action_title="Account Type"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/account_number" />
+
+            <com.ekovpn.android.view.profileactionview.ProfileActionView
+                android:id="@+id/renewal_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:action_button_text=""
+                app:action_icon="@drawable/ic_user"
+                app:action_subtitle="24/JUL/2020"
+                app:action_title="Renewal Date"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/account_type" />
+
+            <ImageView
+                android:id="@+id/tick_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/two_spaces"
+                android:layout_marginTop="@dimen/two_spaces"
+                android:src="@drawable/ic_tick"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/renewal_date" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/two_spaces"
+                android:text="Buy VPN Credits"
+                android:id="@+id/credit_vpn"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toEndOf="@+id/tick_icon"
+                app:layout_constraintTop_toTopOf="@+id/tick_icon" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/unlimited_one_month"
+                android:layout_width="0dp"
+                android:layout_marginTop="@dimen/two_spaces"
+                android:layout_marginEnd="@dimen/two_spaces"
+                android:text="Unlimited for 1 Month \t\t $5.99"
+                android:letterSpacing="0"
+                android:textAllCaps="false"
+                app:layout_constraintStart_toStartOf="@+id/credit_vpn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/credit_vpn"
+                android:backgroundTint="@color/connected_green"
+                android:layout_height="wrap_content" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="0dp"
+                app:layout_constraintStart_toStartOf="@+id/credit_vpn"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="Unlimited for 1 Yes \t\t $49.99"
+                android:letterSpacing="0"
+                android:textAllCaps="false"
+                android:layout_marginEnd="@dimen/two_spaces"
+                app:layout_constraintTop_toBottomOf="@+id/unlimited_one_month"
+                android:id="@+id/unlimited_one_year"
+                android:backgroundTint="@color/connected_green"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:background="?dividerHorizontal"
+                android:id="@+id/divider"
+                android:layout_marginTop="@dimen/two_spaces"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/unlimited_one_year"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_height="1dp"/>
+
+            <com.ekovpn.android.view.profileactionview.ProfileActionView
+                android:id="@+id/referral_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:action_button_text="Share code"
+                app:action_icon="@drawable/ic_user"
+                app:action_subtitle="Code: iJ78qU"
+                app:action_title="Refer friends for Free 1 Hour"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
