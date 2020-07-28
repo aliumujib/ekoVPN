@@ -80,7 +80,7 @@ class ConfigRepositoryImpl @Inject constructor(private val context: Context,
 
 
     companion object {
-        const val FILE_NAME = "servers_new.json"
+        const val FILE_NAME = "servers_new_ike.json"
     }
 
 }

@@ -118,7 +118,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         timer_view.text = timeLeftFormatted
         if (timeLeftMillis < 120000) {
             startBlinkingAnimation()
-        } else if(timeLeftMillis <= 1L) {
+        } else if (timeLeftMillis <= 1L) {
             stopBlinkingAnimation()
         }
         Log.d(HomeFragment::class.java.simpleName, "$timeLeftMillis, $timeLeftFormatted")
@@ -177,6 +177,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                 }
             } else {
                 Toast.makeText(context, "Please view some ads or buy premium", Toast.LENGTH_LONG).show()
+                goToViewAdsScreen()
             }
         }
 
@@ -199,7 +200,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
     }
 
     private fun startBlinkingAnimation() {
-        if(timer_view.animation==null){
+        if (timer_view.animation == null) {
             val anim: Animation = AlphaAnimation(0.0f, 1.0f)
             anim.duration = 500 //You can manage the blinking time with this parameter
             anim.repeatMode = Animation.REVERSE

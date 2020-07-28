@@ -8,8 +8,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    tools:context=".SecondFragment">
+    android:orientation="vertical">
 
     <View
         android:layout_width="50dp"
@@ -23,6 +22,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/two_spaces"
             tools:context=".SecondFragment">
 
 
@@ -302,65 +302,56 @@
 
             </androidx.cardview.widget.CardView>
 
-            <com.google.android.material.button.MaterialButton
+            <TextView
                 android:id="@+id/contact_support"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/two_spaces"
+                android:drawableTop="@drawable/contact_support"
+                android:drawablePadding="@dimen/half_space"
                 android:letterSpacing="0"
-                android:src="@drawable/contact_support"
+                android:lineSpacingMultiplier="1.2"
                 android:text="@string/contact_support"
                 android:textAllCaps="false"
-
                 android:textColor="@color/white"
-                app:icon="@drawable/contact_support"
-                app:iconTint="@color/white"
-                app:layout_constraintEnd_toEndOf="@+id/social"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toStartOf="@id/social"
+                app:layout_constraintStart_toEndOf="@+id/help"
                 app:layout_constraintTop_toBottomOf="@+id/social" />
 
 
-            <View
-                android:id="@+id/divider"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginTop="@dimen/two_spaces"
-                android:alpha="0.5"
-                android:background="@color/white"
-                app:layout_constraintEnd_toEndOf="@id/social"
-                app:layout_constraintStart_toStartOf="@+id/social"
-                app:layout_constraintTop_toBottomOf="@id/contact_support" />
-
-
-            <com.google.android.material.button.MaterialButton
+            <TextView
                 android:id="@+id/privacy"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/two_spaces"
+                android:drawableTop="@drawable/privacy_policy_icon"
+                android:drawablePadding="@dimen/half_space"
                 android:letterSpacing="0"
+                android:lineSpacingMultiplier="1.2"
                 android:text="@string/privacy_policy"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                app:layout_constraintStart_toStartOf="@+id/divider"
-                app:layout_constraintTop_toBottomOf="@id/divider" />
+                app:layout_constraintEnd_toStartOf="@+id/help"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/contact_support" />
 
 
-            <com.google.android.material.button.MaterialButton
+            <TextView
                 android:id="@+id/help"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="end"
+                android:drawableTop="@drawable/help_icon"
+                android:drawablePadding="@dimen/half_space"
                 android:letterSpacing="0"
+                android:lineSpacingMultiplier="1.2"
                 android:text="@string/help"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="@+id/divider"
+                app:layout_constraintEnd_toStartOf="@+id/contact_support"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/privacy"
                 app:layout_constraintTop_toTopOf="@id/privacy" />
 
 
@@ -371,7 +362,6 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/two_spaces"
                 android:text="@string/app_name"
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

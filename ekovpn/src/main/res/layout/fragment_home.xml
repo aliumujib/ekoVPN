@@ -189,7 +189,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="@dimen/two_spaces">
+            >
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/select_location"
@@ -199,6 +199,8 @@
                 android:backgroundTint="@color/grey"
                 android:insetTop="0dp"
                 android:insetRight="0dp"
+                android:layout_marginTop="@dimen/two_spaces"
+                android:layout_marginStart="@dimen/two_spaces"
                 android:insetBottom="0dp"
                 android:paddingTop="0dp"
                 android:paddingBottom="0dp"
@@ -215,6 +217,8 @@
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:src="@drawable/arrow_down"
+                android:layout_marginTop="@dimen/two_spaces"
+                android:layout_marginEnd="@dimen/two_spaces"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -225,6 +229,8 @@
                 android:layout_height="24dp"
                 android:layout_marginTop="@dimen/two_spaces"
                 android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="@dimen/two_spaces"
                 app:layout_constraintStart_toStartOf="@+id/select_location"
                 app:layout_constraintTop_toBottomOf="@+id/select_location" />
 
@@ -240,6 +246,29 @@
                 app:layout_constraintBottom_toBottomOf="@+id/country_flag"
                 app:layout_constraintStart_toEndOf="@+id/country_flag"
                 app:layout_constraintTop_toTopOf="@+id/country_flag" />
+
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:id="@+id/test_connection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:insetBottom="0dp"
+                android:textSize="12sp"
+                app:icon="@drawable/test_vpn_icon"
+                app:iconTint="@color/text"
+                android:letterSpacing="0"
+                android:text="@string/test_vpn_connection"
+                app:iconGravity="textStart"
+                android:textAllCaps="false"
+                android:layout_marginEnd="@dimen/one_space"
+                android:background="?selectableItemBackground"
+                android:paddingTop="@dimen/two_spaces"
+                android:textColor="@color/text"
+                android:padding="0dp"
+                android:layout_marginTop="@dimen/two_spaces"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -260,22 +289,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/test_connection" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/test_connection"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:icon="@drawable/safe_guard"
-        app:iconTint="@color/white"
-        android:letterSpacing="0"
-        android:text="@string/test_vpn_connection"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:layout_marginTop="@dimen/two_spaces"
-        app:layout_constraintEnd_toEndOf="@+id/select_location_card"
-        app:layout_constraintStart_toStartOf="@+id/select_location_card"
         app:layout_constraintTop_toBottomOf="@+id/select_location_card" />
 
 

@@ -1,0 +1,462 @@
+[
+  {
+    "location": {
+      "city": "Virginia",
+      "country": "USA",
+      "country_code": "US"
+    },
+    "open_vpn": [
+      {
+        "protocol": "TCP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/us_virginia_tcp.ovpn"
+      },
+      {
+        "protocol": "UDP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/us_virginia_udp.ovpn"
+      }
+    ],
+    "ikev2": {
+      "certificate_url": "https://ikev2-credential-2020.s3.amazonaws.com/north_virginia.pem",
+      "username": "north_virginia",
+      "password": "NORTH_VIRGINIA_2020",
+      "ip": "54.80.119.49"
+    }
+  },
+  {
+    "location": {
+      "city": "California",
+      "country": "USA",
+      "country_code": "US"
+    },
+    "open_vpn": [
+      {
+        "protocol": "TCP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/us_california_tcp.ovpn"
+      },
+      {
+        "protocol": "UDP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/usa_california_udp.ovpn"
+      }
+    ],
+    "ikev2": {
+      "certificate_url": "https://ikev2-credential-2020.s3.amazonaws.com/us_california.pem",
+      "username": "california",
+      "password": "CALIFORNIA_2020",
+      "ip": "54.176.103.209"
+    }
+  },
+  {
+    "location": {
+      "city": "Ohio",
+      "country": "USA",
+      "country_code": "US"
+    },
+    "open_vpn": [
+      {
+        "protocol": "TCP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/us_ohio_tcp.ovpn"
+      },
+      {
+        "protocol": "UDP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/us_ohio_udp.ovpn"
+      }
+    ],
+    "ikev2": {
+      "certificate_url": "https://ikev2-credential-2020.s3.amazonaws.com/us_ohio.pem",
+      "username": "ohio",
+      "password": "OHIO_2020",
+      "ip": "3.129.106.106"
+    }
+  },
+  {
+    "location": {
+      "city": "Oregon",
+      "country": "USA",
+      "country_code": "US"
+    },
+    "open_vpn": [
+      {
+        "protocol": "TCP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/us_oregon_tcp.ovpn"
+      },
+      {
+        "protocol": "UDP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/us_oregon_udp.ovpn"
+      }
+    ],
+    "ikev2": {
+      "certificate_url": "https://ikev2-credential-2020.s3.amazonaws.com/us_oregon.pem",
+      "username": "oregon",
+      "password": "OREGON_2020",
+      "ip": "44.232.148.70"
+    }
+  },
+  {
+    "location": {
+      "city": "Stockholm",
+      "country": "Sweeden",
+      "country_code": "SE"
+    },
+    "open_vpn": [
+      {
+        "protocol": "TCP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/sweeden_stockholm_tcp.ovpn"
+      },
+      {
+        "protocol": "UDP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/sweeden_stockholm_udp.ovpn"
+      }
+    ],
+    "ikev2": {
+      "certificate_url": "https://ikev2-credential-2020.s3.amazonaws.com/sweeden-ca.pem",
+      "username": "stockholm",
+      "password": "SE_STOCKHOLM_2020",
+      "ip": "13.49.114.83"
+    }
+  },
+  {
+    "location": {
+      "city": "Seoul",
+      "country": "South Korea",
+      "country_code": "KR"
+    },
+    "open_vpn": [
+      {
+        "protocol": "TCP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/southkorea_seoul_tcp.ovpn"
+      },
+      {
+        "protocol": "UDP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/southkorea_seoul_udp.ovpn"
+      }
+    ],
+    "ikev2": {
+      "certificate_url": "https://ikev2-credential-2020.s3.amazonaws.com/sk_seoul.pem",
+      "username": "seoul",
+      "password": "SK_SEOUL_2020",
+      "ip": "3.34.244.178"
+    }
+  },
+  {
+    "location": {
+      "city": "Cape Town",
+      "country": "South Africa",
+      "country_code": "ZA"
+    },
+    "open_vpn": [
+      {
+        "protocol": "TCP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/southafrica_capetown_tcp.ovpn"
+      },
+      {
+        "protocol": "UDP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/southafrica_capetown_udp.ovpn"
+      }
+    ],
+    "ikev2": {
+      "certificate_url": "https://ikev2-credential-2020.s3.amazonaws.com/sa_capetown.pem",
+      "username": "capetown",
+      "password": "CAPETOWN_2020",
+      "ip": "13.245.51.145"
+    }
+  },
+  {
+    "location": {
+      "city": "Tokyo",
+      "country": "Japan",
+      "country_code": "JP"
+    },
+    "open_vpn": [
+      {
+        "protocol": "TCP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/japan_tokyo_tcp.ovpn"
+      },
+      {
+        "protocol": "UDP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/japan_tokyo_udp.ovpn"
+      }
+    ],
+    "ikev2": {
+      "certificate_url": "https://ikev2-credential-2020.s3.amazonaws.com/jp_tokyo.pem",
+      "username": "tokyo",
+      "password": "JP_TOKYO_2020",
+      "ip": "54.64.216.31"
+    }
+  },
+  {
+    "location": {
+      "city": "Milan",
+      "country": "Italy",
+      "country_code": "IT"
+    },
+    "open_vpn": [
+      {
+        "protocol": "TCP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/italy_milan_tcp.ovpn"
+      },
+      {
+        "protocol": "UDP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/italy_milan_udp.ovpn"
+      }
+    ],
+    "ikev2": {
+      "certificate_url": "https://ikev2-credential-2020.s3.amazonaws.com/milan-ca.pem",
+      "username": "milan",
+      "password": "EU_MILAN_2020",
+      "ip": "15.161.5.132"
+    }
+  },
+  {
+    "location": {
+      "city": "Dublin",
+      "country": "Ireland",
+      "country_code": "IE"
+    },
+    "open_vpn": [
+      {
+        "protocol": "TCP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/ireland_dublin_tcp.ovpn"
+      },
+      {
+        "protocol": "UDP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/ireland_dublin_udp.ovpn"
+      }
+    ],
+    "ikev2": {
+      "certificate_url": "https://ikev2-credential-2020.s3.amazonaws.com/ireland-ca.pem",
+      "username": "ireland",
+      "password": "EU_IRELAND_2020",
+      "ip": "54.73.87.233"
+    }
+  },
+  {
+    "location": {
+      "city": "Mumbai",
+      "country": "India",
+      "country_code": "IN"
+    },
+    "open_vpn": [
+      {
+        "protocol": "TCP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/india_mumbai_tcp.ovpn"
+      },
+      {
+        "protocol": "UDP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/india_mumbai_udp.ovpn"
+      }
+    ],
+    "ikev2": {
+      "certificate_url": "https://ikev2-credential-2020.s3.amazonaws.com/in_mumbai.pem",
+      "username": "mumbai",
+      "password": "MUMBAI_2020",
+      "ip": "65.0.0.160"
+    }
+  },
+  {
+    "location": {
+      "city": "Victoria",
+      "country": "Hong Kong",
+      "country_code": "HK"
+    },
+    "open_vpn": [
+      {
+        "protocol": "TCP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/hongkong_victoria_tcp.ovpn"
+      },
+      {
+        "protocol": "UDP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/hongkong_victoria_udp.ovpn"
+      }
+    ],
+    "ikev2": {
+      "certificate_url": "https://ikev2-credential-2020.s3.amazonaws.com/hong_kong.pem",
+      "username": "hong_kong",
+      "password": "HONG_KONG_2020",
+      "ip": "18.166.111.204"
+    }
+  },
+  {
+    "location": {
+      "city": "Frankfurt",
+      "country": "Germany",
+      "country_code": "DE"
+    },
+    "open_vpn": [
+      {
+        "protocol": "TCP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/germany_frankfurt_tcp.ovpn"
+      },
+      {
+        "protocol": "UDP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/germany_frankfurt_udp.ovpn"
+      }
+    ],
+    "ikev2": {
+      "certificate_url": "https://ikev2-credential-2020.s3.amazonaws.com/frankfurt-ca.pem",
+      "username": "frankfurt",
+      "password": "DE_FRANKFURT_2020",
+      "ip": "18.158.247.126"
+    }
+  },
+  {
+    "location": {
+      "city": "Paris",
+      "country": "France",
+      "country_code": "FR"
+    },
+    "open_vpn": [
+      {
+        "protocol": "TCP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/france_paris_tcp.ovpn"
+      },
+      {
+        "protocol": "UDP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/france_paris_udp.ovpn"
+      }
+    ],
+    "ikev2": {
+      "certificate_url": "https://ikev2-credential-2020.s3.amazonaws.com/paris-ca.pem",
+      "username": "paris",
+      "password": "FR_PARIS_2020",
+      "ip": "15.236.197.136"
+    }
+  },
+  {
+    "location": {
+      "city": "Ontario",
+      "country": "Canada",
+      "country_code": "CA"
+    },
+    "open_vpn": [
+      {
+        "protocol": "TCP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/canada_ontario_tcp.ovpn"
+      },
+      {
+        "protocol": "UDP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/canada_ontario_tcp.ovpn"
+      }
+    ],
+    "ikev2": {
+      "certificate_url": "https://ikev2-credential-2020.s3.amazonaws.com/canada-ca.pem",
+      "username": "canada",
+      "password": "CANADA_2020",
+      "ip": "15.222.200.189"
+    }
+  },
+  {
+    "location": {
+      "city": "London",
+      "country": "United Kingdom",
+      "country_code": "GB"
+    },
+    "open_vpn": [
+      {
+        "protocol": "TCP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/england_london_tcp.ovpn"
+      },
+      {
+        "protocol": "UDP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/england_london_udp.ovpn"
+      }
+    ],
+    "ikev2": {
+      "certificate_url": "https://ikev2-credential-2020.s3.amazonaws.com/london-ca.pem",
+      "username": "london",
+      "password": "EU_LONDON_2020",
+      "ip": "18.133.107.184"
+    }
+  },
+  {
+    "location": {
+      "city": "Sao Paulo",
+      "country": "Brazil",
+      "country_code": "BR"
+    },
+    "open_vpn": [
+      {
+        "protocol": "TCP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/brazil_saopaulo_tcp.ovpn"
+      },
+      {
+        "protocol": "UDP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/brazil_saopaulo_udp.ovpn"
+      }
+    ],
+    "ikev2": {
+      "certificate_url": "https://ikev2-credential-2020.s3.amazonaws.com/brazil-ca.pem",
+      "username": "saopaulo",
+      "password": "BR_SAOPAULO_2020",
+      "ip": "177.71.152.74"
+    }
+  },
+  {
+    "location": {
+      "city": "Persia",
+      "country": "Bahrain",
+      "country_code": "BH"
+    },
+    "open_vpn": [
+      {
+        "protocol": "TCP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/bahrain_persia_tcp.ovpn"
+      },
+      {
+        "protocol": "UDP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/bahrain_persia_udp.ovpn"
+      }
+    ],
+    "ikev2": {
+      "certificate_url": "https://ikev2-credential-2020.s3.amazonaws.com/bahrain-ca.pem",
+      "username": "bahrain",
+      "password": "BAHRAIN_2020",
+      "ip": "15.185.180.231"
+    }
+  },
+  {
+    "location": {
+      "city": "Sydney",
+      "country": "Australia",
+      "country_code": "AU"
+    },
+    "open_vpn": [
+      {
+        "protocol": "TCP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/australia_sydney_tcp.ovpn"
+      },
+      {
+        "protocol": "UDP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/australia_sydney_udp.ovpn"
+      }
+    ],
+    "ikev2": {
+      "certificate_url": "https://ikev2-credential-2020.s3.amazonaws.com/au_sydney.pem",
+      "username": "sydney",
+      "password": "AU_SYDNEY_2020",
+      "ip": "54.153.246.196"
+    }
+  },
+  {
+    "location": {
+      "city": "Singapore",
+      "country": "Asia",
+      "country_code": "SG"
+    },
+    "open_vpn": [
+      {
+        "protocol": "TCP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/asia_singapore_tcp.ovpn"
+      },
+      {
+        "protocol": "UDP",
+        "configfileurl": "https://credential-file-2020.s3.amazonaws.com/asia_singapore_udp.ovpn"
+      }
+    ],
+    "ikev2": {
+      "certificate_url": "https://ikev2-credential-2020.s3.amazonaws.com/singapore.pem",
+      "username": "singapore",
+      "password": "SINGAPORE_2020",
+      "ip": "54.179.15.125"
+    }
+  }
+]
