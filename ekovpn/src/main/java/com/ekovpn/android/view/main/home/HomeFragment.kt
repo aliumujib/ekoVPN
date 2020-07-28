@@ -282,9 +282,6 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         VpnStatus.addStateListener(this)
         viewModel.fetchServersForCurrentProtocol()
         viewModel.fetchTimeLeft()
-        if (ekoVpnMgrService?.server == null) {
-            viewModel.setDisconnected()
-        }
     }
 
     private fun initCurrentConnectionUI(location_: Location) {

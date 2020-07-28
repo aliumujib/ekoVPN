@@ -92,7 +92,12 @@ class HomeViewModel @Inject constructor(private val serversRepository: ServersRe
                     val sortedList = it.sortedBy { server ->
                         server.location_.country
                     }
-                    _state.value = _state.value.copy(_serversList = sortedList)
+                    val lastUsed = if(_state.value.lastUsedServer == null){
+                        sortedList.firstOrNull()
+                    }else{
+                        _state.value.lastUsedServer
+                    }
+                    _state.value = _state.value.copy(_serversList = sortedList, lastUsedServer = lastUsed)
                 }.launchIn(viewModelScope)
     }
 

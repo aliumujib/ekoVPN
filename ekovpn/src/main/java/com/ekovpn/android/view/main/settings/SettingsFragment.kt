@@ -15,6 +15,8 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioGroup
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
@@ -41,7 +43,6 @@ class SettingsFragment : Fragment() {
     lateinit var viewModel: SettingsViewModel
 
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_settings, container, false)
@@ -50,6 +51,25 @@ class SettingsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         injectDependencies()
+    }
+
+
+    private val checkChangeListener = RadioGroup.OnCheckedChangeListener { group, checkedId ->
+        when (checkedId) {
+            R.id.tcp -> {
+                viewModel.selectProtocol(Protocol.TCP)
+            }
+            R.id.udp -> {
+                viewModel.selectProtocol(Protocol.UDP)
+            }
+            R.id.ikev2 -> {
+                viewModel.selectProtocol(Protocol.IKEv2)
+            }
+            else -> {
+                viewModel.selectProtocol(Protocol.WIREGUARD)
+            }
+        }
+        Toast.makeText(requireContext(), getString(R.string.new_protocol_selected), Toast.LENGTH_LONG).show()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -68,22 +88,7 @@ class SettingsFragment : Fragment() {
         ikev2.text = Html.fromHtml(getString(R.string.ikev2_title_explanantion))
         wire_guard.text = Html.fromHtml(getString(R.string.wireguard_title_explanantion))
 
-        protocol_group.setOnCheckedChangeListener { _, checkedId ->
-            when (checkedId) {
-                R.id.tcp -> {
-                    viewModel.selectProtocol(Protocol.TCP)
-                }
-                R.id.udp -> {
-                    viewModel.selectProtocol(Protocol.UDP)
-                }
-                R.id.ikev2 -> {
-                    viewModel.selectProtocol(Protocol.IKEv2)
-                }
-                else -> {
-                    viewModel.selectProtocol(Protocol.WIREGUARD)
-                }
-            }
-        }
+        protocol_group.setOnCheckedChangeListener(checkChangeListener)
 
         if (Build.VERSION.SDK_INT>Build.VERSION_CODES.Q){
             ikev2.isEnabled = false
@@ -182,6 +187,7 @@ class SettingsFragment : Fragment() {
     }
 
     private fun selectCurrentProtocol(it: SettingsState) {
+        protocol_group.setOnCheckedChangeListener(null)
         when (it.selectedProtocol) {
             Protocol.TCP -> {
                 protocol_group.check(R.id.tcp)
@@ -196,6 +202,7 @@ class SettingsFragment : Fragment() {
                 protocol_group.check(R.id.wire_guard)
             }
         }
+        protocol_group.setOnCheckedChangeListener(checkChangeListener)
     }
 
 

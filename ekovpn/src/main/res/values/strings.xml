@@ -58,6 +58,8 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="disconnect_to_get_more_time">We\'d have to disconnect you to get more time, do you want to proceed?</string>
+    <string name="new_protocol_selected">New Protocol selected. Connection will be confirmed on next VPN Connection</string>
+    <string name="please_wait">Please wait...</string>
 
     <plurals name="plural_videos">
         <item quantity="one">Watch %d video</item>
