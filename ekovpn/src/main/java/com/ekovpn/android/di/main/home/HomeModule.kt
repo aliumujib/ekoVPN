@@ -17,15 +17,12 @@ package com.ekovpn.android.di.main.home
 
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.PRIVATE
-import com.ekovpn.android.data.servers.ServersRepository
-import com.ekovpn.android.data.settings.SettingsRepository
+import com.ekovpn.android.data.repositories.servers.ServersRepository
 import com.ekovpn.android.data.user.UserRepository
 import com.ekovpn.android.di.scopes.FragmentScope
 import com.ekovpn.android.utils.ext.viewModel
 import com.ekovpn.android.view.main.home.HomeFragment
 import com.ekovpn.android.view.main.home.HomeViewModel
-import com.ekovpn.android.view.main.settings.SettingsFragment
-import com.ekovpn.android.view.main.settings.SettingsViewModel
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.ExperimentalCoroutinesApi

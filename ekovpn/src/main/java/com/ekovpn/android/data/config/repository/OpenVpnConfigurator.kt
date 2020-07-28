@@ -8,9 +8,9 @@ package com.ekovpn.android.data.config.repository
 import android.content.Context
 import android.util.Log
 import androidx.core.net.toUri
-import com.ekovpn.android.cache.room.dao.LocationsDao
-import com.ekovpn.android.cache.room.dao.ServersDao
-import com.ekovpn.android.cache.room.entities.ServerCacheModel
+import com.ekovpn.android.data.cache.room.dao.LocationsDao
+import com.ekovpn.android.data.cache.room.dao.ServersDao
+import com.ekovpn.android.data.cache.room.entities.ServerCacheModel
 import com.ekovpn.android.data.config.ServerConfig
 import com.ekovpn.android.data.config.ServerLocation
 import com.ekovpn.android.data.config.ServerSetUp
@@ -19,7 +19,6 @@ import com.ekovpn.android.data.config.VPNServer.OVPNServer.Companion.toServerCac
 import com.ekovpn.android.data.config.downloader.FileDownloader
 import com.ekovpn.android.data.config.importer.OVPNProfileImporter
 import com.ekovpn.android.models.Protocol
-import com.ekovpn.android.utils.ext.runOnAll
 import de.blinkt.openvpn.core.ProfileManager
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*

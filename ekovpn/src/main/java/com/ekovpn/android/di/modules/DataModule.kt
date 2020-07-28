@@ -19,10 +19,10 @@ import com.ekovpn.android.data.ads.AdsRepository
 import com.ekovpn.android.data.ads.AdsRepositoryImpl
 import com.ekovpn.android.data.config.repository.ConfigRepository
 import com.ekovpn.android.data.config.repository.ConfigRepositoryImpl
-import com.ekovpn.android.data.servers.ServersRepository
-import com.ekovpn.android.data.servers.ServersRepositoryImpl
-import com.ekovpn.android.data.settings.SettingsRepository
-import com.ekovpn.android.data.settings.SettingsRepositoryImpl
+import com.ekovpn.android.data.repositories.servers.ServersRepository
+import com.ekovpn.android.data.repositories.servers.ServersRepositoryImpl
+import com.ekovpn.android.data.repositories.settings.SettingsRepository
+import com.ekovpn.android.data.repositories.settings.SettingsRepositoryImpl
 import com.ekovpn.android.data.user.UserRepository
 import com.ekovpn.android.data.user.UserRepositoryImpl
 import dagger.Module

@@ -9,6 +9,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.ekovpn.android.R
+import kotlinx.android.synthetic.main.profile_dialog.*
 
 class ProfileDialog : DialogFragment() {
 
@@ -80,9 +81,9 @@ class ProfileDialog : DialogFragment() {
             dismiss()
         }
 
-        toolbar?.title = getString(R.string.select_a_location)
+        toolbar?.title = getString(R.string.profile)
 
-
+        premium_options.submitPremiumPurchaseList(listOf("Unlimited for 1 Month\t\t $5.99","Unlimited for 1 Year\t\t $49.99"))
     }
 
     companion object {

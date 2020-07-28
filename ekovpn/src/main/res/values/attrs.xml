@@ -20,6 +20,9 @@
         </attr>
     </declare-styleable>
 
+    <declare-styleable name="PremiumPurchaseView">
+        <attr name="bold_title" format="boolean"/>
+    </declare-styleable>
 
     <declare-styleable name="ProfileActionView">
         <attr name="action_title" format="reference|string"/>

@@ -16,9 +16,9 @@
 package com.ekovpn.android.di.modules
 
 import com.ekovpn.android.BuildConfig
-import com.ekovpn.android.remote.retrofit.APIServiceFactory
-import com.ekovpn.android.remote.retrofit.AWSIPApiService
-import com.ekovpn.android.remote.retrofit.IPStackApiService
+import com.ekovpn.android.data.remote.retrofit.APIServiceFactory
+import com.ekovpn.android.data.remote.retrofit.AWSIPApiService
+import com.ekovpn.android.data.remote.retrofit.IPStackApiService
 import dagger.Module
 import dagger.Provides
 

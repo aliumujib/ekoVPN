@@ -48,11 +48,11 @@ class VpnActivity : AppCompatActivity() {
         }
 
         toolbar.setNavigationOnClickListener {
-            Log.d(VpnActivity::class.java.simpleName, "Back pressed")
             navController.navigateUp() || super.onSupportNavigateUp()
         }
 
         if (intent?.action?.equals(VIEW_MORE_ADS_ACTION) == true) {
+            toolbar.title = getString(R.string.ads_fragment_label)
             findNavController(this@VpnActivity, R.id.nav_host_fragment).navigate(R.id.AdsFragment)
         }
 

@@ -39,6 +39,7 @@ import com.ekovpn.android.utils.ext.show
 import com.ekovpn.android.view.countdowntimer.TimeMilliParser
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
 import com.ekovpn.android.view.main.locationselector.LocationSelectorDialog
+import com.ekovpn.android.view.main.profile.ProfileDialog
 import com.ekovpn.android.view.main.webview.WebViewDialog
 import com.google.android.gms.ads.AdRequest
 import de.blinkt.openvpn.LaunchVPN
@@ -185,6 +186,20 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         activity?.findViewById<View>(R.id.settings_btn)?.setOnClickListener {
             findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToSettingsFragment())
         }
+
+        activity?.findViewById<View>(R.id.profile_btn)?.setOnClickListener {
+            ProfileDialog.display(childFragmentManager, object: ProfileDialog.ClicksListener {
+                override fun onClose() {
+
+                }
+
+                override fun onBackPressed() {
+
+                }
+
+            })
+        }
+
 
         get_more_time.setOnClickListener {
             goToViewAdsScreen()

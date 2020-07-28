@@ -5,7 +5,7 @@
 
 package com.ekovpn.android.data.user
 
-import com.ekovpn.android.cache.settings.UserPrefManager
+import com.ekovpn.android.data.cache.settings.UserPrefManager
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPrefManager) : UserRepository {

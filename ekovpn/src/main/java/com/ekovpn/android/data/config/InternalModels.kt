@@ -5,8 +5,8 @@
 
 package com.ekovpn.android.data.config
 
-import com.ekovpn.android.cache.room.entities.LocationCacheModel
-import com.ekovpn.android.cache.room.entities.ServerCacheModel
+import com.ekovpn.android.data.cache.room.entities.LocationCacheModel
+import com.ekovpn.android.data.cache.room.entities.ServerCacheModel
 import com.ekovpn.android.models.Protocol
 import com.google.gson.annotations.SerializedName
 

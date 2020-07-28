@@ -7,9 +7,9 @@ package com.ekovpn.android.data.config.repository
 
 import android.content.Context
 import android.util.Log
-import com.ekovpn.android.cache.room.dao.LocationsDao
-import com.ekovpn.android.cache.room.dao.ServersDao
-import com.ekovpn.android.cache.settings.SettingsPrefManager
+import com.ekovpn.android.data.cache.room.dao.LocationsDao
+import com.ekovpn.android.data.cache.room.dao.ServersDao
+import com.ekovpn.android.data.cache.settings.SettingsPrefManager
 import com.ekovpn.android.data.config.*
 import com.ekovpn.android.data.config.ServerLocation.Companion.toLocationCacheModel
 import com.google.gson.Gson

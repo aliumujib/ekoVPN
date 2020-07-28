@@ -30,7 +30,7 @@ import com.ekovpn.android.utils.ext.dpToPx
 import com.ekovpn.android.view.countdowntimer.TimeMilliParser
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
 import com.ekovpn.android.view.main.ads.adapter.AdAdapter
-import com.ekovpn.android.view.main.ads.adapter.SelectionListener
+import com.ekovpn.android.utils.SelectionListener
 import io.cabriole.decorator.ColumnProvider
 import io.cabriole.decorator.GridMarginDecoration
 import kotlinx.android.synthetic.main.fragment_ad.*

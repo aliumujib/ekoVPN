@@ -6,7 +6,6 @@
 package com.ekovpn.android.view.main
 
 import androidx.lifecycle.ViewModel
-import com.ekovpn.android.data.settings.SettingsRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 

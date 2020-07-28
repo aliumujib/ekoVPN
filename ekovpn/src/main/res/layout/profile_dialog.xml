@@ -68,63 +68,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/account_type" />
 
-            <ImageView
-                android:id="@+id/tick_icon"
-                android:layout_width="wrap_content"
+
+            <com.ekovpn.android.view.premiumpurchaseview.PremiumPurchaseView
+                android:id="@+id/premium_options"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/two_spaces"
-                android:layout_marginTop="@dimen/two_spaces"
-                android:src="@drawable/ic_tick"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/renewal_date" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/two_spaces"
-                android:text="Buy VPN Credits"
-                android:id="@+id/credit_vpn"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toEndOf="@+id/tick_icon"
-                app:layout_constraintTop_toTopOf="@+id/tick_icon" />
-
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/unlimited_one_month"
-                android:layout_width="0dp"
-                android:layout_marginTop="@dimen/two_spaces"
-                android:layout_marginEnd="@dimen/two_spaces"
-                android:text="Unlimited for 1 Month \t\t $5.99"
-                android:letterSpacing="0"
-                android:textAllCaps="false"
-                app:layout_constraintStart_toStartOf="@+id/credit_vpn"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/credit_vpn"
-                android:backgroundTint="@color/connected_green"
-                android:layout_height="wrap_content" />
-
-            <com.google.android.material.button.MaterialButton
-                android:layout_width="0dp"
-                app:layout_constraintStart_toStartOf="@+id/credit_vpn"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:text="Unlimited for 1 Yes \t\t $49.99"
-                android:letterSpacing="0"
-                android:textAllCaps="false"
-                android:layout_marginEnd="@dimen/two_spaces"
-                app:layout_constraintTop_toBottomOf="@+id/unlimited_one_month"
-                android:id="@+id/unlimited_one_year"
-                android:backgroundTint="@color/connected_green"
-                android:layout_height="wrap_content" />
-
-            <View
-                android:layout_width="wrap_content"
-                android:background="?dividerHorizontal"
-                android:id="@+id/divider"
-                android:layout_marginTop="@dimen/two_spaces"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/unlimited_one_year"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_height="1dp"/>
 
             <com.ekovpn.android.view.profileactionview.ProfileActionView
                 android:id="@+id/referral_code"
@@ -136,7 +87,7 @@
                 app:action_title="Refer friends for Free 1 Hour"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider" />
+                app:layout_constraintTop_toBottomOf="@+id/premium_options" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
