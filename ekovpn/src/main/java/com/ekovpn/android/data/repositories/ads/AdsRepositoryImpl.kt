@@ -3,10 +3,9 @@
  * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
  */
 
-package com.ekovpn.android.data.ads
+package com.ekovpn.android.data.repositories.ads
 
 import android.content.Context
-import android.util.Log
 import com.ekovpn.android.models.Ad
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow

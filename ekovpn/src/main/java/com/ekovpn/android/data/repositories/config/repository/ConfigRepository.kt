@@ -3,13 +3,14 @@
  * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
  */
 
-package com.ekovpn.android.data.ads
+package com.ekovpn.android.data.repositories.config.repository
 
-import com.ekovpn.android.models.Ad
 import kotlinx.coroutines.flow.Flow
 
-interface AdsRepository {
+interface ConfigRepository {
 
-    fun fetchAds(): Flow<List<Ad>>
+    fun fetchAndConfigureServers(): Flow<Result<Unit>>
+
+    fun hasConfiguredServers(): Boolean
 
 }

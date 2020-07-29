@@ -18,7 +18,7 @@ package com.ekovpn.android.di.main.home
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.PRIVATE
 import com.ekovpn.android.data.repositories.servers.ServersRepository
-import com.ekovpn.android.data.user.UserRepository
+import com.ekovpn.android.data.repositories.user.UserRepository
 import com.ekovpn.android.di.scopes.FragmentScope
 import com.ekovpn.android.utils.ext.viewModel
 import com.ekovpn.android.view.main.home.HomeFragment

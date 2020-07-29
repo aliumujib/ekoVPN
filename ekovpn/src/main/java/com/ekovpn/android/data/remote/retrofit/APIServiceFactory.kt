@@ -1,5 +1,9 @@
 package com.ekovpn.android.data.remote.retrofit
 
+import com.ekovpn.android.data.cache.manager.TokenManager
+import com.ekovpn.android.data.remote.retrofit.tokens.AuthInterceptor
+import com.ekovpn.android.data.remote.retrofit.tokens.AuthTokenRefresherInterceptor
+import com.ekovpn.android.data.remote.retrofit.tokens.TokenRefresher
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -28,11 +32,36 @@ object APIServiceFactory {
         return retrofit.create(IPStackApiService::class.java)
     }
 
-    fun ekoVPNApiService(apiURL: String, gson: Gson = makeGson()): EkoVPNApiService {
+    fun simpleEkoVPNApiService(apiURL: String, gson: Gson = makeGson()): EkoVPNApiService {
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY
         val httpClientBuilder = OkHttpClient.Builder()
         httpClientBuilder.addInterceptor(logging)
+        httpClientBuilder.connectTimeout(60, TimeUnit.SECONDS)
+        httpClientBuilder.readTimeout(60, TimeUnit.SECONDS)
+
+        val retrofit = Retrofit.Builder()
+                .baseUrl(apiURL)
+                .client(httpClientBuilder.build())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build()
+
+        return retrofit.create(EkoVPNApiService::class.java)
+    }
+
+    fun ekoVPNApiService(apiURL: String, gson: Gson = makeGson(), authInterceptor: AuthInterceptor, tokenManager: TokenManager, tokenRefresher: TokenRefresher): EkoVPNApiService {
+        val logging = HttpLoggingInterceptor()
+        logging.level = HttpLoggingInterceptor.Level.BODY
+        val httpClientBuilder = OkHttpClient.Builder()
+                .addInterceptor(authInterceptor)
+                .addInterceptor(
+                        AuthTokenRefresherInterceptor(
+                                tokenManager,
+                                tokenRefresher
+                        )
+                )
+        httpClientBuilder.addInterceptor(logging)
+
         httpClientBuilder.connectTimeout(60, TimeUnit.SECONDS)
         httpClientBuilder.readTimeout(60, TimeUnit.SECONDS)
 

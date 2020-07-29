@@ -20,6 +20,7 @@ import androidx.room.Room
 import com.ekovpn.android.data.cache.room.DBClass
 import com.ekovpn.android.data.cache.room.dao.LocationsDao
 import com.ekovpn.android.data.cache.room.dao.ServersDao
+import com.ekovpn.android.data.cache.room.dao.UsersDao
 import dagger.Module
 import dagger.Provides
 import de.blinkt.openvpn.core.ProfileManager
@@ -40,6 +41,12 @@ class CacheModule {
     @Provides
     fun providesServersDao(dBClass: DBClass): ServersDao {
         return dBClass.serversDao()
+    }
+
+    @Singleton
+    @Provides
+    fun providesUsersDao(dBClass: DBClass): UsersDao {
+        return dBClass.usersDao()
     }
 
     @Singleton

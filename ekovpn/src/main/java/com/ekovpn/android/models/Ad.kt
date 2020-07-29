@@ -8,9 +8,8 @@ package com.ekovpn.android.models
 import android.content.res.Resources
 import android.os.Parcelable
 import com.ekovpn.android.R
-import com.ekovpn.android.data.ads.AdModel
+import com.ekovpn.android.data.repositories.ads.AdModel
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.item_ad.view.*
 
 @Parcelize
 data class Ad(val type: AdType, val count: Int,  val timeAddition: Long) : Parcelable {

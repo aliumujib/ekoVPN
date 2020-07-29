@@ -3,6 +3,6 @@
  * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
  */
 
-package com.ekovpn.android.data.ads
+package com.ekovpn.android.data.repositories.ads
 
 data class AdModel(val type: Int, val count: Int, val timeAddition: Long)

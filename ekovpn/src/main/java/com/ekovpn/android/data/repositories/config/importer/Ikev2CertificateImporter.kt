@@ -3,14 +3,14 @@
  * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
  */
 
-package com.ekovpn.android.data.config.importer
+package com.ekovpn.android.data.repositories.config.importer
 
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import com.ekovpn.android.data.config.IKEv2
-import com.ekovpn.android.data.config.ServerLocation
-import com.ekovpn.android.data.config.VPNServer
+import com.ekovpn.android.data.repositories.config.IKEv2
+import com.ekovpn.android.data.repositories.config.ServerLocation
+import com.ekovpn.android.data.repositories.config.VPNServer
 import org.strongswan.android.data.VpnProfile
 import org.strongswan.android.data.VpnType
 import org.strongswan.android.logic.TrustedCertificateManager

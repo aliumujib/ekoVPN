@@ -5,6 +5,6 @@
 
 package com.ekovpn.android.data.remote.models
 
-data class EkoVPNAPIResponse<T>(val success: Boolean, val message: String, val data: T)
+data class EkoVPNAPIResponse<T>(val success: Boolean, val message: String, val data: T?)
 
-data class EkoVPNAPIAuthResponse<T>(val success: Boolean, val message: String, val data: T, val token: String)
+data class EkoVPNAPIAuthResponse<T>(val success: Boolean, val message: String, val data: T?, val token: String?)

@@ -3,15 +3,15 @@
  * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
  */
 
-package com.ekovpn.android.data.config.repository
+package com.ekovpn.android.data.repositories.config.repository
 
 import android.content.Context
 import android.util.Log
 import com.ekovpn.android.data.cache.room.dao.LocationsDao
 import com.ekovpn.android.data.cache.room.dao.ServersDao
 import com.ekovpn.android.data.cache.settings.SettingsPrefManager
-import com.ekovpn.android.data.config.*
-import com.ekovpn.android.data.config.ServerLocation.Companion.toLocationCacheModel
+import com.ekovpn.android.data.repositories.config.*
+import com.ekovpn.android.data.repositories.config.ServerLocation.Companion.toLocationCacheModel
 import com.google.gson.Gson
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*

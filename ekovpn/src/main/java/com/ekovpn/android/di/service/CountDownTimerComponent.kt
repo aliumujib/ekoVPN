@@ -16,7 +16,7 @@
 package com.ekovpn.android.di.service
 
 
-import com.ekovpn.android.data.user.UserRepository
+import com.ekovpn.android.data.repositories.user.UserRepository
 import com.ekovpn.android.di.components.CoreComponent
 import com.ekovpn.android.di.scopes.ActivityScope
 import com.ekovpn.android.service.EkoVPNMgrService

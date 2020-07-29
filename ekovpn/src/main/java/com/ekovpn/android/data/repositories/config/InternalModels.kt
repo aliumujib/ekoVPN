@@ -3,7 +3,7 @@
  * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
  */
 
-package com.ekovpn.android.data.config
+package com.ekovpn.android.data.repositories.config
 
 import com.ekovpn.android.data.cache.room.entities.LocationCacheModel
 import com.ekovpn.android.data.cache.room.entities.ServerCacheModel

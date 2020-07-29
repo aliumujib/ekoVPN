@@ -17,8 +17,8 @@ package com.ekovpn.android.di.main.ads
 
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.PRIVATE
-import com.ekovpn.android.data.ads.AdsRepository
-import com.ekovpn.android.data.user.UserRepository
+import com.ekovpn.android.data.repositories.ads.AdsRepository
+import com.ekovpn.android.data.repositories.user.UserRepository
 import com.ekovpn.android.di.scopes.FragmentScope
 import com.ekovpn.android.utils.ext.viewModel
 import com.ekovpn.android.view.main.ads.AdsFragment

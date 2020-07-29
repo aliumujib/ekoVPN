@@ -3,7 +3,7 @@
  * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
  */
 
-package com.ekovpn.android.data.user
+package com.ekovpn.android.data.repositories.user
 
 import com.ekovpn.android.data.cache.settings.UserPrefManager
 import javax.inject.Inject

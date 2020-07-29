@@ -3,17 +3,17 @@
  * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
  */
 
-package com.ekovpn.android.data.config.repository
+package com.ekovpn.android.data.repositories.config.repository
 
 import android.util.Log
 import androidx.core.net.toUri
 import com.ekovpn.android.data.cache.room.dao.LocationsDao
 import com.ekovpn.android.data.cache.room.dao.ServersDao
 import com.ekovpn.android.data.cache.room.entities.ServerCacheModel
-import com.ekovpn.android.data.config.*
-import com.ekovpn.android.data.config.VPNServer.IkeV2Server.Companion.toServerCacheModel
-import com.ekovpn.android.data.config.downloader.FileDownloader
-import com.ekovpn.android.data.config.importer.Ikev2CertificateImporter
+import com.ekovpn.android.data.repositories.config.*
+import com.ekovpn.android.data.repositories.config.VPNServer.IkeV2Server.Companion.toServerCacheModel
+import com.ekovpn.android.data.repositories.config.downloader.FileDownloader
+import com.ekovpn.android.data.repositories.config.importer.Ikev2CertificateImporter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import org.strongswan.android.data.VpnProfileDataSource

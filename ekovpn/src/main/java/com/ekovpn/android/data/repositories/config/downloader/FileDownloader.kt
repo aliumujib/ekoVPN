@@ -3,7 +3,7 @@
  * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
  */
 
-package com.ekovpn.android.data.config.downloader
+package com.ekovpn.android.data.repositories.config.downloader
 
 import android.content.Context
 import android.os.Environment
@@ -11,9 +11,9 @@ import android.util.Log
 import androidx.core.content.ContextCompat
 import com.downloader.OnDownloadListener
 import com.downloader.PRDownloader
-import com.ekovpn.android.data.config.IKEv2
-import com.ekovpn.android.data.config.ServerLocation
-import com.ekovpn.android.data.config.ServerSetUp
+import com.ekovpn.android.data.repositories.config.IKEv2
+import com.ekovpn.android.data.repositories.config.ServerLocation
+import com.ekovpn.android.data.repositories.config.ServerSetUp
 import com.ekovpn.android.models.Protocol
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

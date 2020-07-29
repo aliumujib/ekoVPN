@@ -3,15 +3,11 @@
  * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
  */
 
-package com.ekovpn.android.data.cache.room.entities
+package com.ekovpn.android.models
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import com.ekovpn.android.models.User
+import com.ekovpn.android.data.cache.room.entities.UserCacheModel
 
-@Entity
-data class UserCacheModel(
-        @PrimaryKey
+data class User(
         val id: String,
         val account_id: String,
         val account_type: String,
@@ -26,12 +22,4 @@ data class UserCacheModel(
         val time_expiry: String,
         val updatedAt: String,
         val vpn_credits: Int
-) {
-
-    fun toUser(): User {
-        return User(id, account_id, account_type, active, createdAt, order_data
-                , order_number, referral_id, referred_by
-                , renewal_at
-                , role, time_expiry, updatedAt, vpn_credits)
-    }
-}
+)

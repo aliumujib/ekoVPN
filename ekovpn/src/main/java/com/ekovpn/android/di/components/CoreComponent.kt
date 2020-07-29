@@ -16,11 +16,12 @@
 package com.ekovpn.android.di.components
 
 import android.content.Context
-import com.ekovpn.android.data.ads.AdsRepository
-import com.ekovpn.android.data.config.repository.ConfigRepository
+import com.ekovpn.android.data.repositories.ads.AdsRepository
+import com.ekovpn.android.data.repositories.config.repository.ConfigRepository
+import com.ekovpn.android.data.repositories.auth.AuthRepository
 import com.ekovpn.android.data.repositories.servers.ServersRepository
 import com.ekovpn.android.data.repositories.settings.SettingsRepository
-import com.ekovpn.android.data.user.UserRepository
+import com.ekovpn.android.data.repositories.user.UserRepository
 import com.ekovpn.android.di.modules.*
 import com.ekovpn.android.utils.flow.PostExecutionThread
 import dagger.Component
@@ -49,6 +50,8 @@ interface CoreComponent {
     fun serversRepository(): ServersRepository
 
     fun settingsRepository(): SettingsRepository
+
+    fun authRepository(): AuthRepository
 
     fun userRepository(): UserRepository
 

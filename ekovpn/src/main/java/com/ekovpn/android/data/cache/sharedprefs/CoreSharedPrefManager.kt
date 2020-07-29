@@ -17,7 +17,7 @@ open class CoreSharedPrefManager(context: Context) {
     private val sharedPreferencesEditor: SharedPreferences.Editor = sharedPreferences.edit()
 
 
-    private fun delete(key: String) {
+    fun delete(key: String) {
         if (sharedPreferences.contains(key)) {
             sharedPreferencesEditor.remove(key).commit()
         }

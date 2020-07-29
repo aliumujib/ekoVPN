@@ -3,15 +3,12 @@
  * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
  */
 
-package com.ekovpn.android.data.config.importer
+package com.ekovpn.android.data.repositories.config.importer
 
 import android.net.Uri
 import androidx.core.net.toFile
 import de.blinkt.openvpn.VpnProfile
 import de.blinkt.openvpn.core.ConfigParser
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import java.io.FileNotFoundException
 import java.io.InputStream
 import java.io.InputStreamReader
 import javax.inject.Inject

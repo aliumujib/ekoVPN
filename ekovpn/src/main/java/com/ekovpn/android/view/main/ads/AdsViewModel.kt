@@ -7,8 +7,8 @@ package com.ekovpn.android.view.main.ads
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ekovpn.android.data.ads.AdsRepository
-import com.ekovpn.android.data.user.UserRepository
+import com.ekovpn.android.data.repositories.ads.AdsRepository
+import com.ekovpn.android.data.repositories.user.UserRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject

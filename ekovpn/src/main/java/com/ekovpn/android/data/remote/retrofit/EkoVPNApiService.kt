@@ -1,6 +1,6 @@
 package com.ekovpn.android.data.remote.retrofit
 
-import com.ekovpn.android.data.config.ServerConfig
+import com.ekovpn.android.data.repositories.config.ServerConfig
 import com.ekovpn.android.data.remote.models.EkoVPNAPIAuthResponse
 import com.ekovpn.android.data.remote.models.EkoVPNAPIResponse
 import com.ekovpn.android.data.remote.models.ads.RemoteAd
@@ -11,6 +11,11 @@ import retrofit2.http.*
 interface EkoVPNApiService {
 
     @POST("authenticate")
+    @FormUrlEncoded
+    fun syncAppLogin(@FieldMap query: Map<String, @JvmSuppressWildcards Any>): EkoVPNAPIAuthResponse<RemoteApp>
+
+    @POST("authenticate")
+    @FormUrlEncoded
     suspend fun appLogin(@FieldMap query: Map<String, @JvmSuppressWildcards Any>): EkoVPNAPIAuthResponse<RemoteApp>
 
     @POST("user")
@@ -20,6 +25,7 @@ interface EkoVPNApiService {
     suspend fun fetchExistingUser(@Path("userAccount") userAccount: String): EkoVPNAPIResponse<RemoteUser>
 
     @PUT("user/account/{userId}")
+    @FormUrlEncoded
     suspend fun updateUserAccount(@Path("userId") userAccount: String, @FieldMap query: Map<String, @JvmSuppressWildcards Any>): EkoVPNAPIResponse<RemoteUser>
 
     @GET("json/ads")

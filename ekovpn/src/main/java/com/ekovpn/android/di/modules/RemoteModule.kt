@@ -16,9 +16,13 @@
 package com.ekovpn.android.di.modules
 
 import com.ekovpn.android.BuildConfig
+import com.ekovpn.android.data.cache.manager.TokenManager
 import com.ekovpn.android.data.remote.retrofit.APIServiceFactory
 import com.ekovpn.android.data.remote.retrofit.AWSIPApiService
+import com.ekovpn.android.data.remote.retrofit.EkoVPNApiService
 import com.ekovpn.android.data.remote.retrofit.IPStackApiService
+import com.ekovpn.android.data.remote.retrofit.tokens.AuthInterceptor
+import com.ekovpn.android.data.remote.retrofit.tokens.TokenRefresher
 import dagger.Module
 import dagger.Provides
 
@@ -38,6 +42,12 @@ abstract class RemoteModule {
         @JvmStatic
         fun provideAWSIPApiService(): AWSIPApiService {
             return APIServiceFactory.amazonWSAPIService(BuildConfig.AWS_IP_BASE_URL)
+        }
+
+        @Provides
+        @JvmStatic
+        fun providesEkoVPNApiService(authInterceptor: AuthInterceptor, tokenRefresher: TokenRefresher, tokenManager: TokenManager): EkoVPNApiService {
+            return APIServiceFactory.ekoVPNApiService(BuildConfig.EKO_VPN_BASE_URL, tokenManager = tokenManager, tokenRefresher = tokenRefresher, authInterceptor = authInterceptor)
         }
 
     }
