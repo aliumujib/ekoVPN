@@ -27,7 +27,7 @@ import com.ekovpn.android.data.repositories.user.UserRepository
 import com.ekovpn.android.di.service.DaggerCountDownTimerComponent
 import com.ekovpn.android.models.Server
 import com.ekovpn.android.utils.ext.isNOrLater
-import com.ekovpn.android.view.countdowntimer.TimeMilliParser
+import com.ekovpn.android.view.compoundviews.countdowntimer.TimeMilliParser
 import com.ekovpn.android.view.main.VpnActivity
 import de.blinkt.openvpn.core.IOpenVPNServiceInternal
 import de.blinkt.openvpn.core.OpenVPNService

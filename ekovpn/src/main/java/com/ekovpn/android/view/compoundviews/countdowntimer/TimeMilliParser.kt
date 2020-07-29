@@ -3,7 +3,7 @@
  * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
  */
 
-package com.ekovpn.android.view.countdowntimer
+package com.ekovpn.android.view.compoundviews.countdowntimer
 
 class TimeMilliParser {
 

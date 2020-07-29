@@ -61,6 +61,11 @@
     <string name="new_protocol_selected">New Protocol selected. Connection will be confirmed on next VPN Connection</string>
     <string name="please_wait">Please wait...</string>
     <string name="profile">Account</string>
+    <string name="account_number_subtitle"><![CDATA[<b>%1$s</b>]]></string>
+    <string name="account_type_subtitle"><![CDATA[<b>%1$s</b>]]></string>
+    <string name="renewal_date_subtitle"><![CDATA[<b>%1$s</b>]]></string>
+    <string name="referral_title"><![CDATA[Refer friends for <b>Free 1 hour</b>]]></string>
+    <string name="referral_sub_title"><![CDATA[Code: <b>%1$s</b>]]></string>
 
     <plurals name="plural_videos">
         <item quantity="one">Watch %d video</item>

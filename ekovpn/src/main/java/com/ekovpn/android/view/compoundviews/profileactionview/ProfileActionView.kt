@@ -1,4 +1,4 @@
-package com.ekovpn.android.view.profileactionview
+package com.ekovpn.android.view.compoundviews.profileactionview
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -112,11 +112,11 @@ class ProfileActionView : LinearLayout {
         iconView.setImageDrawable(drawable)
     }
 
-    private fun setActionTitle(title: String) {
+     fun setActionTitle(title: String) {
         label.text = Html.fromHtml(title)
     }
 
-    private fun setActionSubTitle(subtitle: String) {
+     fun setActionSubTitle(subtitle: String) {
         description.text = Html.fromHtml(subtitle)
     }
 

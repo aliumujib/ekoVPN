@@ -13,6 +13,7 @@ import com.ekovpn.android.data.cache.settings.SettingsPrefManager
 import com.ekovpn.android.data.repositories.config.*
 import com.ekovpn.android.data.repositories.config.ServerLocation.Companion.toLocationCacheModel
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
@@ -76,6 +77,7 @@ class ConfigRepositoryImpl @Inject constructor(private val context: Context,
                     Log.d(ConfigRepositoryImpl::class.java.simpleName, "List $it")
                     Result.success(Unit)
                 }.take(configurationOperations.size)
+                .flowOn(Dispatchers.IO)
     }
 
 

@@ -20,7 +20,6 @@ import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
@@ -34,13 +33,11 @@ import com.ekovpn.android.di.main.home.HomeModule
 import com.ekovpn.android.models.Location
 import com.ekovpn.android.models.Server
 import com.ekovpn.android.service.EkoVPNMgrService
-import com.ekovpn.android.utils.ext.hide
 import com.ekovpn.android.utils.ext.show
-import com.ekovpn.android.view.countdowntimer.TimeMilliParser
+import com.ekovpn.android.view.compoundviews.countdowntimer.TimeMilliParser
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
 import com.ekovpn.android.view.main.locationselector.LocationSelectorDialog
 import com.ekovpn.android.view.main.profile.ProfileDialog
-import com.ekovpn.android.view.main.webview.WebViewDialog
 import com.google.android.gms.ads.AdRequest
 import de.blinkt.openvpn.LaunchVPN
 import de.blinkt.openvpn.VpnProfile

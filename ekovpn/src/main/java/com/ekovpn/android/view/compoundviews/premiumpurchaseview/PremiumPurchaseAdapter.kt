@@ -1,4 +1,4 @@
-package com.ekovpn.android.view.premiumpurchaseview
+package com.ekovpn.android.view.compoundviews.premiumpurchaseview
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ekovpn.android.R
 import com.ekovpn.android.utils.SelectionListener
-import com.ekovpn.android.utils.ext.recursivelyApplyToChildren
 import kotlinx.android.synthetic.main.item_billing_sku.view.*
 
 

@@ -1,25 +1,17 @@
-package com.ekovpn.android.view.premiumpurchaseview
+package com.ekovpn.android.view.compoundviews.premiumpurchaseview
 
 import android.content.Context
-import android.graphics.drawable.Drawable
-import android.text.Html
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ekovpn.android.R
 import com.ekovpn.android.utils.SelectionListener
 import com.ekovpn.android.utils.ext.dpToPx
-import com.ekovpn.android.view.main.ads.adapter.AdAdapter
-import io.cabriole.decorator.ColumnProvider
-import io.cabriole.decorator.GridMarginDecoration
 import io.cabriole.decorator.LinearMarginDecoration
-import kotlinx.android.synthetic.main.fragment_ad.*
 import kotlinx.android.synthetic.main.premium_purchase_view.view.*
-import kotlinx.android.synthetic.main.profile_action_view.view.*
 import kotlinx.android.synthetic.main.profile_action_view.view.divider
 
 class PremiumPurchaseView : LinearLayout {
