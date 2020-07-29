@@ -7,7 +7,7 @@ package com.ekovpn.android.view.main.settings
 
 import androidx.lifecycle.ViewModel
 import com.ekovpn.android.models.Protocol
-import com.ekovpn.android.data.settings.SettingsRepository
+import com.ekovpn.android.data.repositories.settings.SettingsRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

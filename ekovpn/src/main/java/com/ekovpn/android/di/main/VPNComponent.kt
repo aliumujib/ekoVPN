@@ -17,10 +17,10 @@ package com.ekovpn.android.di.main
 
 
 import android.content.Context
-import com.ekovpn.android.data.ads.AdsRepository
-import com.ekovpn.android.data.servers.ServersRepository
-import com.ekovpn.android.data.settings.SettingsRepository
-import com.ekovpn.android.data.user.UserRepository
+import com.ekovpn.android.data.repositories.ads.AdsRepository
+import com.ekovpn.android.data.repositories.servers.ServersRepository
+import com.ekovpn.android.data.repositories.settings.SettingsRepository
+import com.ekovpn.android.data.repositories.user.UserRepository
 import com.ekovpn.android.di.components.CoreComponent
 import com.ekovpn.android.di.scopes.ActivityScope
 import com.ekovpn.android.view.main.VpnActivity

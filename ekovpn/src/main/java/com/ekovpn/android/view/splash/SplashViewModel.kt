@@ -8,23 +8,30 @@ package com.ekovpn.android.view.splash
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ekovpn.android.data.config.repository.ConfigRepository
+import com.ekovpn.android.data.repositories.auth.AuthRepository
+import com.ekovpn.android.data.repositories.config.repository.ConfigRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-class SplashViewModel @Inject constructor(private val configRepository: ConfigRepository) : ViewModel() {
+class SplashViewModel @Inject constructor(private val configRepository: ConfigRepository, private val authRepository: AuthRepository) : ViewModel() {
 
     private val _state = MutableStateFlow<SetUpState>(SetUpState.Idle)
     val state: StateFlow<SetUpState> = _state
 
     init {
-        runSetupIfNeeded()
+
+        authRepository.fetchUserByAccountNumber("wKsqqL8GNHjQzvEG").onEach {
+            Log.d(SplashViewModel::class.java.simpleName, "$it")
+            runSetupIfNeeded()
+        }.catch {
+            it.printStackTrace()
+        }.launchIn(viewModelScope)
     }
 
-     fun runSetupIfNeeded() {
+    fun runSetupIfNeeded() {
         if (configRepository.hasConfiguredServers().not()) {
             configRepository.fetchAndConfigureServers()
                     .flowOn(Dispatchers.IO)
@@ -39,9 +46,9 @@ class SplashViewModel @Inject constructor(private val configRepository: ConfigRe
                             Log.d(SplashViewModel::class.java.simpleName, "Error")
                         }
                     }.onCompletion {
-                        if(it != null){
+                        if (it != null) {
                             _state.value = SetUpState.Failed
-                        }else{
+                        } else {
                             _state.value = SetUpState.Finished
                         }
                     }.catch {

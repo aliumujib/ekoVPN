@@ -7,8 +7,8 @@ package com.ekovpn.android.view.main.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ekovpn.android.data.servers.ServersRepository
-import com.ekovpn.android.data.user.UserRepository
+import com.ekovpn.android.data.repositories.servers.ServersRepository
+import com.ekovpn.android.data.repositories.user.UserRepository
 import com.ekovpn.android.models.Server
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*

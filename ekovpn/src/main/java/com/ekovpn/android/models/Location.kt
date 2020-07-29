@@ -6,7 +6,7 @@
 package com.ekovpn.android.models
 
 import android.os.Parcelable
-import com.ekovpn.android.cache.room.entities.LocationCacheModel
+import com.ekovpn.android.data.cache.room.entities.LocationCacheModel
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize

@@ -9,6 +9,7 @@ import com.ekovpn.android.models.Ad
 import com.ekovpn.android.models.Ad.Companion.getIcon
 import com.ekovpn.android.models.Ad.Companion.getMinutes
 import com.ekovpn.android.models.Ad.Companion.getQuantityDescription
+import com.ekovpn.android.utils.SelectionListener
 import com.ekovpn.android.utils.ext.recursivelyApplyToChildren
 import kotlinx.android.synthetic.main.item_ad.view.*
 

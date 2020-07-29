@@ -17,7 +17,7 @@ package com.ekovpn.android.di.main.settings
 
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.PRIVATE
-import com.ekovpn.android.data.settings.SettingsRepository
+import com.ekovpn.android.data.repositories.settings.SettingsRepository
 import com.ekovpn.android.di.scopes.FragmentScope
 import com.ekovpn.android.utils.ext.viewModel
 import com.ekovpn.android.view.main.settings.SettingsFragment

@@ -23,7 +23,7 @@ import androidx.core.app.NotificationCompat
 import com.ekovpn.android.ApplicationClass
 import com.ekovpn.android.ApplicationClass.Companion.EKO_NOTIFICATION_CHANNEL_ID
 import com.ekovpn.android.R
-import com.ekovpn.android.data.user.UserRepository
+import com.ekovpn.android.data.repositories.user.UserRepository
 import com.ekovpn.android.di.service.DaggerCountDownTimerComponent
 import com.ekovpn.android.models.Server
 import com.ekovpn.android.utils.ext.isNOrLater

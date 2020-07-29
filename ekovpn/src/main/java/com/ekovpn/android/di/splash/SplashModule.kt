@@ -17,7 +17,8 @@ package com.ekovpn.android.di.splash
 
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.PRIVATE
-import com.ekovpn.android.data.config.repository.ConfigRepository
+import com.ekovpn.android.data.repositories.auth.AuthRepository
+import com.ekovpn.android.data.repositories.config.repository.ConfigRepository
 import com.ekovpn.android.di.scopes.ActivityScope
 import com.ekovpn.android.utils.ext.viewModel
 import com.ekovpn.android.view.splash.SplashActivity
@@ -40,9 +41,10 @@ class SplashModule(
 
     @ActivityScope
     @Provides
-    fun providesViewModel(configRepository: ConfigRepository) = activity.viewModel {
+    fun providesViewModel(configRepository: ConfigRepository, authRepository: AuthRepository) = activity.viewModel {
         SplashViewModel(
-                configRepository
+                configRepository,
+                authRepository
         )
     }
 

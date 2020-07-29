@@ -2,6 +2,7 @@ package com.ekovpn.android.view.profileactionview
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.text.Html
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -112,15 +113,15 @@ class ProfileActionView : LinearLayout {
     }
 
     private fun setActionTitle(title: String) {
-        label.text = title
+        label.text = Html.fromHtml(title)
     }
 
     private fun setActionSubTitle(subtitle: String) {
-        description.text = subtitle
+        description.text = Html.fromHtml(subtitle)
     }
 
     private fun setActionButtonText(title: String) {
-        action_button.text = title
+        action_button.text = Html.fromHtml(title)
     }
 
     fun setActionButtonClickListener(listener: OnClickListener) {
