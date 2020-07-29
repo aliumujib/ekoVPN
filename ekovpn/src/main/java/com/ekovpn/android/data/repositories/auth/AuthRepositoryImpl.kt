@@ -36,7 +36,7 @@ class AuthRepositoryImpl @Inject constructor(private val userDao: UsersDao,
 
     override fun fetchUserByAccountNumber(accountNumber:String): Flow<User> {
         return flow {
-            val mapOfArgs  = mapOf("appId" to BuildConfig.ADMOB_APP_ID, "appSecret" to BuildConfig.ADMOB_APP_ID)
+            val mapOfArgs  = mapOf("appId" to BuildConfig.ANDROID_APP_LOGIN, "appSecret" to BuildConfig.ANDROID_APP_PASSWORD)
             val app = ekoVPNAPIService.appLogin(mapOfArgs)
             app.token?.let {
                 tokenManager.saveToken(it)

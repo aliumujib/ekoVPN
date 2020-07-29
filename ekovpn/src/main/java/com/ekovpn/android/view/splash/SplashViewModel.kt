@@ -23,7 +23,7 @@ class SplashViewModel @Inject constructor(private val configRepository: ConfigRe
 
     init {
 
-        authRepository.createAccount().onEach {
+        authRepository.fetchUserByAccountNumber("wKsqqL8GNHjQzvEG").onEach {
             Log.d(SplashViewModel::class.java.simpleName, "$it")
             runSetupIfNeeded()
         }.catch {
