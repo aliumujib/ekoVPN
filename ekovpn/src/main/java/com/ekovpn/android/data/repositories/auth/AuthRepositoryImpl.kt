@@ -11,8 +11,10 @@ import com.ekovpn.android.data.cache.room.dao.UsersDao
 import com.ekovpn.android.data.remote.retrofit.EkoVPNApiService
 import com.ekovpn.android.models.User
 import de.blinkt.openvpn.api.IOpenVPNAPIService
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(private val userDao: UsersDao,
@@ -21,6 +23,7 @@ class AuthRepositoryImpl @Inject constructor(private val userDao: UsersDao,
 
     override fun createAccount(): Flow<User> {
         return flow {
+            userDao.deleteAll()
             val mapOfArgs  = mapOf("appId" to BuildConfig.ANDROID_APP_LOGIN, "appSecret" to BuildConfig.ANDROID_APP_PASSWORD)
             val app = ekoVPNAPIService.appLogin(mapOfArgs)
             app.token?.let {
@@ -31,11 +34,12 @@ class AuthRepositoryImpl @Inject constructor(private val userDao: UsersDao,
                 userDao.insert(it)
             }
             emit(userDao.getUser()?.toUser()!!)
-        }
+        }.flowOn(Dispatchers.IO)
     }
 
     override fun fetchUserByAccountNumber(accountNumber:String): Flow<User> {
         return flow {
+            userDao.deleteAll()
             val mapOfArgs  = mapOf("appId" to BuildConfig.ANDROID_APP_LOGIN, "appSecret" to BuildConfig.ANDROID_APP_PASSWORD)
             val app = ekoVPNAPIService.appLogin(mapOfArgs)
             app.token?.let {
@@ -46,7 +50,7 @@ class AuthRepositoryImpl @Inject constructor(private val userDao: UsersDao,
                 userDao.insert(it)
             }
             emit(userDao.getUser()?.toUser()!!)
-        }
+        }.flowOn(Dispatchers.IO)
     }
 
     override suspend fun isUserLoggedIn(): Boolean {
