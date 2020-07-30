@@ -10,13 +10,13 @@ import com.ekovpn.android.data.cache.room.entities.UserCacheModel
 data class RemoteUser(
         val __v: Int,
         val _id: String,
-        val account_id: String,
+        val account_number: String,
         val account_type: String,
         val active: Boolean,
         val createdAt: String,
         val order_data: String?,
         val order_number: String?,
-        val referral_id: String,
+        val referral_code: String,
         val referred_by: String?,
         val renewal_at: String?,
         val role: String,
@@ -25,8 +25,8 @@ data class RemoteUser(
         val vpn_credits: Int
 ) {
     fun toUserCacheModel(): UserCacheModel {
-        return UserCacheModel(_id, account_id, account_type, active, createdAt, order_data
-                ?: NOT_AVAILABLE, order_number ?: NOT_AVAILABLE, referral_id, referred_by
+        return UserCacheModel(_id, account_number, account_type, active, createdAt, order_data
+                ?: NOT_AVAILABLE, order_number ?: NOT_AVAILABLE, referral_code, referred_by
                 ?: NOT_AVAILABLE, renewal_at
                 ?: NOT_AVAILABLE, role, time_expiry, updatedAt, vpn_credits)
     }

@@ -29,34 +29,36 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.TranslateAnimation
+import android.widget.Button
 import androidx.annotation.ColorRes
 import androidx.core.view.children
+import com.ekovpn.android.R
 
 internal val View.inflater: LayoutInflater get() = LayoutInflater.from(context)
 
 
 fun View.hide() {
     this.animate().translationY(-this.bottom.toFloat())
-        .setInterpolator(AccelerateInterpolator())
-        .setListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
-                super.onAnimationEnd(animation)
-                visibility = View.GONE
-            }
-        })
-        .start()
+            .setInterpolator(AccelerateInterpolator())
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    super.onAnimationEnd(animation)
+                    visibility = View.GONE
+                }
+            })
+            .start()
 }
 
 fun View.show() {
     this.animate().translationY(0F)
-        .setInterpolator(DecelerateInterpolator())
-        .setListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
-                super.onAnimationEnd(animation)
-                visibility = View.VISIBLE
-            }
-        })
-        .start()
+            .setInterpolator(DecelerateInterpolator())
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    super.onAnimationEnd(animation)
+                    visibility = View.VISIBLE
+                }
+            })
+            .start()
 }
 
 
@@ -64,10 +66,10 @@ fun View.show() {
 fun View.slideUp() {
     this.visibility = View.VISIBLE
     val animate = TranslateAnimation(
-        0f, // fromXDelta
-        0f, // toXDelta
-        this.height.toFloat(), // fromYDelta
-        0f
+            0f, // fromXDelta
+            0f, // toXDelta
+            this.height.toFloat(), // fromYDelta
+            0f
     )                // toYDelta
     animate.duration = 500
     this.startAnimation(animate)
@@ -76,10 +78,10 @@ fun View.slideUp() {
 // slide the view from its current position to below itself
 fun View.slideDown() {
     val animate = TranslateAnimation(
-        0f, // fromXDelta
-        0f, // toXDelta
-        0f, // fromYDelta
-        this.height.toFloat()
+            0f, // fromXDelta
+            0f, // toXDelta
+            0f, // fromYDelta
+            this.height.toFloat()
     ) // toYDelta
     animate.duration = 500
     this.startAnimation(animate)
@@ -97,9 +99,9 @@ fun ViewGroup.recursivelyApplyToChildren(function: (child: View) -> Unit) {
 
 fun Any.animateBetweenColors(start: Int, end: Int, function: (animatedValue: Int) -> Unit) {
     val animator = ValueAnimator.ofObject(
-        ArgbEvaluator(),
-        start,
-        end
+            ArgbEvaluator(),
+            start,
+            end
     )
     animator.duration = 500 // milliseconds
     animator.addUpdateListener { valueAnimator ->
@@ -121,9 +123,14 @@ fun checkIfIsMarshMallow(): Boolean {
     return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
 }
 
-fun slightDelay(function: () -> Unit, timeOut:Long = 1000) {
+fun slightDelay(function: () -> Unit, timeOut: Long = 1000) {
     val handler = Handler()
     handler.postDelayed({
         function.invoke()
     }, timeOut)
+}
+
+fun Button.setColors() {
+    setTextColor(context.resources.getColor(R.color.eko_red))
+    setBackgroundColor(context.resources.getColor(android.R.color.transparent))
 }

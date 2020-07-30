@@ -94,7 +94,7 @@ class EkoVPNMgrService : Service() {
 
     private fun timeVPNConnection(intent: Intent) {
         intent.getParcelableExtra<Server>(TIMER_SERVICE_VPN_PROFILE)?.let {
-            disconnectCurrentVPN()
+            //disconnectCurrentVPN()
             countDownTimer?.cancel()
 
             server = intent.getParcelableExtra(TIMER_SERVICE_VPN_PROFILE)
@@ -286,7 +286,7 @@ class EkoVPNMgrService : Service() {
         const val TIMER_SERVICE_INCREMENT = "TIMER_SERVICE_INCREMENT"
 
         const val TIMER_GROUP = "TIMER_GROUP"
-        const val TIMER_SERVICE_NOTIFICATION = 1234
+        const val TIMER_SERVICE_NOTIFICATION = 5234
 
     }
 }

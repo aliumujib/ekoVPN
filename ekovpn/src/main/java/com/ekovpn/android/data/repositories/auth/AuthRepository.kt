@@ -12,6 +12,9 @@ interface AuthRepository {
 
     fun createAccount(): Flow<User>
 
+    fun loginToApp(): Flow<String>
+
     suspend fun isUserLoggedIn(): Boolean
+
     fun fetchUserByAccountNumber(accountNumber: String): Flow<User>
 }

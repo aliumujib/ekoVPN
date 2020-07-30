@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2012-2020 Abdul-Mujeeb Aliu for ekoVPN
+  ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
+  -->
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/two_spaces"
+    android:layout_height="match_parent"
+    tools:background="@drawable/bg"
+    tools:context=".view.auth.login.LoginFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1"
+        android:id="@+id/guideline"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:textSize="24sp"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:id="@+id/welcome_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline"
+        android:drawablePadding="@dimen/two_spaces"
+        android:drawableEnd="@drawable/logo_white"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome_to" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        android:lineSpacingMultiplier="1.2"
+        android:id="@+id/existing_user"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/welcome_logo"
+        android:layout_marginTop="@dimen/four_spaces"
+        android:layout_height="wrap_content"
+         />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/account_number_textfield"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/four_spaces"
+        app:boxStrokeColor="@color/login_field_colors"
+        app:hintTextColor="@color/login_field_colors"
+        app:layout_constraintStart_toStartOf="parent"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:layout_constraintTop_toBottomOf="@+id/existing_user"
+        android:hint="@string/account_number_hint">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:textColor="@color/login_field_colors"
+            android:textColorHint="@color/login_field_colors"
+            android:layout_height="wrap_content"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/extended_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/account_number_textfield"
+        android:layout_marginVertical="@dimen/two_spaces"
+        app:layout_constraintEnd_toEndOf="@+id/account_number_textfield"
+        android:layout_gravity="bottom|right"
+        android:contentDescription="@string/login"
+        android:text="@string/login"
+        android:backgroundTint="@color/white"
+        app:iconGravity="end"
+        android:textSize="14sp"
+        android:insetBottom="0dp"
+        android:insetTop="0dp"
+        android:textAllCaps="false"
+        android:textColor="@color/text_button_orange"
+        app:iconTint="@color/text_button_orange"
+        app:icon="@drawable/arrow_right_white"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        android:lineSpacingMultiplier="1.2"
+        android:id="@+id/new_user"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/new_user"
+        app:layout_constraintTop_toBottomOf="@+id/extended_fab"
+        android:layout_marginTop="@dimen/four_spaces"
+        android:layout_height="wrap_content"
+        />
+
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sign_up"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/create_free_account"
+        android:textColor="@color/text_button_orange"
+        android:backgroundTint="@color/white"
+        android:layout_marginVertical="@dimen/three_spaces"
+        android:textSize="14sp"
+        android:letterSpacing="0"
+        android:textAllCaps="false"
+        app:layout_constraintTop_toBottomOf="@+id/new_user"
+        android:insetBottom="0dp"
+        android:insetTop="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:iconTint="@color/black"
+        />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        android:lineSpacingMultiplier="1.2"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/forgot_account_number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginVertical="@dimen/four_spaces"
+        android:layout_height="wrap_content"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

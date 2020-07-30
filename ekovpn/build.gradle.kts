@@ -17,8 +17,9 @@ android {
     defaultConfig {
         minSdkVersion(21)
         targetSdkVersion(29)
-        versionCode = 169
-        versionName = "0.7.16"
+        versionCode = 2
+        versionName = "0.0.9"
+        resConfigs(listOf("en"))
     }
 
     compileOptions {
@@ -77,6 +78,8 @@ dependencies {
     val okhttp3LoggingInterceptorVersion = "3.9.0"
     val retrofitGsonVersion = "2.3.0"
     val streamsupportVersion = "1.7.2"
+    val billing_version = "3.0.0"
+
 
     implementation("androidx.annotation:annotation:1.1.0")
     implementation("androidx.core:core:$coreVersion")
@@ -123,6 +126,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics:17.4.4")
     implementation("com.google.firebase:firebase-crashlytics:17.1.1")
     implementation("com.google.android.gms:play-services-ads:19.2.0")
+    implementation ("com.android.billingclient:billing-ktx:$billing_version")
 
     dependencies.add("uiImplementation", project(":openvpn"))
     dependencies.add("skeletonImplementation", project(":openvpn"))

@@ -13,6 +13,9 @@
     <string name="settings_fragment_label">Settings</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="login_fragment_label">Login</string>
+    <string name="success_fragment_label">Success</string>
+    <string name="splash_fragment_label">Splash</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
@@ -66,6 +69,14 @@
     <string name="renewal_date_subtitle"><![CDATA[<b>%1$s</b>]]></string>
     <string name="referral_title"><![CDATA[Refer friends for <b>Free 1 hour</b>]]></string>
     <string name="referral_sub_title"><![CDATA[Code: <b>%1$s</b>]]></string>
+    <string name="disconnect_notice">In order to connect to the new server, we have to disconnect you, would you like to proceed?</string>
+    <string name="welcome_to">Welcome to</string>
+    <string name="existing_title"><![CDATA[Existing User? <br> <big><b>Enter your Account Number</b></big>]]></string>
+    <string name="account_number_hint">Account number</string>
+    <string name="new_user">New User?</string>
+    <string name="login">Login</string>
+    <string name="create_free_account">Create Free Account</string>
+    <string name="forgot_account_number">Forgot Account Number</string>
 
     <plurals name="plural_videos">
         <item quantity="one">Watch %d video</item>

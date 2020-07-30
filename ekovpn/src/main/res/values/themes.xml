@@ -5,7 +5,7 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Icsopenvpn" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.EkoVPN" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/eko_red_light</item>
         <item name="colorPrimaryVariant">@color/eko_red</item>
@@ -22,7 +22,8 @@
     </style>
 
 
-    <style name="Theme.IcsopenvpnNoActionBar.FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
+
+    <style name="Theme.EkoVPN.FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
         <item name="colorPrimary">@color/eko_red_light</item>
         <item name="colorPrimaryVariant">@color/eko_red</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -38,13 +39,17 @@
         <item name="android:fontFamily">@font/avenirltstd_light</item>
     </style>
 
-    <style name="Theme.IcsopenvpnNoActionBar.Slide">
+    <style name="Theme.EkoVPN.NoActionBar.Slide">
         <item name="android:windowEnterAnimation">@anim/slide_in_up</item>
         <item name="android:windowExitAnimation">@anim/slide_out_down</item>
     </style>
 
+    <style name="Theme.EkoVPN.TextInputHintAppearance">
+       <item name="android:textColor">@color/login_field_colors</item>
+    </style>
+
     <!-- Base application theme. -->
-    <style name="Theme.IcsopenvpnNoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.EkoVPN.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/eko_red_light</item>
         <item name="colorPrimaryVariant">@color/eko_red</item>
@@ -57,14 +62,12 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <item name="android:fontFamily">@font/avenirltstd_light</item>
         <!-- Customize your theme here. -->
-    </style>
-
-    <style name="Theme.Icsopenvpn.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.Icsopenvpn.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-    <style name="Theme.Icsopenvpn.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Theme.EkoVPN.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.EkoVPN.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

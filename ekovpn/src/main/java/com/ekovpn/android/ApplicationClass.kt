@@ -20,12 +20,10 @@ import com.ekovpn.android.di.components.DaggerCoreComponent
 import com.ekovpn.android.di.modules.ContextModule
 import com.ekovpn.android.utils.detectAllExpect
 import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.initialization.InitializationStatus
 import de.blinkt.openvpn.core.ICSOpenVPNApplication
 import org.strongswan.android.security.LocalCertificateKeyStoreProvider
 import org.strongswan.android.utils.ContextProvider
 import java.security.Security
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener
 
 
 class ApplicationClass: ICSOpenVPNApplication(), SharedPreferences.OnSharedPreferenceChangeListener {
