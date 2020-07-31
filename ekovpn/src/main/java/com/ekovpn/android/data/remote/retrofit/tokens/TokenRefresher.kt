@@ -4,6 +4,7 @@ import android.util.Log
 import com.ekovpn.android.BuildConfig
 import com.ekovpn.android.data.remote.retrofit.APIServiceFactory
 import com.google.gson.Gson
+import retrofit2.awaitResponse
 import javax.inject.Inject
 
 class TokenRefresher @Inject constructor(
@@ -11,13 +12,13 @@ class TokenRefresher @Inject constructor(
 
     fun refreshToken(email: String, password: String): String? {
         val hashMap = HashMap<String, Any>()
-        hashMap["email"] = email
-        hashMap["password"] = password
+        hashMap["appId"] = email
+        hashMap["appSecret"] = password
         val data = APIServiceFactory.simpleEkoVPNApiService(
             BuildConfig.EKO_VPN_BASE_URL, Gson()
-        ).syncAppLogin(hashMap)
+        ).syncAppLogin(hashMap).execute().body()
         Log.d(TokenRefresher::class.java.simpleName, data.toString())
-        return data.token
+        return data?.token
     }
 
 }

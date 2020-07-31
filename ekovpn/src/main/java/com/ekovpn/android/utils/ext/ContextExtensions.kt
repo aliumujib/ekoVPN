@@ -15,15 +15,23 @@
  */
 package com.ekovpn.android.utils.ext
 
+import android.app.AlertDialog
+import android.app.DatePickerDialog
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
+import android.content.Context.CLIPBOARD_SERVICE
+import android.content.DialogInterface
 import android.net.wifi.WifiManager
 import android.util.DisplayMetrics
+import android.widget.Button
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import java.net.InetAddress
 import java.net.UnknownHostException
 import kotlin.math.roundToInt
+
 
 /**
  * Get resource string from optional id
@@ -32,11 +40,11 @@ import kotlin.math.roundToInt
  * @return The key value if exist, otherwise empty.
  */
 fun Context.getString(@StringRes resId: Int?) =
-    resId?.let {
-        getString(it)
-    } ?: run {
-        ""
-    }
+        resId?.let {
+            getString(it)
+        } ?: run {
+            ""
+        }
 
 
 fun Context.dpToPx(dp: Int): Int {
@@ -68,3 +76,45 @@ fun intToInetAddress(hostAddress: Int): InetAddress {
         throw AssertionError()
     }
 }
+
+fun Context.copyToClipBoard(text: String) {
+    val clipboard: ClipboardManager? = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
+    val clip: ClipData = ClipData.newPlainText("eko_vpn_acc", text)
+    clipboard?.setPrimaryClip(clip)
+}
+
+fun Context.showAlertDialog(positiveAction: () -> Unit, negativeAction: () -> Unit, title: String) {
+    val builder1: AlertDialog.Builder = AlertDialog.Builder(this)
+    builder1.setMessage(title)
+    builder1.setCancelable(false)
+
+    builder1.setPositiveButton(
+            "Yes"
+    ) { dialog, id ->
+        positiveAction.invoke()
+        dialog.cancel()
+    }
+
+    builder1.setNegativeButton(
+            "No"
+    ) { dialog, id ->
+        negativeAction.invoke()
+        dialog.cancel()
+    }
+
+    val alert11: AlertDialog = builder1.create()
+
+    alert11.setOnShowListener {
+        val negativeBtn: Button = alert11.getButton(DatePickerDialog.BUTTON_NEGATIVE)
+        negativeBtn.setColors()
+
+        val positiveBtn: Button = alert11.getButton(DatePickerDialog.BUTTON_POSITIVE)
+        positiveBtn.setColors()
+    }
+
+
+
+    alert11.show()
+}
+
+

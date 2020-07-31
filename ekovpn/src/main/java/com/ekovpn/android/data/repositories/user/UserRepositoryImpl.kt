@@ -5,10 +5,16 @@
 
 package com.ekovpn.android.data.repositories.user
 
+import com.ekovpn.android.data.cache.room.dao.UsersDao
 import com.ekovpn.android.data.cache.settings.UserPrefManager
+import com.ekovpn.android.models.User
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPrefManager) : UserRepository {
+class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPrefManager, private val usersDao: UsersDao) : UserRepository {
 
     override fun getTimeLeft(): Long {
         return userPrefManager.getTimeLeft()
@@ -22,6 +28,12 @@ class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPr
         val original = getTimeLeft()
         val new = original + newTime
         setTimeLeft(new)
+    }
+
+    override fun getCurrentUser(): Flow<User> {
+        return usersDao.streamUser().map {
+            it.toUser()
+        }.flowOn(Dispatchers.IO)
     }
 
 }

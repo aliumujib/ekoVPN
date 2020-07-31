@@ -86,7 +86,7 @@ public class CharonVpnService extends VpnService implements Runnable, VpnStateSe
 	private static final String NOTIFICATION_CHANNEL = "org.strongswan.android.CharonVpnService.VPN_STATE_NOTIFICATION";
 	public static final String LOG_FILE = "charon.log";
 	public static final String KEY_IS_RETRY = "retry";
-	public static final int VPN_STATE_NOTIFICATION_ID = 1;
+	public static final int VPN_STATE_NOTIFICATION_ID = 72356;
 
 	private String mLogFile;
 	private String mAppDir;

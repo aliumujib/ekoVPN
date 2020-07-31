@@ -27,7 +27,7 @@ import com.ekovpn.android.data.repositories.user.UserRepository
 import com.ekovpn.android.di.service.DaggerCountDownTimerComponent
 import com.ekovpn.android.models.Server
 import com.ekovpn.android.utils.ext.isNOrLater
-import com.ekovpn.android.view.countdowntimer.TimeMilliParser
+import com.ekovpn.android.view.compoundviews.countdowntimer.TimeMilliParser
 import com.ekovpn.android.view.main.VpnActivity
 import de.blinkt.openvpn.core.IOpenVPNServiceInternal
 import de.blinkt.openvpn.core.OpenVPNService
@@ -94,7 +94,7 @@ class EkoVPNMgrService : Service() {
 
     private fun timeVPNConnection(intent: Intent) {
         intent.getParcelableExtra<Server>(TIMER_SERVICE_VPN_PROFILE)?.let {
-            disconnectCurrentVPN()
+            //disconnectCurrentVPN()
             countDownTimer?.cancel()
 
             server = intent.getParcelableExtra(TIMER_SERVICE_VPN_PROFILE)
@@ -286,7 +286,7 @@ class EkoVPNMgrService : Service() {
         const val TIMER_SERVICE_INCREMENT = "TIMER_SERVICE_INCREMENT"
 
         const val TIMER_GROUP = "TIMER_GROUP"
-        const val TIMER_SERVICE_NOTIFICATION = 1234
+        const val TIMER_SERVICE_NOTIFICATION = 5234
 
     }
 }

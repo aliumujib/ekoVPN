@@ -21,14 +21,10 @@ class AuthRepositoryImpl @Inject constructor(private val userDao: UsersDao,
                                              private val tokenManager: TokenManager,
                                              private val ekoVPNAPIService: EkoVPNApiService) : AuthRepository {
 
+
     override fun createAccount(): Flow<User> {
         return flow {
             userDao.deleteAll()
-            val mapOfArgs  = mapOf("appId" to BuildConfig.ANDROID_APP_LOGIN, "appSecret" to BuildConfig.ANDROID_APP_PASSWORD)
-            val app = ekoVPNAPIService.appLogin(mapOfArgs)
-            app.token?.let {
-                tokenManager.saveToken(it)
-            }
             val user = ekoVPNAPIService.createNewUser()
             user.data?.toUserCacheModel()?.let {
                 userDao.insert(it)
@@ -37,20 +33,30 @@ class AuthRepositoryImpl @Inject constructor(private val userDao: UsersDao,
         }.flowOn(Dispatchers.IO)
     }
 
+    override fun loginToApp(): Flow<String> {
+        return flow {
+            emit(login())
+        }
+    }
+
     override fun fetchUserByAccountNumber(accountNumber:String): Flow<User> {
         return flow {
             userDao.deleteAll()
-            val mapOfArgs  = mapOf("appId" to BuildConfig.ANDROID_APP_LOGIN, "appSecret" to BuildConfig.ANDROID_APP_PASSWORD)
-            val app = ekoVPNAPIService.appLogin(mapOfArgs)
-            app.token?.let {
-                tokenManager.saveToken(it)
-            }
             val user = ekoVPNAPIService.fetchExistingUser(accountNumber)
             user.data?.toUserCacheModel()?.let {
                 userDao.insert(it)
             }
             emit(userDao.getUser()?.toUser()!!)
         }.flowOn(Dispatchers.IO)
+    }
+
+    private suspend fun login(): String {
+        val mapOfArgs = mapOf("appId" to BuildConfig.ANDROID_APP_LOGIN, "appSecret" to BuildConfig.ANDROID_APP_PASSWORD)
+        val app = ekoVPNAPIService.appLogin(mapOfArgs)
+        app.token?.let {
+            tokenManager.saveToken(it)
+        }
+        return app.token!!
     }
 
     override suspend fun isUserLoggedIn(): Boolean {

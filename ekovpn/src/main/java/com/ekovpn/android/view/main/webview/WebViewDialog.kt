@@ -35,7 +35,7 @@ class WebViewDialog : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.Theme_IcsopenvpnNoActionBar_FullScreenDialog)
+        setStyle(STYLE_NORMAL, R.style.Theme_EkoVPN_FullScreenDialog)
     }
 
     override fun onStart() {
@@ -45,7 +45,7 @@ class WebViewDialog : DialogFragment() {
             val width = ViewGroup.LayoutParams.MATCH_PARENT
             val height = ViewGroup.LayoutParams.MATCH_PARENT
             dialog.window!!.setLayout(width, height)
-            dialog.window!!.setWindowAnimations(R.style.Theme_IcsopenvpnNoActionBar_Slide)
+            dialog.window!!.setWindowAnimations(R.style.Theme_EkoVPN_NoActionBar_Slide)
             disableBackClick()
         }
     }

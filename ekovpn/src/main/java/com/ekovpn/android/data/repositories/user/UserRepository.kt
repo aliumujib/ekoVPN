@@ -5,6 +5,9 @@
 
 package com.ekovpn.android.data.repositories.user
 
+import com.ekovpn.android.models.User
+import kotlinx.coroutines.flow.Flow
+
 interface UserRepository {
 
     fun getTimeLeft(): Long
@@ -12,5 +15,7 @@ interface UserRepository {
     fun setTimeLeft(timeLeft: Long)
 
     fun addToTimeLeft(newTime: Long)
+
+    fun getCurrentUser(): Flow<User>
 
 }

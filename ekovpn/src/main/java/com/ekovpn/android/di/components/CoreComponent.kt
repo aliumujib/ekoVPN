@@ -46,12 +46,12 @@ interface CoreComponent {
     fun context(): Context
 
     fun configRepository(): ConfigRepository
+    fun authRepository(): AuthRepository
 
     fun serversRepository(): ServersRepository
 
     fun settingsRepository(): SettingsRepository
 
-    fun authRepository(): AuthRepository
 
     fun userRepository(): UserRepository
 

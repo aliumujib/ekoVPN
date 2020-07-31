@@ -16,4 +16,5 @@
     <dimen name="text_small">11sp</dimen>
     <dimen name="one_half_space">12dp</dimen>
     <dimen name="ripple_radius">64dp</dimen>
+    <dimen name="three_spaces">24dp</dimen>
 </resources>

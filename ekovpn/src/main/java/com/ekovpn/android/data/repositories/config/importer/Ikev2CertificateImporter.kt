@@ -34,7 +34,7 @@ class Ikev2CertificateImporter @Inject constructor(val context: Context) {
 
     private fun makeProfile(certificate: X509Certificate, serverLocation: ServerLocation, ikeV2: IKEv2): VpnProfile {
         val vpnProfile = VpnProfile()
-        vpnProfile.name = "${serverLocation.city}-${serverLocation.country}-ikeV2"
+        vpnProfile.name = "${serverLocation.city}-${serverLocation.country}-IKEv2"
         vpnProfile.gateway = ikeV2.ip
         vpnProfile.vpnType = VpnType.IKEV2_EAP
         vpnProfile.password = ikeV2.password

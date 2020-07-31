@@ -20,7 +20,6 @@ import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
@@ -34,13 +33,13 @@ import com.ekovpn.android.di.main.home.HomeModule
 import com.ekovpn.android.models.Location
 import com.ekovpn.android.models.Server
 import com.ekovpn.android.service.EkoVPNMgrService
-import com.ekovpn.android.utils.ext.hide
+import com.ekovpn.android.utils.ext.delay
 import com.ekovpn.android.utils.ext.show
-import com.ekovpn.android.view.countdowntimer.TimeMilliParser
+import com.ekovpn.android.utils.ext.showAlertDialog
+import com.ekovpn.android.view.compoundviews.countdowntimer.TimeMilliParser
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
 import com.ekovpn.android.view.main.locationselector.LocationSelectorDialog
 import com.ekovpn.android.view.main.profile.ProfileDialog
-import com.ekovpn.android.view.main.webview.WebViewDialog
 import com.google.android.gms.ads.AdRequest
 import de.blinkt.openvpn.LaunchVPN
 import de.blinkt.openvpn.VpnProfile
@@ -188,7 +187,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         }
 
         activity?.findViewById<View>(R.id.profile_btn)?.setOnClickListener {
-            ProfileDialog.display(childFragmentManager, object: ProfileDialog.ClicksListener {
+            ProfileDialog.display(childFragmentManager, object : ProfileDialog.ClicksListener {
                 override fun onClose() {
 
                 }
@@ -253,11 +252,30 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                     }
 
                     override fun onLocationSelected(server: Server) {
-                        connectToServer(server)
+                        showDialogOrConnect(server)
                     }
                 }, viewModel.state.value._serversList)
             }
         }
+    }
+
+    private fun showDialogOrConnect(server: Server) {
+        if (ekoVpnMgrService?.server == null) {
+            connectToServer(server)
+        } else {
+            requireContext().showAlertDialog({
+                disconnectCurrentConnection()
+                delay({
+                    connectToServer(server)
+                }, 1500)
+            }, {
+
+            }, getString(R.string.disconnect_notice))
+        }
+    }
+
+    private fun disconnectCurrentConnection() {
+        ekoVpnMgrService?.disconnectCurrentVPN()
     }
 
     private fun checkForExistingConnection() {

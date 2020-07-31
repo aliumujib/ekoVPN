@@ -19,5 +19,6 @@
     <color name="grey">#e4e4e4</color>
     <color name="connected_green">#3EAC04</color>
     <color name="text"> #757575</color>
+    <color name="text_button_orange">#ff8c45</color>
 
 </resources>
