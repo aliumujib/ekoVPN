@@ -5,6 +5,7 @@
 
 package com.ekovpn.android.view.auth.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
@@ -20,6 +21,7 @@ import com.ekovpn.android.di.auth.login.LoginModule
 import com.ekovpn.android.utils.ext.hideKeyboard
 import com.ekovpn.android.view.auth.SplashActivity.Companion.authComponent
 import com.ekovpn.android.view.auth.accountnumberbottomsheeet.AccountRecoveryBottomSheet
+import com.ekovpn.android.view.main.VpnActivity
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

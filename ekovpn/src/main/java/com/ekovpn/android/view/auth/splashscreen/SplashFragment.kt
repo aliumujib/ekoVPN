@@ -76,13 +76,18 @@ class SplashFragment : Fragment() {
                 setup_text_.setText(R.string.wait_while_we_set_up)
             }
             SetUpState.Finished -> {
-                findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment())
+                val intent = Intent(requireContext(), VpnActivity::class.java)
+                startActivity(intent)
+                this.requireActivity().finish()
             }
             SetUpState.Failed -> {
                 retry.visibility = View.VISIBLE
                 progressBar.visibility = View.INVISIBLE
                 setup_text_.setText(R.string.an_error_occured)
                 Log.d(SplashFragment::class.java.simpleName, "Error")
+            }
+            SetUpState.LoggedIn -> {
+                findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment())
             }
             else -> {
                 retry.visibility = View.VISIBLE

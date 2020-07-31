@@ -33,30 +33,7 @@ class SplashViewModel @Inject constructor(private val configRepository: ConfigRe
         }
     }
 
-    private fun fetchServers() {
-        configRepository.fetchAndConfigureServers()
-                .onStart {
-                    _state.value = SetUpState.Working
-                }
-                .onEach {
-                    if (it.isSuccess) {
-                        Log.d(SplashViewModel::class.java.simpleName, "Success")
-                    } else {
-                        _state.value = SetUpState.Failed
-                        Log.d(SplashViewModel::class.java.simpleName, "Error")
-                    }
-                }.onCompletion {
-                    if (it != null) {
-                        _state.value = SetUpState.Failed
-                    } else {
-                        _state.value = SetUpState.Finished
-                    }
-                }.catch {
-                    Log.d(SplashViewModel::class.java.simpleName, "${it.message}")
-                    _state.value = SetUpState.Failed
-                }
-                .launchIn(viewModelScope)
-    }
+
 
     private fun login() {
         authRepository.loginToApp()
@@ -65,7 +42,7 @@ class SplashViewModel @Inject constructor(private val configRepository: ConfigRe
                 }
                 .onEach {
                     Log.d(SplashViewModel::class.java.simpleName, "$it")
-                    _state.value = SetUpState.Finished
+                    _state.value = SetUpState.LoggedIn
                 }.catch {
                     it.printStackTrace()
                     _state.value = SetUpState.Failed

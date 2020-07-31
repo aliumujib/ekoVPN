@@ -13,6 +13,7 @@ sealed class SetUpState(
 
     object Idle : SetUpState(true, null)
     object Working : SetUpState(true, null)
+    object LoggedIn : SetUpState(false, null)
     object Finished : SetUpState(false, null)
     object Failed : SetUpState(false, Throwable("An error occurred"))
 
