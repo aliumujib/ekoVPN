@@ -76,9 +76,6 @@ class SplashFragment : Fragment() {
                 setup_text_.setText(R.string.wait_while_we_set_up)
             }
             SetUpState.Finished -> {
-//                val intent = Intent(requireContext(), VpnActivity::class.java)
-//                startActivity(intent)
-//                this.requireActivity().finish()
                 findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment())
             }
             SetUpState.Failed -> {

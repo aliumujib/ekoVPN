@@ -5,8 +5,6 @@
 
 package com.ekovpn.android.models
 
-import com.ekovpn.android.data.cache.room.entities.UserCacheModel
-
 data class User(
         val id: String,
         val account_id: String,

@@ -84,11 +84,11 @@ class LoginFragment : Fragment() {
 
             }
             LoginState.Working -> {
-               showProgress()
+                showProgress()
             }
-            LoginState.Finished -> {
+            is LoginState.Finished -> {
                 hideProgress()
-                findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToSuccessFragment())
+                findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToSuccessFragment(state.isFreshAccount))
             }
             is LoginState.Failed -> {
                 hideProgress()

@@ -132,7 +132,7 @@ class ProfileDialog : DialogFragment() {
         account_number.setActionButtonClickListener(View.OnClickListener {
             viewModel.state.value.user?.account_id?.let {
                 requireContext().copyToClipBoard(it)
-                Toast.makeText(requireContext(), "Your account number has been copied to your clip board, store it somewhere safe", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), getString(R.string.account_number_copied), Toast.LENGTH_LONG).show()
             }
         })
 

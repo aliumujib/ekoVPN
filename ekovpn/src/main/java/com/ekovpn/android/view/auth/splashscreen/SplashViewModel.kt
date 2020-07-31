@@ -60,6 +60,9 @@ class SplashViewModel @Inject constructor(private val configRepository: ConfigRe
 
     private fun login() {
         authRepository.loginToApp()
+                .onStart {
+
+                }
                 .onEach {
                     Log.d(SplashViewModel::class.java.simpleName, "$it")
                     _state.value = SetUpState.Finished

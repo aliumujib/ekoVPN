@@ -82,6 +82,8 @@
     <string name="free_to_use">ekoVPN is free for everyone to use, you can watch Ads to get more free VPN Credits or pay a monthly fee for Unlimited Credits.</string>
     <string name="continue_free">Continue Free</string>
     <string name="start_free">Start Free</string>
+    <string name="account_number_copied">Your account number has been copied to your clip board, store it somewhere safe</string>
+    <string name="welcome_back">Welcome Back!</string>
 
     <plurals name="plural_videos">
         <item quantity="one">Watch %d video</item>

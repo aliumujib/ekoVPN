@@ -21,7 +21,7 @@ class LoginViewModel @Inject constructor(private val configRepository: ConfigRep
     val state: StateFlow<LoginState> = _state
 
 
-    private fun fetchServers() {
+    private fun fetchServers(isFreshAccount: Boolean) {
         configRepository.fetchAndConfigureServers()
                 .onStart {
                     _state.value = LoginState.Working
@@ -37,7 +37,7 @@ class LoginViewModel @Inject constructor(private val configRepository: ConfigRep
                     if (it != null) {
                         _state.value = LoginState.Failed()
                     } else {
-                        _state.value = LoginState.Finished
+                        _state.value = LoginState.Finished(isFreshAccount)
                     }
                 }.catch {
                     Log.d(LoginViewModel::class.java.simpleName, "${it.message}")
@@ -57,7 +57,7 @@ class LoginViewModel @Inject constructor(private val configRepository: ConfigRep
                 }
                 .onEach {
                     Log.d(LoginViewModel::class.java.simpleName, "$it")
-                    fetchServers()
+                    fetchServers(false)
                 }.catch {
                     it.printStackTrace()
                     _state.value = LoginState.Failed(it)
@@ -68,7 +68,7 @@ class LoginViewModel @Inject constructor(private val configRepository: ConfigRep
     fun createAccount() {
         authRepository.createAccount().onEach {
             Log.d(LoginViewModel::class.java.simpleName, "$it")
-            fetchServers()
+            fetchServers(true)
         }.onStart {
             _state.value = LoginState.Working
         }.catch {

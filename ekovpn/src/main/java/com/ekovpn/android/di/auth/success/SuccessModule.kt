@@ -26,6 +26,7 @@ import com.ekovpn.android.utils.ext.viewModel
 import com.ekovpn.android.view.auth.splashscreen.SplashFragment
 import com.ekovpn.android.view.auth.splashscreen.SplashViewModel
 import com.ekovpn.android.view.auth.success.SuccessFragment
+import com.ekovpn.android.view.auth.success.SuccessViewModel
 import com.ekovpn.android.view.main.home.HomeFragment
 import com.ekovpn.android.view.main.home.HomeViewModel
 import dagger.Module
@@ -44,8 +45,8 @@ class SuccessModule(@VisibleForTesting(otherwise = PRIVATE) val fragment: Succes
 
     @FragmentScope
     @Provides
-    fun providesViewModel(configRepository: ConfigRepository, authRepository: AuthRepository) = fragment.viewModel {
-        SplashViewModel(configRepository, authRepository)
+    fun providesViewModel(userRepository: UserRepository) = fragment.viewModel {
+        SuccessViewModel(userRepository)
     }
 
 }

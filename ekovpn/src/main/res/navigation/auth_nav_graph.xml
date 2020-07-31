@@ -43,6 +43,11 @@
         android:id="@+id/SuccessFragment"
         android:name="com.ekovpn.android.view.auth.success.SuccessFragment"
         android:label="@string/success_fragment_label"
-        tools:layout="@layout/fragment_ad" />
+        tools:layout="@layout/fragment_ad">
+        <argument
+            android:name="isFreshAccount"
+            android:defaultValue="false"
+            app:argType="boolean" />
+    </fragment>
 
 </navigation>
