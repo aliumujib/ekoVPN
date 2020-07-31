@@ -84,6 +84,8 @@
     <string name="start_free">Start Free</string>
     <string name="account_number_copied">Your account number has been copied to your clip board, store it somewhere safe</string>
     <string name="welcome_back">Welcome Back!</string>
+    <string name="paid_user_instructions">Paid User? Enter your Playstore  Order Number (Search your email)</string>
+    <string name="confirm">Confirm</string>
 
     <plurals name="plural_videos">
         <item quantity="one">Watch %d video</item>

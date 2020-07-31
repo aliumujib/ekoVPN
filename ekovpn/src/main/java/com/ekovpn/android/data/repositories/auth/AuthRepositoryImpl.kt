@@ -50,6 +50,17 @@ class AuthRepositoryImpl @Inject constructor(private val userDao: UsersDao,
         }.flowOn(Dispatchers.IO)
     }
 
+    override fun fetchUserByOrderNumber(orderNumber: String): Flow<User> {
+        return flow {
+            userDao.deleteAll()
+            val user = ekoVPNAPIService.fetchExistingUserByOrderNumber(orderNumber)
+            user.data?.toUserCacheModel()?.let {
+                userDao.insert(it)
+            }
+            emit(userDao.getUser()?.toUser()!!)
+        }.flowOn(Dispatchers.IO)
+    }
+
     private suspend fun login(): String {
         val mapOfArgs = mapOf("appId" to BuildConfig.ANDROID_APP_LOGIN, "appSecret" to BuildConfig.ANDROID_APP_PASSWORD)
         val app = ekoVPNAPIService.appLogin(mapOfArgs)

@@ -17,4 +17,7 @@ interface AuthRepository {
     suspend fun isUserLoggedIn(): Boolean
 
     fun fetchUserByAccountNumber(accountNumber: String): Flow<User>
+
+    fun fetchUserByOrderNumber(orderNumber: String): Flow<User>
+
 }

@@ -17,7 +17,9 @@ import androidx.navigation.fragment.findNavController
 import com.ekovpn.android.R
 import com.ekovpn.android.di.auth.login.DaggerLoginComponent
 import com.ekovpn.android.di.auth.login.LoginModule
+import com.ekovpn.android.utils.ext.hideKeyboard
 import com.ekovpn.android.view.auth.SplashActivity.Companion.authComponent
+import com.ekovpn.android.view.auth.accountnumberbottomsheeet.AccountRecoveryBottomSheet
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -70,12 +72,27 @@ class LoginFragment : Fragment() {
 
     private fun initViews() {
         existing_user.text = Html.fromHtml(getString(R.string.existing_title))
+        account_number_input.requestFocus()
         login_btn.setOnClickListener {
             loginViewModel.login(account_number_input.text.toString())
         }
         sign_up.setOnClickListener {
             loginViewModel.createAccount()
         }
+        forgot_account_number.setOnClickListener {
+            showBottomSheet()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        hideKeyboard()
+    }
+
+    private fun showBottomSheet(){
+        AccountRecoveryBottomSheet() {
+            loginViewModel.recoverAccount(it)
+        }.show(childFragmentManager, javaClass.simpleName)
     }
 
     private fun handleState(state: LoginState) {
