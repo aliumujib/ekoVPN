@@ -7,13 +7,13 @@ package com.ekovpn.android.view.auth.login
 
 
 sealed class LoginState(
-    val isLoading: Boolean,
-    val error: Throwable?
+        val isLoading: Boolean,
+        error: Throwable?
 ) {
 
     object Idle : LoginState(true, null)
     object Working : LoginState(true, null)
     object Finished : LoginState(false, null)
-    object Failed : LoginState(false, Throwable("An error occurred"))
+    data class Failed(val error: Throwable = Throwable("An error occurred")) : LoginState(false, error)
 
 }

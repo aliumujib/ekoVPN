@@ -20,17 +20,6 @@ class LoginViewModel @Inject constructor(private val configRepository: ConfigRep
     private val _state = MutableStateFlow<LoginState>(LoginState.Idle)
     val state: StateFlow<LoginState> = _state
 
-    init {
-        runSetupIfNeeded()
-    }
-
-    fun runSetupIfNeeded() {
-        if (configRepository.hasConfiguredServers().not()) {
-            login()
-        } else {
-            _state.value = LoginState.Finished
-        }
-    }
 
     private fun fetchServers() {
         configRepository.fetchAndConfigureServers()
@@ -41,28 +30,50 @@ class LoginViewModel @Inject constructor(private val configRepository: ConfigRep
                     if (it.isSuccess) {
                         Log.d(LoginViewModel::class.java.simpleName, "Success")
                     } else {
-                        _state.value = LoginState.Failed
+                        _state.value = LoginState.Failed()
                         Log.d(LoginViewModel::class.java.simpleName, "Error")
                     }
                 }.onCompletion {
                     if (it != null) {
-                        _state.value = LoginState.Failed
+                        _state.value = LoginState.Failed()
                     } else {
                         _state.value = LoginState.Finished
                     }
                 }.catch {
                     Log.d(LoginViewModel::class.java.simpleName, "${it.message}")
-                    _state.value = LoginState.Failed
+                    _state.value = LoginState.Failed()
                 }
                 .launchIn(viewModelScope)
     }
 
-    private fun login() {
-        authRepository.fetchUserByAccountNumber("1977423788024893").onEach {
+    fun login(accountNumber: String) {
+        if (accountNumber.isEmpty()) {
+            _state.value = LoginState.Failed(Throwable("Please enter your account number"))
+            return
+        }
+        authRepository.fetchUserByAccountNumber(accountNumber)
+                .onStart {
+                    _state.value = LoginState.Working
+                }
+                .onEach {
+                    Log.d(LoginViewModel::class.java.simpleName, "$it")
+                    fetchServers()
+                }.catch {
+                    it.printStackTrace()
+                    _state.value = LoginState.Failed(it)
+                }.launchIn(viewModelScope)
+    }
+
+
+    fun createAccount() {
+        authRepository.createAccount().onEach {
             Log.d(LoginViewModel::class.java.simpleName, "$it")
             fetchServers()
+        }.onStart {
+            _state.value = LoginState.Working
         }.catch {
             it.printStackTrace()
+            _state.value = LoginState.Failed()
         }.launchIn(viewModelScope)
     }
 

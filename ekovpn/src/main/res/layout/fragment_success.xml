@@ -4,16 +4,115 @@
   ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
   -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:background="@drawable/bg"
     tools:context=".view.auth.success.SuccessFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.Guideline
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05"
+        android:id="@+id/guideline"
+        android:layout_height="wrap_content"/>
 
-</FrameLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:textSize="24sp"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:id="@+id/welcome_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline"
+        android:layout_marginHorizontal="@dimen/two_spaces"
+        android:drawablePadding="@dimen/two_spaces"
+        android:drawableEnd="@drawable/logo_white"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome_to" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:textSize="40sp"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:id="@+id/success_text"
+        android:textStyle="bold"
+        android:layout_marginTop="@dimen/two_spaces"
+        app:layout_constraintTop_toBottomOf="@+id/welcome_logo"
+        app:layout_constraintStart_toStartOf="@+id/welcome_logo"
+        android:layout_height="wrap_content"
+        android:text="@string/success" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:textColor="@color/white"
+        android:gravity="start"
+        android:id="@+id/welcome_intro_text"
+        android:textStyle="bold"
+        android:layout_marginTop="@dimen/two_spaces"
+        app:layout_constraintTop_toBottomOf="@+id/success_text"
+        app:layout_constraintStart_toStartOf="@+id/welcome_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="@dimen/two_spaces"
+        android:layout_height="wrap_content"
+        android:text="@string/keep_acct_number_safe" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:textSize="24sp"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:id="@+id/account_number"
+        app:layout_constraintStart_toStartOf="@+id/welcome_logo"
+        android:textStyle="bold"
+        android:layout_marginTop="@dimen/three_spaces"
+        app:layout_constraintTop_toBottomOf="@+id/welcome_intro_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="wrap_content"
+        tools:text="2020 4455 6860 6041" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:textColor="@color/white"
+        android:gravity="start"
+        android:id="@+id/free_to_use_text"
+        app:layout_constraintStart_toStartOf="@+id/welcome_logo"
+        android:textStyle="bold"
+        android:layout_marginTop="@dimen/three_spaces"
+        android:layout_marginEnd="@dimen/two_spaces"
+        app:layout_constraintTop_toBottomOf="@+id/account_number"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="wrap_content"
+        android:text="@string/free_to_use" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/start_free"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/free_to_use_text"
+        android:layout_marginVertical="@dimen/two_spaces"
+        app:layout_constraintEnd_toEndOf="@+id/free_to_use_text"
+        android:text="@string/start_free"
+        android:backgroundTint="@color/white"
+        app:iconGravity="end"
+        android:textSize="14sp"
+        android:insetBottom="0dp"
+        android:insetTop="0dp"
+        android:textAllCaps="false"
+        android:textColor="@color/text_button_orange"
+        app:iconTint="@color/text_button_orange"
+        app:icon="@drawable/arrow_right_white"/>
+
+    <com.ekovpn.android.view.compoundviews.premiumpurchaseview.PremiumPurchaseView
+        android:id="@+id/premium_options"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

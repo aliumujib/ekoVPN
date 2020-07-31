@@ -25,7 +25,6 @@ class AuthRepositoryImpl @Inject constructor(private val userDao: UsersDao,
     override fun createAccount(): Flow<User> {
         return flow {
             userDao.deleteAll()
-            login()
             val user = ekoVPNAPIService.createNewUser()
             user.data?.toUserCacheModel()?.let {
                 userDao.insert(it)
@@ -43,7 +42,6 @@ class AuthRepositoryImpl @Inject constructor(private val userDao: UsersDao,
     override fun fetchUserByAccountNumber(accountNumber:String): Flow<User> {
         return flow {
             userDao.deleteAll()
-            login()
             val user = ekoVPNAPIService.fetchExistingUser(accountNumber)
             user.data?.toUserCacheModel()?.let {
                 userDao.insert(it)

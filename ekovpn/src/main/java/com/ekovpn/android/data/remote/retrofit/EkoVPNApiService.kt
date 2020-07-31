@@ -6,13 +6,14 @@ import com.ekovpn.android.data.remote.models.EkoVPNAPIResponse
 import com.ekovpn.android.data.remote.models.ads.RemoteAd
 import com.ekovpn.android.data.remote.models.auth.RemoteApp
 import com.ekovpn.android.data.remote.models.auth.RemoteUser
+import retrofit2.Call
 import retrofit2.http.*
 
 interface EkoVPNApiService {
 
     @POST("authenticate")
     @FormUrlEncoded
-    fun syncAppLogin(@FieldMap query: Map<String, @JvmSuppressWildcards Any>): EkoVPNAPIAuthResponse<RemoteApp>
+    fun syncAppLogin(@FieldMap query: Map<String, @JvmSuppressWildcards Any>): Call<EkoVPNAPIAuthResponse<RemoteApp>>
 
     @POST("authenticate")
     @FormUrlEncoded

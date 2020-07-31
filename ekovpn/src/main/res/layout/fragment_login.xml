@@ -62,12 +62,13 @@
             android:textColor="@color/login_field_colors"
             android:textColorHint="@color/login_field_colors"
             android:layout_height="wrap_content"
+            android:id="@+id/account_number_input"
             />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/extended_fab"
+        android:id="@+id/login_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/account_number_textfield"
@@ -94,7 +95,7 @@
         android:id="@+id/new_user"
         app:layout_constraintStart_toStartOf="parent"
         android:text="@string/new_user"
-        app:layout_constraintTop_toBottomOf="@+id/extended_fab"
+        app:layout_constraintTop_toBottomOf="@+id/login_btn"
         android:layout_marginTop="@dimen/four_spaces"
         android:layout_height="wrap_content"
         />

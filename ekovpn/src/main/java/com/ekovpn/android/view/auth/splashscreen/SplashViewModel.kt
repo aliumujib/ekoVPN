@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ekovpn.android.data.repositories.auth.AuthRepository
 import com.ekovpn.android.data.repositories.config.repository.ConfigRepository
+import com.ekovpn.android.view.auth.login.LoginState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
@@ -21,11 +22,15 @@ class SplashViewModel @Inject constructor(private val configRepository: ConfigRe
     val state: StateFlow<SetUpState> = _state
 
     init {
-        login()
+        runSetupIfNeeded()
     }
 
     fun runSetupIfNeeded() {
-
+        if (configRepository.hasConfiguredServers().not()) {
+            login()
+        } else {
+            _state.value = SetUpState.Finished
+        }
     }
 
     private fun fetchServers() {
