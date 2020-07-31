@@ -50,8 +50,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/four_spaces"
-        app:boxStrokeColor="@color/login_field_colors"
-        app:hintTextColor="@color/login_field_colors"
+        app:boxStrokeColor="@color/outline_login_text_colors"
+        app:hintTextColor="@color/outline_login_text_colors"
+        android:textColorHint="@color/outline_login_text_colors"
         app:layout_constraintStart_toStartOf="parent"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:layout_constraintTop_toBottomOf="@+id/existing_user"
@@ -59,9 +60,13 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:textColor="@color/login_field_colors"
-            android:textColorHint="@color/login_field_colors"
+            android:textColor="@color/outline_login_text_colors"
+            android:textColorHint="@color/outline_login_text_colors"
             android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:imeOptions="actionDone"
             android:id="@+id/account_number_input"
             />
 
@@ -80,6 +85,7 @@
         android:backgroundTint="@color/white"
         app:iconGravity="end"
         android:textSize="14sp"
+        android:letterSpacing="0"
         android:insetBottom="0dp"
         android:insetTop="0dp"
         android:textAllCaps="false"
@@ -129,6 +135,7 @@
         android:lineSpacingMultiplier="1.2"
         app:layout_constraintStart_toStartOf="parent"
         android:text="@string/forgot_account_number"
+        android:id="@+id/forgot_account_number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginVertical="@dimen/four_spaces"

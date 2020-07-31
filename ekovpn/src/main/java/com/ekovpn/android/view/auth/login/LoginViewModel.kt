@@ -77,4 +77,16 @@ class LoginViewModel @Inject constructor(private val configRepository: ConfigRep
         }.launchIn(viewModelScope)
     }
 
+    fun recoverAccount(orderNumber: String) {
+        authRepository.fetchUserByOrderNumber(orderNumber).onEach {
+            Log.d(LoginViewModel::class.java.simpleName, "$it")
+            fetchServers(true)
+        }.onStart {
+            _state.value = LoginState.Working
+        }.catch {
+            it.printStackTrace()
+            _state.value = LoginState.Failed()
+        }.launchIn(viewModelScope)
+    }
+
 }

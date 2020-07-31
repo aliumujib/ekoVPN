@@ -45,7 +45,7 @@
     </style>
 
     <style name="Theme.EkoVPN.TextInputHintAppearance">
-       <item name="android:textColor">@color/login_field_colors</item>
+       <item name="android:textColor">@color/solid_field_colors</item>
     </style>
 
     <!-- Base application theme. -->
@@ -66,6 +66,18 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog" />
+
+    <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bottom_sheet_background_drawable</item>
+    </style>
+
+    <style name="BaseBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/BottomSheet</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/white</item>
+    </style>
 
     <style name="Theme.EkoVPN.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="Theme.EkoVPN.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
