@@ -5,7 +5,6 @@
 
 package com.ekovpn.android.view.auth.login
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
@@ -14,14 +13,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.ekovpn.android.R
 import com.ekovpn.android.di.auth.login.DaggerLoginComponent
 import com.ekovpn.android.di.auth.login.LoginModule
 import com.ekovpn.android.utils.ext.hideKeyboard
-import com.ekovpn.android.view.auth.SplashActivity.Companion.authComponent
+import com.ekovpn.android.view.auth.AuthActivity.Companion.authComponent
+import com.ekovpn.android.view.auth.AuthState
+import com.ekovpn.android.view.auth.AuthViewModel
 import com.ekovpn.android.view.auth.accountnumberbottomsheeet.AccountRecoveryBottomSheet
-import com.ekovpn.android.view.main.VpnActivity
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -30,8 +29,7 @@ import javax.inject.Inject
 class LoginFragment : Fragment() {
 
     @Inject
-    lateinit var loginViewModel: LoginViewModel
-
+    lateinit var authViewModel: AuthViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,11 +52,19 @@ class LoginFragment : Fragment() {
     }
 
     private fun showProgress() {
+        progressBar.visibility = View.VISIBLE
+        login_btn.visibility = View.GONE
+        sign_up.visibility = View.GONE
+        new_user.visibility = View.GONE
         login_btn.isEnabled = false
         sign_up.isEnabled = false
     }
 
     private fun hideProgress() {
+        progressBar.visibility = View.GONE
+        login_btn.visibility = View.VISIBLE
+        sign_up.visibility = View.VISIBLE
+        new_user.visibility = View.VISIBLE
         login_btn.isEnabled = true
         sign_up.isEnabled = true
     }
@@ -67,7 +73,7 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initViews()
-        loginViewModel.state.onEach {
+        authViewModel.state.onEach {
             handleState(it)
         }.launchIn(lifecycleScope)
     }
@@ -76,10 +82,10 @@ class LoginFragment : Fragment() {
         existing_user.text = Html.fromHtml(getString(R.string.existing_title))
         account_number_input.requestFocus()
         login_btn.setOnClickListener {
-            loginViewModel.login(account_number_input.text.toString())
+            authViewModel.login(account_number_input.text.toString())
         }
         sign_up.setOnClickListener {
-            loginViewModel.createAccount()
+            authViewModel.createAccount()
         }
         forgot_account_number.setOnClickListener {
             showBottomSheet()
@@ -91,28 +97,21 @@ class LoginFragment : Fragment() {
         hideKeyboard()
     }
 
-    private fun showBottomSheet(){
+    private fun showBottomSheet() {
         AccountRecoveryBottomSheet() {
-            loginViewModel.recoverAccount(it)
+            authViewModel.recoverAccount(it)
         }.show(childFragmentManager, javaClass.simpleName)
     }
 
-    private fun handleState(state: LoginState) {
-        when (state) {
-            LoginState.Idle -> {
-
-            }
-            LoginState.Working -> {
-                showProgress()
-            }
-            is LoginState.Finished -> {
-                hideProgress()
-                findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToSuccessFragment(state.isFreshAccount))
-            }
-            is LoginState.Failed -> {
-                hideProgress()
-                Toast.makeText(context, state.error.message, Toast.LENGTH_LONG).show()
-            }
+    private fun handleState(state: AuthState) {
+        if(state.isLoading){
+            showProgress()
+        }else if (state.user != null && state.hasCompletedConfig && state.isLoading.not()){
+            hideProgress()
+            authViewModel.goToSuccessScreen()
+        }else if(state.error != null){
+            hideProgress()
+            Toast.makeText(context, state.error.message, Toast.LENGTH_LONG).show()
         }
     }
 

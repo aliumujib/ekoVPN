@@ -18,12 +18,8 @@ package com.ekovpn.android.di.auth.success
 
 
 import com.ekovpn.android.di.auth.AuthComponent
-import com.ekovpn.android.di.auth.splash.SplashComponent
-import com.ekovpn.android.di.main.VPNComponent
 import com.ekovpn.android.di.scopes.FragmentScope
-import com.ekovpn.android.view.auth.splashscreen.SplashFragment
 import com.ekovpn.android.view.auth.success.SuccessFragment
-import com.ekovpn.android.view.main.home.HomeFragment
 import dagger.Component
 
 /**

@@ -13,38 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ekovpn.android.di.auth.splash
+package com.ekovpn.android.di.splash
 
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.PRIVATE
 import com.ekovpn.android.data.repositories.auth.AuthRepository
 import com.ekovpn.android.data.repositories.config.repository.ConfigRepository
-import com.ekovpn.android.data.repositories.servers.ServersRepository
-import com.ekovpn.android.data.repositories.user.UserRepository
-import com.ekovpn.android.di.scopes.FragmentScope
+import com.ekovpn.android.di.scopes.ActivityScope
 import com.ekovpn.android.utils.ext.viewModel
-import com.ekovpn.android.view.auth.splashscreen.SplashFragment
-import com.ekovpn.android.view.auth.splashscreen.SplashViewModel
-import com.ekovpn.android.view.main.home.HomeFragment
-import com.ekovpn.android.view.main.home.HomeViewModel
+import com.ekovpn.android.view.splash.SplashActivity
+import com.ekovpn.android.view.splash.SplashViewModel
 import dagger.Module
 import dagger.Provides
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /**
- * Class that contributes to the object graph [SplashModule].
+ * Class that contributes to the object graph [SplashComponent].
  *
  * @see Module
  */
-@ExperimentalCoroutinesApi
+
 @Module
-class SplashModule(@VisibleForTesting(otherwise = PRIVATE) val fragment: SplashFragment) {
+class SplashModule(
+        @VisibleForTesting(otherwise = PRIVATE)
+        val activity: SplashActivity
+) {
 
 
-    @FragmentScope
+    @ActivityScope
     @Provides
-    fun providesViewModel(configRepository: ConfigRepository, authRepository: AuthRepository) = fragment.viewModel {
-        SplashViewModel(configRepository, authRepository)
+    fun providesViewModel(configRepository: ConfigRepository, authRepository: AuthRepository) = activity.viewModel {
+        SplashViewModel(
+                configRepository,
+                authRepository
+        )
     }
 
 }

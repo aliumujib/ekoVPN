@@ -16,8 +16,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EkoVPN">
 
-        <activity android:name=".view.main.ads.AdViewingActivity"
-            android:theme="@style/Theme.EkoVPN"/>
+        <activity android:name=".view.auth.AuthActivity" />
+
+        <activity
+            android:name=".view.main.ads.AdViewingActivity"
+            android:theme="@style/Theme.EkoVPN" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
@@ -29,13 +32,12 @@
             android:theme="@style/Theme.EkoVPN" />
 
         <service android:name=".service.EkoVPNMgrService" />
-
         <service
             android:name="org.strongswan.android.logic.VpnStateService"
             android:exported="false" />
 
         <activity
-            android:name=".view.auth.SplashActivity"
+            android:name=".view.splash.SplashActivity"
             android:theme="@style/Theme.EkoVPN">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

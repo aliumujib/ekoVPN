@@ -18,5 +18,6 @@
     <dimen name="ripple_radius">64dp</dimen>
     <dimen name="three_spaces">24dp</dimen>
     <dimen name="eight_spaces">64dp</dimen>
+    <dimen name="six_spaces">48dp</dimen>
 
 </resources>

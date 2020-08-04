@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2020 Abdul-Mujeeb Aliu
  *
@@ -13,29 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ekovpn.android.di.auth.splash
+package com.ekovpn.android.di.splash
 
 
-
-import com.ekovpn.android.di.auth.AuthComponent
-import com.ekovpn.android.di.main.VPNComponent
-import com.ekovpn.android.di.scopes.FragmentScope
-import com.ekovpn.android.view.auth.splashscreen.SplashFragment
-import com.ekovpn.android.view.main.home.HomeFragment
+import com.ekovpn.android.data.repositories.auth.AuthRepository
+import com.ekovpn.android.data.repositories.config.repository.ConfigRepository
+import com.ekovpn.android.data.repositories.user.UserRepository
+import com.ekovpn.android.di.components.CoreComponent
+import com.ekovpn.android.di.scopes.ActivityScope
+import com.ekovpn.android.view.splash.SplashActivity
 import dagger.Component
 
 /**
  * Class for which a fully-formed, dependency-injected implementation is to
- * be generated from [SplashModule].
+ * be generated from [SplashComponent].
  *
  * @see Component
  */
-@FragmentScope
+@ActivityScope
 @Component(
     modules = [SplashModule::class],
-    dependencies = [AuthComponent::class])
+    dependencies = [CoreComponent::class])
 interface SplashComponent {
 
-    fun inject(fragment: SplashFragment)
+    fun inject(activity: SplashActivity)
+
+    fun userRepository (): UserRepository
+
+    fun configRepository(): ConfigRepository
+
+    fun authRepository(): AuthRepository
 
 }

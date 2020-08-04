@@ -9,7 +9,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:background="@drawable/bg"
     tools:context=".view.auth.success.SuccessFragment">
 
     <androidx.constraintlayout.widget.Guideline
@@ -20,41 +19,39 @@
         android:layout_height="wrap_content"/>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:textSize="24sp"
-        android:textColor="@color/white"
-        android:gravity="center"
-        android:id="@+id/welcome_logo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline"
-        android:layout_marginHorizontal="@dimen/two_spaces"
-        android:drawablePadding="@dimen/two_spaces"
-        android:drawableEnd="@drawable/logo_white"
-        android:layout_height="wrap_content"
-        android:text="@string/welcome_to" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:textSize="40sp"
-        android:textColor="@color/white"
-        android:gravity="center"
+        android:layout_width="0dp"
+        android:textSize="30sp"
+        android:textColor="@color/black"
         android:id="@+id/success_text"
+        android:layout_marginHorizontal="@dimen/two_spaces"
         android:textStyle="bold"
-        android:layout_marginTop="@dimen/two_spaces"
-        app:layout_constraintTop_toBottomOf="@+id/welcome_logo"
-        app:layout_constraintStart_toStartOf="@+id/welcome_logo"
+        android:layout_marginTop="@dimen/six_spaces"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         android:layout_height="wrap_content"
         android:text="@string/success" />
 
+    <View
+        android:id="@+id/divider"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/two_spaces"
+        android:layout_marginHorizontal="@dimen/two_spaces"
+        android:background="?dividerHorizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/success_text" />
+
     <TextView
         android:layout_width="0dp"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:gravity="start"
         android:id="@+id/welcome_intro_text"
         android:textStyle="bold"
         android:layout_marginTop="@dimen/two_spaces"
-        app:layout_constraintTop_toBottomOf="@+id/success_text"
-        app:layout_constraintStart_toStartOf="@+id/welcome_logo"
+        app:layout_constraintTop_toBottomOf="@+id/divider"
+        app:layout_constraintStart_toStartOf="@+id/success_text"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="@dimen/two_spaces"
         android:layout_height="wrap_content"
@@ -63,10 +60,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:textSize="24sp"
-        android:textColor="@color/white"
         android:gravity="center"
         android:id="@+id/account_number"
-        app:layout_constraintStart_toStartOf="@+id/welcome_logo"
+        app:layout_constraintStart_toStartOf="@+id/welcome_intro_text"
         android:textStyle="bold"
         android:layout_marginTop="@dimen/three_spaces"
         app:layout_constraintTop_toBottomOf="@+id/welcome_intro_text"
@@ -76,10 +72,9 @@
 
     <TextView
         android:layout_width="0dp"
-        android:textColor="@color/white"
         android:gravity="start"
         android:id="@+id/free_to_use_text"
-        app:layout_constraintStart_toStartOf="@+id/welcome_logo"
+        app:layout_constraintStart_toStartOf="@+id/welcome_intro_text"
         android:textStyle="bold"
         android:layout_marginTop="@dimen/three_spaces"
         android:layout_marginEnd="@dimen/two_spaces"
@@ -94,17 +89,30 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/free_to_use_text"
         android:layout_marginVertical="@dimen/two_spaces"
-        app:layout_constraintEnd_toEndOf="@+id/free_to_use_text"
+        app:layout_constraintStart_toStartOf="@+id/free_to_use_text"
         android:text="@string/start_free"
-        android:backgroundTint="@color/white"
         app:iconGravity="end"
         android:textSize="14sp"
         android:insetBottom="0dp"
         android:insetTop="0dp"
         android:textAllCaps="false"
-        android:textColor="@color/text_button_orange"
-        app:iconTint="@color/text_button_orange"
-        app:icon="@drawable/arrow_right_white"/>
+        android:backgroundTint="@color/eko_red"
+        android:textColor="@color/white"
+        app:iconTint="@color/white"
+        app:icon="@drawable/arrow_right_white"
+       />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/two_spaces"
+        android:background="?dividerHorizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/premium_options"
+        android:layout_marginHorizontal="@dimen/two_spaces"
+        app:layout_constraintTop_toBottomOf="@+id/start_free" />
 
     <com.ekovpn.android.view.compoundviews.premiumpurchaseview.PremiumPurchaseView
         android:id="@+id/premium_options"

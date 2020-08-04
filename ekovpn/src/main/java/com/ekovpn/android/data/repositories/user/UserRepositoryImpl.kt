@@ -10,6 +10,7 @@ import com.ekovpn.android.data.cache.settings.UserPrefManager
 import com.ekovpn.android.models.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -31,7 +32,11 @@ class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPr
     }
 
     override fun getCurrentUser(): Flow<User> {
-        return usersDao.streamUser().map {
+        return usersDao.streamUser()
+                .filter {
+                    it != null
+                }
+                .map {
             it.toUser()
         }.flowOn(Dispatchers.IO)
     }
