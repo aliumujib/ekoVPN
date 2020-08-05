@@ -254,7 +254,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                     override fun onLocationSelected(server: Server) {
                         showDialogOrConnect(server)
                     }
-                }, viewModel.state.value._serversList)
+                }, viewModel.state.value.currentConnectionServer, viewModel.state.value._serversList)
             }
         }
     }

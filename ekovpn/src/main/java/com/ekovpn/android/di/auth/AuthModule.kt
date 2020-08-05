@@ -19,10 +19,12 @@ import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.PRIVATE
 import com.ekovpn.android.data.repositories.auth.AuthRepository
 import com.ekovpn.android.data.repositories.config.repository.ConfigRepository
+import com.ekovpn.android.data.repositories.user.UserRepository
 import com.ekovpn.android.di.scopes.ActivityScope
 import com.ekovpn.android.utils.ext.viewModel
-import com.ekovpn.android.view.auth.SplashActivity
-import com.ekovpn.android.view.auth.splashscreen.SplashViewModel
+import com.ekovpn.android.view.auth.AuthActivity
+import com.ekovpn.android.view.auth.AuthViewModel
+import com.ekovpn.android.view.splash.SplashViewModel
 import dagger.Module
 import dagger.Provides
 
@@ -35,15 +37,16 @@ import dagger.Provides
 @Module
 class AuthModule(
         @VisibleForTesting(otherwise = PRIVATE)
-        val activity: SplashActivity
+        val activity: AuthActivity
 ) {
 
 
     @ActivityScope
     @Provides
-    fun providesViewModel(configRepository: ConfigRepository, authRepository: AuthRepository) = activity.viewModel {
-        SplashViewModel(
+    fun providesViewModel(configRepository: ConfigRepository, userRepository: UserRepository,authRepository: AuthRepository) = activity.viewModel {
+        AuthViewModel(
                 configRepository,
+                userRepository,
                 authRepository
         )
     }

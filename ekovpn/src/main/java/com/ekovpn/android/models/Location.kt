@@ -10,7 +10,7 @@ import com.ekovpn.android.data.cache.room.entities.LocationCacheModel
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class Location(
+data class Location(
         val id: Int,
         val city: String,
         val country: String,

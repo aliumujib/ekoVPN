@@ -28,6 +28,7 @@
         app:layout_constraintStart_toEndOf="@+id/country_flag"
         android:layout_marginStart="@dimen/one_half_space"
         android:background="?selectableItemBackground"
+        android:drawableEnd="@drawable/ic_caret_expand"
         android:gravity="start"
         android:padding="@dimen/two_spaces"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"

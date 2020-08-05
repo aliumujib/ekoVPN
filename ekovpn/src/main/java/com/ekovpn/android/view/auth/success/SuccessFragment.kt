@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.ekovpn.android.R
@@ -19,7 +20,9 @@ import com.ekovpn.android.di.auth.success.DaggerSuccessComponent
 import com.ekovpn.android.di.auth.success.SuccessModule
 import com.ekovpn.android.utils.ext.copyToClipBoard
 import com.ekovpn.android.utils.ext.hide
-import com.ekovpn.android.view.auth.SplashActivity.Companion.authComponent
+import com.ekovpn.android.view.auth.AuthActivity.Companion.authComponent
+import com.ekovpn.android.view.auth.AuthState
+import com.ekovpn.android.view.auth.AuthViewModel
 import com.ekovpn.android.view.main.VpnActivity
 import kotlinx.android.synthetic.main.fragment_success.*
 import kotlinx.coroutines.flow.launchIn
@@ -29,10 +32,9 @@ import javax.inject.Inject
 
 class SuccessFragment : Fragment() {
 
-    @Inject
-    lateinit var viewModel: SuccessViewModel
 
-    val isFreshAccount : SuccessFragmentArgs by navArgs()
+    @Inject
+    lateinit var viewModel: AuthViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +60,6 @@ class SuccessFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.setIsFreshAccount(isFreshAccount.isFreshAccount)
         viewModel.state
                 .onEach {
                     handleState(it)
@@ -101,7 +102,7 @@ class SuccessFragment : Fragment() {
         return builder.toString()
     }
 
-    private fun handleState(state: SuccessState) {
+    private fun handleState(state: AuthState) {
         state.user?.account_id?.let {
             account_number.text = insertPeriodically(it, " ", 4)
         }
@@ -111,7 +112,7 @@ class SuccessFragment : Fragment() {
             start_free.hide()
             premium_options.hide()
         }else{
-            if(state.isNewUser){
+            if(state.isFreshAccount){
                 welcome_intro_text.text = getString(R.string.keep_acct_number_safe)
                 start_free.text = getString(R.string.start_free)
             }else{

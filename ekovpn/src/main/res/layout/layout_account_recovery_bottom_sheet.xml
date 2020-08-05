@@ -66,7 +66,7 @@
         app:layout_constraintEnd_toEndOf="@+id/account_number_textfield"
         android:contentDescription="@string/login"
         android:text="@string/confirm"
-        android:backgroundTint="@color/text_button_orange"
+        android:backgroundTint="@color/eko_red"
         app:iconGravity="end"
         android:textSize="14sp"
         android:letterSpacing="0"

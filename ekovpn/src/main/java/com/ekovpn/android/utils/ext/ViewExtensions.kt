@@ -30,7 +30,10 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.TranslateAnimation
 import android.widget.Button
+import android.widget.TextView
 import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import com.ekovpn.android.R
 
@@ -133,4 +136,10 @@ fun slightDelay(function: () -> Unit, timeOut: Long = 1000) {
 fun Button.setColors() {
     setTextColor(context.resources.getColor(R.color.eko_red))
     setBackgroundColor(context.resources.getColor(android.R.color.transparent))
+}
+
+
+fun TextView.setRightDrawable(@DrawableRes drawableRes: Int){
+    val drawable = ContextCompat.getDrawable(context, drawableRes)
+    this.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null)
 }

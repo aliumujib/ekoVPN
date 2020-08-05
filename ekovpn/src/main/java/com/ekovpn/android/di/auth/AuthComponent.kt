@@ -21,7 +21,9 @@ import com.ekovpn.android.data.repositories.config.repository.ConfigRepository
 import com.ekovpn.android.data.repositories.user.UserRepository
 import com.ekovpn.android.di.components.CoreComponent
 import com.ekovpn.android.di.scopes.ActivityScope
-import com.ekovpn.android.view.auth.SplashActivity
+import com.ekovpn.android.view.auth.AuthActivity
+import com.ekovpn.android.view.auth.AuthViewModel
+import com.ekovpn.android.view.splash.SplashActivity
 import dagger.Component
 
 /**
@@ -36,12 +38,14 @@ import dagger.Component
     dependencies = [CoreComponent::class])
 interface AuthComponent {
 
-    fun inject(activity: SplashActivity)
+    fun inject(activity: AuthActivity)
 
     fun userRepository (): UserRepository
 
     fun configRepository(): ConfigRepository
 
     fun authRepository(): AuthRepository
+
+    fun authViewModel(): AuthViewModel
 
 }

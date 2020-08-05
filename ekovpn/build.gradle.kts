@@ -17,8 +17,8 @@ android {
     defaultConfig {
         minSdkVersion(21)
         targetSdkVersion(29)
-        versionCode = 2
-        versionName = "0.0.9"
+        versionCode = 1
+        versionName = "0.0.8"
         resConfigs(listOf("en"))
     }
 
@@ -29,6 +29,35 @@ android {
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+
+    signingConfigs {
+//        getByName("debug") {
+//            keyAlias = "debug"
+//            keyPassword = "my debug key password"
+//            storeFile = file("/home/miles/keystore.jks")
+//            storePassword = "my keystore password"
+//        }
+        create("release") {
+            storeFile = file("ekovpn_key.jks")
+            storePassword = "Password01"
+            keyAlias = "ekoVPN"
+            keyPassword = "Password01"
+        }
+    }
+
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
+            isDebuggable = true
+        }
+        getByName("debug") {
+            signingConfig = signingConfigs.getByName("debug")
+            isDebuggable = true
+        }
     }
 
     flavorDimensions("implementation")
@@ -126,8 +155,8 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics:17.4.4")
     implementation("com.google.firebase:firebase-crashlytics:17.1.1")
     implementation("com.google.android.gms:play-services-ads:19.2.0")
-    implementation ("com.android.billingclient:billing-ktx:$billing_version")
-
+    implementation("com.android.billingclient:billing-ktx:$billing_version")
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
     dependencies.add("uiImplementation", project(":openvpn"))
     dependencies.add("skeletonImplementation", project(":openvpn"))
     implementation(project(":ikeV2"))

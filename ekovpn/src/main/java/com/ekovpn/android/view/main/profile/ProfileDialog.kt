@@ -16,6 +16,7 @@ import com.ekovpn.android.R
 import com.ekovpn.android.di.main.profile.DaggerProfileComponent
 import com.ekovpn.android.di.main.profile.ProfileModule
 import com.ekovpn.android.utils.ext.copyToClipBoard
+import com.ekovpn.android.view.compoundviews.premiumpurchaseview.PremiumPurchaseView
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
 import kotlinx.android.synthetic.main.profile_dialog.*
 import kotlinx.coroutines.flow.launchIn
@@ -23,7 +24,7 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 
-class ProfileDialog : DialogFragment() {
+class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListener {
 
     private var toolbar: Toolbar? = null
     private var clicksListener: ClicksListener? = null
@@ -59,7 +60,7 @@ class ProfileDialog : DialogFragment() {
             val width = ViewGroup.LayoutParams.MATCH_PARENT
             val height = ViewGroup.LayoutParams.MATCH_PARENT
             dialog.window!!.setLayout(width, height)
-            dialog.window!!.setWindowAnimations(R.style.Theme_EkoVPN_NoActionBar_Slide)
+            dialog.window!!.setWindowAnimations(R.style.Theme_EkoVPN_Slide)
             disableBackClick()
         }
     }
@@ -136,6 +137,8 @@ class ProfileDialog : DialogFragment() {
             }
         })
 
+        premium_options.addListener(this)
+
         referral_code.setActionButtonClickListener(View.OnClickListener {
             viewModel.state.value.user?.referral_id?.let {
                 shareText(it)
@@ -148,6 +151,11 @@ class ProfileDialog : DialogFragment() {
         account_type.setActionSubTitle(getString(R.string.account_type_subtitle, profileState.user?.account_type))
         renewal_date.setActionSubTitle(getString(R.string.renewal_date_subtitle, profileState.user?.renewal_at))
         referral_code.setActionSubTitle(getString(R.string.referral_sub_title, profileState.user?.referral_id))
+    }
+
+    override fun onStop() {
+        super.onStop()
+        premium_options.removeListener(this)
     }
 
     companion object {
@@ -166,4 +174,17 @@ class ProfileDialog : DialogFragment() {
             return webViewDialog
         }
     }
+
+    override fun handleSuccessfulSubscription(orderId: String) {
+        viewModel.updateUserWithOrderId(orderId)
+    }
+
+    override fun handleUserCancellation() {
+        Toast.makeText(context, "You cancelled, we hope you will reconsider :(", Toast.LENGTH_LONG).show()
+    }
+
+    override fun handleOtherError(error: Int) {
+        Toast.makeText(context, "Failed to complete purchase, any debits will be automatically refunded", Toast.LENGTH_LONG).show()
+    }
+
 }

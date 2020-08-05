@@ -6,6 +6,7 @@
 package com.ekovpn.android.data.remote.models.auth
 
 import com.ekovpn.android.data.cache.room.entities.UserCacheModel
+import com.ekovpn.android.models.User
 
 data class RemoteUser(
         val __v: Int,
@@ -26,6 +27,13 @@ data class RemoteUser(
 ) {
     fun toUserCacheModel(): UserCacheModel {
         return UserCacheModel(_id, account_number, account_type, active, createdAt, order_data
+                ?: NOT_AVAILABLE, order_number ?: NOT_AVAILABLE, referral_code, referred_by
+                ?: NOT_AVAILABLE, renewal_at
+                ?: NOT_AVAILABLE, role, time_expiry, updatedAt, vpn_credits)
+    }
+
+    fun toUser(): User {
+        return User(_id, account_number, account_type, active, createdAt, order_data
                 ?: NOT_AVAILABLE, order_number ?: NOT_AVAILABLE, referral_code, referred_by
                 ?: NOT_AVAILABLE, renewal_at
                 ?: NOT_AVAILABLE, role, time_expiry, updatedAt, vpn_credits)

@@ -34,7 +34,7 @@ interface UsersDao {
     @Query("SELECT * FROM UserCacheModel LIMIT 1")
     suspend fun getUser(): UserCacheModel?
 
-    @Query("SELECT * FROM UserCacheModel LIMIT 1")
+    @Query("SELECT * FROM UserCacheModel")
      fun streamUser(): Flow<UserCacheModel>
 
     @Query("DELETE FROM UserCacheModel")

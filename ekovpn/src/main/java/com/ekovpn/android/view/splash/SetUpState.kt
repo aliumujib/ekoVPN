@@ -3,7 +3,7 @@
  * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
  */
 
-package com.ekovpn.android.view.auth.splashscreen
+package com.ekovpn.android.view.splash
 
 
 sealed class SetUpState(
@@ -13,6 +13,7 @@ sealed class SetUpState(
 
     object Idle : SetUpState(true, null)
     object Working : SetUpState(true, null)
+    object LoggedIn : SetUpState(false, null)
     object Finished : SetUpState(false, null)
     object Failed : SetUpState(false, Throwable("An error occurred"))
 
