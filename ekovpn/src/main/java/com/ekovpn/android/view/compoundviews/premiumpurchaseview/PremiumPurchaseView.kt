@@ -1,6 +1,8 @@
 package com.ekovpn.android.view.compoundviews.premiumpurchaseview
 
+import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,17 +17,20 @@ import com.ekovpn.android.utils.ext.dpToPx
 import io.cabriole.decorator.LinearMarginDecoration
 import kotlinx.android.synthetic.main.premium_purchase_view.view.*
 import kotlinx.android.synthetic.main.profile_action_view.view.divider
+import kotlinx.coroutines.withContext
 
 
 class PremiumPurchaseView : LinearLayout {
 
-    private val premiumPurchaseAdapter by lazy {
-        PremiumPurchaseAdapter(object : SelectionListener<String> {
-            override fun select(item: String) {
+    private val listeners = mutableListOf<PurchaseProcessListener>()
 
+    private val premiumPurchaseAdapter by lazy {
+        PremiumPurchaseAdapter(object : SelectionListener<SkuDetails> {
+            override fun select(item: SkuDetails) {
+                launchBillingFlow(item)
             }
 
-            override fun deselect(item: String) {
+            override fun deselect(item: SkuDetails) {
 
             }
         })
@@ -33,8 +38,19 @@ class PremiumPurchaseView : LinearLayout {
 
     private val purchasesUpdateListener =
             PurchasesUpdatedListener { billingResult, purchases ->
-                // To be implemented in a later section.
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
+                    for (purchase in purchases) {
+                        handlePurchase(purchase)
+                    }
+                } else if (billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
+                    listeners.forEach {
+                        it.handleUserCancellation()
+                    }
+                } else {
+                    // Handle any other error codes.
+                }
             }
+
 
     private var billingClient = BillingClient.newBuilder(context)
             .setListener(purchasesUpdateListener)
@@ -70,6 +86,15 @@ class PremiumPurchaseView : LinearLayout {
         connectToBilling()
     }
 
+    private fun launchBillingFlow(skuDetails: SkuDetails) {
+        val billingFlowParams = BillingFlowParams.newBuilder()
+                .setSkuDetails(skuDetails)
+                .build()
+        getActivity()?.let {
+            val responseCode = billingClient.launchBillingFlow(it, billingFlowParams).responseCode
+        }
+    }
+
     private fun connectToBilling() {
         Log.d(PremiumPurchaseView::class.simpleName, "connecting to Billing")
         billingClient.startConnection(object : BillingClientStateListener {
@@ -77,7 +102,7 @@ class PremiumPurchaseView : LinearLayout {
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     // The BillingClient is ready. You can query purchases here.
                     querySkuDetails()
-                }else{
+                } else {
                     Log.d(PremiumPurchaseView::class.simpleName, "${billingResult.responseCode}")
                 }
             }
@@ -100,11 +125,7 @@ class PremiumPurchaseView : LinearLayout {
         params.setSkusList(skuList).setType(BillingClient.SkuType.SUBS)
         billingClient.querySkuDetailsAsync(params.build()) { billingResult, skuDetailsList ->
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                Log.d(PremiumPurchaseView::class.simpleName, "found ${skuDetailsList?.size} products")
-                val products = skuDetailsList?.map {
-                    it.title
-                }
-                products?.let {
+                skuDetailsList?.let {
                     submitPremiumPurchaseList(it)
                 }
             } else {
@@ -127,7 +148,48 @@ class PremiumPurchaseView : LinearLayout {
         }
     }
 
-    fun submitPremiumPurchaseList(list: List<String>) {
+
+    private fun handlePurchase(purchase: Purchase) {
+        val acknowledgePurchaseResponseListener = AcknowledgePurchaseResponseListener { billingResult ->
+            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                listeners.forEach {
+                    it.handleSuccessfulSubscription(purchase.orderId)
+                }
+            }else{
+                listeners.forEach {
+                    it.handleOtherError(billingResult.responseCode)
+                }
+            }
+        }
+        if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
+            if (!purchase.isAcknowledged) {
+                val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
+                        .setPurchaseToken(purchase.purchaseToken)
+                billingClient.acknowledgePurchase(acknowledgePurchaseParams.build(), acknowledgePurchaseResponseListener)
+            }
+        }
+    }
+
+    private fun getActivity(): Activity? {
+        var context = context
+        while (context is ContextWrapper) {
+            if (context is Activity) {
+                return context
+            }
+            context = context.baseContext
+        }
+        return null
+    }
+
+    fun addListener(listener: PurchaseProcessListener) {
+        listeners.add(listener)
+    }
+
+    fun removeListener(listener: PurchaseProcessListener) {
+        listeners.remove(listener)
+    }
+
+    private fun submitPremiumPurchaseList(list: List<SkuDetails>) {
         premiumPurchaseAdapter.submitList(list)
     }
 
@@ -137,6 +199,12 @@ class PremiumPurchaseView : LinearLayout {
         } else {
             divider.visibility = View.GONE
         }
+    }
+
+    interface PurchaseProcessListener {
+        fun handleSuccessfulSubscription(orderId: String)
+        fun handleUserCancellation()
+        fun handleOtherError(error: Int)
     }
 
 

@@ -7,15 +7,15 @@ package com.ekovpn.android.data.repositories.user
 
 import com.ekovpn.android.data.cache.room.dao.UsersDao
 import com.ekovpn.android.data.cache.settings.UserPrefManager
+import com.ekovpn.android.data.remote.retrofit.EkoVPNApiService
 import com.ekovpn.android.models.User
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
-class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPrefManager, private val usersDao: UsersDao) : UserRepository {
+class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPrefManager,
+                                             private val ekoVPNApiService: EkoVPNApiService,
+                                             private val usersDao: UsersDao) : UserRepository {
 
     override fun getTimeLeft(): Long {
         return userPrefManager.getTimeLeft()
@@ -37,7 +37,17 @@ class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPr
                     it != null
                 }
                 .map {
-            it.toUser()
+                    it.toUser()
+                }.flowOn(Dispatchers.IO)
+    }
+
+    override fun updateUserWithOrderId(orderId: String): Flow<User> {
+        return flow {
+            val userId = usersDao.getUser()!!.id
+            val map = mutableMapOf<String, String>()
+            map["order_number"] = orderId
+            val user = ekoVPNApiService.updateUserAccount(userId, map).data
+            emit(user!!.toUser())
         }.flowOn(Dispatchers.IO)
     }
 

@@ -15,11 +15,29 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 class ProfileViewModel @Inject constructor(val userRepository: UserRepository) : ViewModel() {
 
-    private val _state = MutableStateFlow<ProfileState>(ProfileState(true, null, null))
+    private val _state = MutableStateFlow(ProfileState(true, null, null))
     val state: StateFlow<ProfileState> = _state
 
+    fun updateUserWithOrderId(orderId: String) {
+        userRepository.updateUserWithOrderId(orderId)
+                .onStart {
+                    _state.value = _state.value.copy(isLoading = true)
+                }.catch {
+                    _state.value = _state.value.copy(error = it)
+                }
+                .onEach {
+            _state.value = _state.value.copy(user = it, isLoading = false)
+        }.launchIn(viewModelScope)
+    }
+
     init {
-        userRepository.getCurrentUser().onEach {
+        userRepository.getCurrentUser()
+                .onStart {
+                    _state.value = _state.value.copy(isLoading = true)
+                }.catch {
+                    _state.value = _state.value.copy(error = it)
+                }
+                .onEach {
             _state.value = _state.value.copy(user = it, isLoading = false)
         }.launchIn(viewModelScope)
     }

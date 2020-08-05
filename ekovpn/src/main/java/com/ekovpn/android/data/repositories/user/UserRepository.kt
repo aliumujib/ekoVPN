@@ -18,4 +18,6 @@ interface UserRepository {
 
     fun getCurrentUser(): Flow<User>
 
+    fun updateUserWithOrderId(orderId: String) : Flow<User>
+
 }
