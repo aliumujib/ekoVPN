@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:src="@color/black"
-        android:layout_marginStart="@dimen/two_spaces"
+        android:layout_marginStart="@dimen/three_spaces"
         android:id="@+id/country_flag"
         android:layout_height="25dp" />
 
@@ -31,9 +31,17 @@
         android:drawableEnd="@drawable/ic_caret_expand"
         android:gravity="start"
         android:padding="@dimen/two_spaces"
+        android:layout_marginEnd="@dimen/two_spaces"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/country_flag"
         android:layout_height="wrap_content" />
+
+    <View
+        android:layout_width="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/divider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="1dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

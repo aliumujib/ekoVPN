@@ -37,6 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:action_button_text="Copy"
+                android:background="?selectableItemBackground"
                 app:action_icon="@drawable/ic_user"
                 app:action_subtitle="1232 9876 8020 7729"
                 app:action_title="Account Number"
@@ -61,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:action_button_text=""
-                app:action_icon="@drawable/ic_user"
+                app:action_icon="@drawable/get_more_time_icon"
                 app:action_subtitle="24/JUL/2020"
                 app:action_title="Renewal Date"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -74,8 +75,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:paddingStart="@dimen/four_spaces"
+                android:paddingEnd="@dimen/three_spaces"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/renewal_date" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:background="?dividerHorizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/premium_options" />
+
 
             <com.ekovpn.android.view.compoundviews.profileactionview.ProfileActionView
                 android:id="@+id/referral_code"

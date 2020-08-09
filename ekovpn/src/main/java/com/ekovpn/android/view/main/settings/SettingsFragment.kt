@@ -131,7 +131,7 @@ class SettingsFragment : Fragment() {
         }
 
         help.setOnClickListener {
-            WebViewDialog.display(childFragmentManager, WebViewDialog.Companion.WebUrl("https://www.ekovpn.com/what-is-a-vpn", "Privacy Policy"), null)
+            WebViewDialog.display(childFragmentManager, WebViewDialog.Companion.WebUrl("https://www.ekovpn.com/what-is-a-vpn", "Help"), null)
         }
 
         app_version.text = resources.getString(R.string.app_version, BuildConfig.VERSION_NAME)

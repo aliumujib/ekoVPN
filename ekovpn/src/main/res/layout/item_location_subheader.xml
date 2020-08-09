@@ -43,7 +43,7 @@
         app:layout_constraintBottom_toBottomOf="@id/country_city_name"
         app:layout_constraintEnd_toEndOf="parent"
         android:src="@drawable/ic_tick"
-        android:layout_marginEnd="@dimen/two_spaces"
+        android:layout_marginEnd="@dimen/four_spaces"
         android:id="@+id/ic_tick"
         android:layout_height="16dp" />
 

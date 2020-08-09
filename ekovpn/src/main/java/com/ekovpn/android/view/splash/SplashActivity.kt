@@ -7,6 +7,7 @@ package com.ekovpn.android.view.splash
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -85,7 +86,11 @@ class SplashActivity : AppCompatActivity() {
                 startActivity(intent)
                 this.finish()
             }
+            SetUpState.Idle -> {
+
+            }
             else -> {
+                Log.d(SplashActivity::class.java.simpleName, "$state")
                 retry.visibility = View.VISIBLE
                 progressBar.visibility = View.INVISIBLE
                 setup_text_.visibility = View.INVISIBLE

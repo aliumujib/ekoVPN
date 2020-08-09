@@ -16,6 +16,7 @@ import com.ekovpn.android.R
 import com.ekovpn.android.di.main.profile.DaggerProfileComponent
 import com.ekovpn.android.di.main.profile.ProfileModule
 import com.ekovpn.android.utils.ext.copyToClipBoard
+import com.ekovpn.android.utils.ext.recursivelyApplyToChildren
 import com.ekovpn.android.view.compoundviews.premiumpurchaseview.PremiumPurchaseView
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
 import kotlinx.android.synthetic.main.profile_dialog.*
@@ -131,11 +132,16 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
     private fun initViews() {
         referral_code.setActionTitle(getString(R.string.referral_title))
         account_number.setActionButtonClickListener(View.OnClickListener {
-            viewModel.state.value.user?.account_id?.let {
-                requireContext().copyToClipBoard(it)
-                Toast.makeText(requireContext(), getString(R.string.account_number_copied), Toast.LENGTH_LONG).show()
-            }
+            copyAccountNumberToClipBoard()
         })
+        account_number.setOnClickListener {
+            copyAccountNumberToClipBoard()
+        }
+        (account_number as ViewGroup).recursivelyApplyToChildren {
+            it.setOnClickListener {
+                copyAccountNumberToClipBoard()
+            }
+        }
 
         premium_options.addListener(this)
 
@@ -146,9 +152,16 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
         })
     }
 
+    private fun copyAccountNumberToClipBoard() {
+        viewModel.state.value.user?.account_id?.let {
+            requireContext().copyToClipBoard(it)
+            Toast.makeText(requireContext(), getString(R.string.account_number_copied), Toast.LENGTH_LONG).show()
+        }
+    }
+
     private fun handleStates(profileState: ProfileState) {
         account_number.setActionSubTitle(getString(R.string.account_number_subtitle, profileState.user?.account_id))
-        account_type.setActionSubTitle(getString(R.string.account_type_subtitle, profileState.user?.account_type))
+        account_type.setActionSubTitle(getString(R.string.account_type_subtitle, profileState.user?.account_type?.capitalize()))
         renewal_date.setActionSubTitle(getString(R.string.renewal_date_subtitle, profileState.user?.renewal_at))
         referral_code.setActionSubTitle(getString(R.string.referral_sub_title, profileState.user?.referral_id))
     }

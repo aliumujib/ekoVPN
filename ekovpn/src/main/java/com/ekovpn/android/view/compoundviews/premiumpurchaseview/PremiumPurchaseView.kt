@@ -78,7 +78,6 @@ class PremiumPurchaseView : LinearLayout {
                         true
                 )
 
-                showDivider(showDivider)
                 recycle()
             }
         }
@@ -193,13 +192,6 @@ class PremiumPurchaseView : LinearLayout {
         premiumPurchaseAdapter.submitList(list)
     }
 
-    private fun showDivider(show: Boolean) {
-        if (show) {
-            divider.visibility = View.VISIBLE
-        } else {
-            divider.visibility = View.GONE
-        }
-    }
 
     interface PurchaseProcessListener {
         fun handleSuccessfulSubscription(orderId: String)
