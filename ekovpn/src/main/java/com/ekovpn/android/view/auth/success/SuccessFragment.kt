@@ -20,6 +20,7 @@ import com.ekovpn.android.di.auth.success.DaggerSuccessComponent
 import com.ekovpn.android.di.auth.success.SuccessModule
 import com.ekovpn.android.utils.ext.copyToClipBoard
 import com.ekovpn.android.utils.ext.hide
+import com.ekovpn.android.utils.ext.insertPeriodically
 import com.ekovpn.android.view.auth.AuthActivity.Companion.authComponent
 import com.ekovpn.android.view.auth.AuthState
 import com.ekovpn.android.view.auth.AuthViewModel
@@ -84,23 +85,7 @@ class SuccessFragment : Fragment() {
         }
     }
 
-    private fun insertPeriodically(
-            text: String, insert: String, period: Int): String? {
-        val builder = StringBuilder(
-                text.length + insert.length * (text.length / period) + 1)
-        var index = 0
-        var prefix = ""
-        while (index < text.length) {
-            // Don't put the insert in the very first iteration.
-            // This is easier than appending it *after* each substring
-            builder.append(prefix)
-            prefix = insert
-            builder.append(text.substring(index,
-                    Math.min(index + period, text.length)))
-            index += period
-        }
-        return builder.toString()
-    }
+
 
     private fun handleState(state: AuthState) {
         state.user?.account_id?.let {

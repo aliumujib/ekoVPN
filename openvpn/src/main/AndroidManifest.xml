@@ -78,14 +78,10 @@
         </service>
 
         <activity android:name="de.blinkt.openvpn.api.GrantPermissionsActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
+
         </activity>
         <activity android:name="de.blinkt.openvpn.api.ConfirmDialog">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
+
         </activity>
 
         <receiver android:name="de.blinkt.openvpn.OnBootReceiver">

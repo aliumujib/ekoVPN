@@ -25,17 +25,19 @@
         android:id="@+id/countries"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <com.ekovpn.android.view.compoundviews.profileactionview.ProfileActionView
                 android:id="@+id/account_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="?selectableItemBackground"
                 app:action_button_text="Copy"
                 app:action_icon="@drawable/ic_user"
                 app:action_subtitle="1232 9876 8020 7729"
@@ -61,7 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:action_button_text=""
-                app:action_icon="@drawable/ic_user"
+                app:action_icon="@drawable/get_more_time_icon"
                 app:action_subtitle="24/JUL/2020"
                 app:action_title="Renewal Date"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -73,9 +75,21 @@
                 android:id="@+id/premium_options"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingStart="@dimen/four_spaces"
+                android:paddingEnd="@dimen/three_spaces"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/renewal_date" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:background="?dividerHorizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/premium_options" />
+
 
             <com.ekovpn.android.view.compoundviews.profileactionview.ProfileActionView
                 android:id="@+id/referral_code"
@@ -88,6 +102,43 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/premium_options" />
+
+
+            <!--PROD: ca-app-pub-7604868220609576/2561495917 -->
+            <!--TEST: ca-app-pub-3940256099942544/6300978111 -->
+
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/adView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/three_spaces"
+                app:adSize="BANNER"
+                app:adUnitId="ca-app-pub-3940256099942544/6300978111"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/referral_code" />
+
+
+            <Button
+                android:id="@+id/logout"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/four_spaces"
+                android:layout_marginEnd="@dimen/three_spaces"
+                android:layout_marginBottom="@dimen/three_spaces"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="Log Out"
+                android:textAllCaps="false"
+                android:letterSpacing="0"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:strokeColor="@color/eko_red" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

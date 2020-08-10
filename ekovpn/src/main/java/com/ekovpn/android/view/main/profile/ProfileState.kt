@@ -11,7 +11,8 @@ import com.ekovpn.android.models.User
 data class ProfileState(
         val isLoading: Boolean,
         val user: User?,
-        val error: Throwable?
+        val error: Throwable?,
+        val isLoggedOut:Boolean
 ) {
 //
 //    object Idle : ProfileState(true, null, null)

@@ -18,6 +18,7 @@ package com.ekovpn.android.di.main
 
 import android.content.Context
 import com.ekovpn.android.data.repositories.ads.AdsRepository
+import com.ekovpn.android.data.repositories.config.repository.ConfigRepository
 import com.ekovpn.android.data.repositories.servers.ServersRepository
 import com.ekovpn.android.data.repositories.settings.SettingsRepository
 import com.ekovpn.android.data.repositories.user.UserRepository
@@ -41,6 +42,8 @@ interface VPNComponent {
     fun context(): Context
 
     fun settingsRepository(): SettingsRepository
+
+    fun configRepository(): ConfigRepository
 
     fun serversRepository(): ServersRepository
 

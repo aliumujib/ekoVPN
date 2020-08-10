@@ -13,4 +13,6 @@ interface ConfigRepository {
 
     fun hasConfiguredServers(): Boolean
 
+    fun logOutAndClearData():Flow<Unit>
+
 }
