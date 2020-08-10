@@ -12,8 +12,8 @@ import javax.inject.Inject
 
 class SettingsPrefManager @Inject constructor(val context: Context) : CoreSharedPrefManager(context) {
 
-    fun setHasCompletedSetup() {
-        savePref(HAS_COMPLETED_SETUP, true)
+    fun setHasCompletedSetup(hasCompletedSetup:Boolean) {
+        savePref(HAS_COMPLETED_SETUP, hasCompletedSetup)
     }
 
     fun getHasCompletedSetup(): Boolean {

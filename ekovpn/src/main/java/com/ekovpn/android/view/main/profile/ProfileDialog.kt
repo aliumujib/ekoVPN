@@ -2,6 +2,7 @@ package com.ekovpn.android.view.main.profile
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -16,9 +17,12 @@ import com.ekovpn.android.R
 import com.ekovpn.android.di.main.profile.DaggerProfileComponent
 import com.ekovpn.android.di.main.profile.ProfileModule
 import com.ekovpn.android.utils.ext.copyToClipBoard
+import com.ekovpn.android.utils.ext.insertPeriodically
 import com.ekovpn.android.utils.ext.recursivelyApplyToChildren
+import com.ekovpn.android.view.auth.AuthActivity
 import com.ekovpn.android.view.compoundviews.premiumpurchaseview.PremiumPurchaseView
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
+import com.google.android.gms.ads.AdRequest
 import kotlinx.android.synthetic.main.profile_dialog.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -111,6 +115,7 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
 
 
         initViews()
+        initAdControls()
 
         viewModel.state.onEach {
             handleStates(it)
@@ -144,7 +149,9 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
         }
 
         premium_options.addListener(this)
-
+        logout.setOnClickListener {
+            viewModel.logOut()
+        }
         referral_code.setActionButtonClickListener(View.OnClickListener {
             viewModel.state.value.user?.referral_id?.let {
                 shareText(it)
@@ -160,10 +167,27 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
     }
 
     private fun handleStates(profileState: ProfileState) {
-        account_number.setActionSubTitle(getString(R.string.account_number_subtitle, profileState.user?.account_id))
+        Log.d(ProfileDialog::class.java.simpleName, profileState.toString())
+        if(profileState.isLoggedOut){
+            val intent = Intent(requireContext(), AuthActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+            requireActivity().finish()
+            return
+        }
+
+        profileState.user?.account_id?.let {
+            account_number.setActionSubTitle(getString(R.string.account_number_subtitle,insertPeriodically(it, " ", 4) ))
+        }
         account_type.setActionSubTitle(getString(R.string.account_type_subtitle, profileState.user?.account_type?.capitalize()))
+
         renewal_date.setActionSubTitle(getString(R.string.renewal_date_subtitle, profileState.user?.renewal_at))
         referral_code.setActionSubTitle(getString(R.string.referral_sub_title, profileState.user?.referral_id))
+    }
+
+    private fun initAdControls() {
+        val adRequest = AdRequest.Builder().build()
+        adView.loadAd(adRequest)
     }
 
     override fun onStop() {

@@ -40,7 +40,6 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:textColor="@color/outline_login_text_colors"
             android:textColorHint="@color/outline_login_text_colors"
             android:layout_height="wrap_content"
             android:maxLines="1"

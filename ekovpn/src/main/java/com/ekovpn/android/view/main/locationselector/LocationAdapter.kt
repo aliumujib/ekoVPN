@@ -1,9 +1,11 @@
 package com.ekovpn.android.view.main.locationselector
 
 import android.text.Html
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import coil.api.load
 import com.ekovpn.android.R
 import com.ekovpn.android.models.Location
@@ -15,6 +17,7 @@ import com.ekovpn.android.view.sectionedadapter.SectionedViewHolder
 import kotlinx.android.synthetic.main.item_location_header.view.*
 import kotlinx.android.synthetic.main.item_location_subheader.view.*
 import org.jetbrains.anko.childrenRecursiveSequence
+import org.strongswan.android.logic.StrongSwanApplication.getContext
 
 class LocationAdapter constructor(private val locationClickListener: LocationClickListener,
                                   private var countriesList: List<Section<Server>>,
@@ -68,10 +71,17 @@ class LocationAdapter constructor(private val locationClickListener: LocationCli
             private val locationClickListener: LocationClickListener
     ) : BaseSectionedViewHolder(view) {
 
-        fun bind(model: Location, isExpanded:Boolean) {
+        fun bind(model: Location, isExpanded:Boolean, isConnected: Boolean) {
             view.country_flag.load("https://www.countryflags.io/${model.country_code}/flat/64.png")
             view.country_name.text = Html.fromHtml(model.country)
             view.country_name.setRightDrawable(if (isExpanded) R.drawable.ic_caret_collapase else R.drawable.ic_caret_expand)
+            val outValue = TypedValue()
+            itemView.context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
+           if(isConnected){
+               itemView.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.divider))
+           }else{
+               itemView.setBackgroundResource(outValue.resourceId)
+           }
             itemView.setOnClickListener {
                 toggleSectionExpanded(relativePosition.section())
             }
@@ -91,7 +101,8 @@ class LocationAdapter constructor(private val locationClickListener: LocationCli
     }
 
     override fun onBindHeaderViewHolder(holder: BaseSectionedViewHolder?, section: Int, expanded: Boolean) {
-        (holder as LocationListHeaderItemViewHolder).bind(countriesList[section].location, expanded)
+        val isConnected = countriesList[section].location.country_code == currentServer?.location_?.country_code
+        (holder as LocationListHeaderItemViewHolder).bind(countriesList[section].location, expanded, isConnected)
     }
 
     override fun onBindFooterViewHolder(holder: BaseSectionedViewHolder?, section: Int) {

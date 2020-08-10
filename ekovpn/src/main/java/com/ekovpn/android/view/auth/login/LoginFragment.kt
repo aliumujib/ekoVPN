@@ -17,6 +17,7 @@ import com.ekovpn.android.R
 import com.ekovpn.android.di.auth.login.DaggerLoginComponent
 import com.ekovpn.android.di.auth.login.LoginModule
 import com.ekovpn.android.utils.ext.hideKeyboard
+import com.ekovpn.android.utils.input.CreditCardMask
 import com.ekovpn.android.view.auth.AuthActivity.Companion.authComponent
 import com.ekovpn.android.view.auth.AuthState
 import com.ekovpn.android.view.auth.AuthViewModel
@@ -83,6 +84,7 @@ class LoginFragment : Fragment() {
     private fun initViews() {
         existing_user.text = Html.fromHtml(getString(R.string.existing_title))
         account_number_input.requestFocus()
+        CreditCardMask(account_number_input).listen()
         login_btn.setOnClickListener {
             hideKeyboard()
             authViewModel.login(account_number_input.text.toString())

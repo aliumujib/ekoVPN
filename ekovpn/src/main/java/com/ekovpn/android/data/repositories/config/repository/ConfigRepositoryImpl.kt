@@ -35,6 +35,15 @@ class ConfigRepositoryImpl @Inject constructor(private val context: Context,
         return settingsPrefManager.getHasCompletedSetup()
     }
 
+    override fun logOutAndClearData():Flow<Unit> {
+      return flow {
+          settingsPrefManager.setHasCompletedSetup(false)
+          locationsDao.deleteAll()
+          serversDao.deleteAll()
+          emit(Unit)
+      }.flowOn(Dispatchers.IO)
+    }
+
 
     private fun loadJSonData(): Array<ServerConfig> {
         val data = loadFromJson()
@@ -72,7 +81,7 @@ class ConfigRepositoryImpl @Inject constructor(private val context: Context,
                     it.printStackTrace()
                 }
                 .onCompletion {
-                    settingsPrefManager.setHasCompletedSetup()
+                    settingsPrefManager.setHasCompletedSetup(true)
                 }.map {
                     Log.d(ConfigRepositoryImpl::class.java.simpleName, "List $it")
                     Result.success(Unit)

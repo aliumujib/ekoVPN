@@ -17,6 +17,7 @@ package com.ekovpn.android.di.main.profile
 
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.PRIVATE
+import com.ekovpn.android.data.repositories.config.repository.ConfigRepository
 import com.ekovpn.android.data.repositories.user.UserRepository
 import com.ekovpn.android.di.scopes.FragmentScope
 import com.ekovpn.android.utils.ext.viewModel
@@ -39,8 +40,8 @@ class ProfileModule(@VisibleForTesting(otherwise = PRIVATE) val fragment: Profil
 
     @FragmentScope
     @Provides
-    fun providesViewModel(userRepository: UserRepository) = fragment.viewModel {
-        ProfileViewModel(userRepository)
+    fun providesViewModel(userRepository: UserRepository, configRepository: ConfigRepository) = fragment.viewModel {
+        ProfileViewModel(userRepository, configRepository)
     }
 
 }

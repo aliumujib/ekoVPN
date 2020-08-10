@@ -29,3 +29,22 @@ fun fromHtml(source: String?): Spanned {
         Html.fromHtml(source)
     }
 }
+
+
+ fun insertPeriodically(
+        text: String, insert: String, period: Int): String? {
+    val builder = StringBuilder(
+            text.length + insert.length * (text.length / period) + 1)
+    var index = 0
+    var prefix = ""
+    while (index < text.length) {
+        // Don't put the insert in the very first iteration.
+        // This is easier than appending it *after* each substring
+        builder.append(prefix)
+        prefix = insert
+        builder.append(text.substring(index,
+                Math.min(index + period, text.length)))
+        index += period
+    }
+    return builder.toString()
+}

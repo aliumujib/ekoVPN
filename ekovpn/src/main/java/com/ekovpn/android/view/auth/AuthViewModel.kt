@@ -64,7 +64,7 @@ class AuthViewModel @Inject constructor(private val configRepository: ConfigRepo
             _state.value = _state.value.copy(error = Throwable("Please enter your account number"), isLoading = false, user = null)
             return
         }
-        authRepository.fetchUserByAccountNumber(accountNumber)
+        authRepository.fetchUserByAccountNumber(accountNumber.trim().replace(" ",""))
                 .onStart {
                     _state.value = _state.value.copy(isLoading = true)
                 }
@@ -73,7 +73,7 @@ class AuthViewModel @Inject constructor(private val configRepository: ConfigRepo
                     fetchServers(false)
                 }.catch {
                     it.printStackTrace()
-                    _state.value = _state.value.copy(error = it, isLoading = false, user = null)
+                    _state.value = _state.value.copy(error = Throwable("An error occurred, while logging you in, please retry"), isLoading = false, user = null)
                 }.launchIn(viewModelScope)
     }
 
@@ -86,19 +86,19 @@ class AuthViewModel @Inject constructor(private val configRepository: ConfigRepo
             _state.value = _state.value.copy(isLoading = true)
         }.catch {
             it.printStackTrace()
-            _state.value = _state.value.copy(error = it, isLoading = false, user = null)
+            _state.value = _state.value.copy(error = Throwable("An error occurred while signing you up, please retry"), isLoading = false, user = null)
         }.launchIn(viewModelScope)
     }
 
     fun recoverAccount(orderNumber: String) {
-        authRepository.fetchUserByOrderNumber(orderNumber).onEach {
+        authRepository.fetchUserByOrderNumber(orderNumber.trim()).onEach {
             Log.d(AuthViewModel::class.java.simpleName, "$it")
             fetchServers(true)
         }.onStart {
             _state.value = _state.value.copy(isLoading = true)
         }.catch {
             it.printStackTrace()
-            _state.value = _state.value.copy(error = it, isLoading = false, user = null)
+            _state.value = _state.value.copy(error = Throwable("An error occurred while recovering your account, please contact support."), isLoading = false, user = null)
         }.launchIn(viewModelScope)
     }
 
