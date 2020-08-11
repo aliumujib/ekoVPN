@@ -31,7 +31,7 @@ import java.util.ArrayList
 /**
  * Maintains and mediates changes to the set of available WireGuard tunnels,
  */
-class TunnelManager(private val configStore: ConfigStore) : BaseObservable() {
+class TunnelManager(private val configStore: ConfigStore)  {
     val tunnels = CompletableFuture<ObservableSortedKeyedArrayList<String, ObservableTunnel>>()
     private val context: Context = get()
     private val delayedLoadRestoreTunnels = ArrayList<CompletableFuture<Void>>()

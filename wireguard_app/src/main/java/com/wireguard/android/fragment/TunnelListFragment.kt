@@ -54,6 +54,7 @@ class TunnelListFragment : BaseFragment() {
     private val actionModeListener = ActionModeListener()
     private var actionMode: ActionMode? = null
     private var binding: TunnelListFragmentBinding? = null
+
     private fun importTunnel(configText: String) {
         try {
             // Ensure the config text is parseable before proceeding…

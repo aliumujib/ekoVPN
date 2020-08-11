@@ -17,6 +17,7 @@ class NameInputFilter : InputFilter {
                         sStart: Int, sEnd: Int,
                         dest: Spanned,
                         dStart: Int, dEnd: Int): CharSequence? {
+
         var replacement: SpannableStringBuilder? = null
         var rIndex = 0
         val dLength = dest.length
@@ -42,4 +43,5 @@ class NameInputFilter : InputFilter {
         @JvmStatic
         fun newInstance() = NameInputFilter()
     }
+
 }
