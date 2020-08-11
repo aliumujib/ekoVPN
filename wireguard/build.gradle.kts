@@ -1,5 +1,6 @@
 plugins {
     id("com.android.library")
+    id("kotlin-android")
     id("checkstyle")
 }
 
@@ -16,6 +17,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
     }
 
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
 }
 
 
@@ -33,8 +37,6 @@ dependencies {
     val materialComponentsVersion = "1.2.0-alpha06"
     val preferenceVersion = "1.1.1"
     val streamsupportVersion = "1.7.2"
-    val threetenabpVersion = "1.2.4"
-    val zxingEmbeddedVersion = "3.6.0"
 
 
     implementation("com.wireguard.android:tunnel:1.0.20200407")
@@ -51,5 +53,5 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
     implementation("net.sourceforge.streamsupport:android-retrofuture:$streamsupportVersion")
-
+    //implementation( "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.61")
 }

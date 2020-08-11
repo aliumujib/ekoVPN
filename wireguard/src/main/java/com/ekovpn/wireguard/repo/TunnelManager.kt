@@ -37,16 +37,14 @@ class TunnelManager constructor(private val configStore: ConfigStore, val contex
         return tunnel
     }
 
-    fun create(name: String, config: Config?): Flow<EkoTunnel> {
-        return flow {
-            if (Tunnel.isNameInvalid(name))
-                throw (IllegalArgumentException("Tunnel name is not valid"))
-            if (tunnelMap.containsKey(name))
-                throw (IllegalArgumentException("Tunnel $name is already existing"))
+    fun create(name: String, config: Config?): EkoTunnel {
+//        if (Tunnel.isNameInvalid(name))
+//            throw (IllegalArgumentException("Tunnel $name is not valid"))
+        if (tunnelMap.containsKey(name))
+            throw (IllegalArgumentException("Tunnel $name is already existing"))
 
-            val configuration = configStore.create(name, config!!)
-            emit(addToList(name, configuration, Tunnel.State.DOWN)!!)
-        }
+        val configuration = configStore.create(name, config!!)
+        return (addToList(name, configuration, Tunnel.State.DOWN)!!)
     }
 
     fun delete(tunnel: EkoTunnel): Flow<Unit> {
@@ -56,7 +54,7 @@ class TunnelManager constructor(private val configStore: ConfigStore, val contex
             // Make sure nothing touches the tunnel.
             if (wasLastUsed)
                 lastUsedTunnel = null
-            tunnelMap.remove(tunnel)
+            tunnelMap.remove(tunnel.name)
             if (originalState == Tunnel.State.UP)
                 getBackend().setState(tunnel, Tunnel.State.DOWN, null)
             try {
@@ -138,7 +136,7 @@ class TunnelManager constructor(private val configStore: ConfigStore, val contex
             // Make sure nothing touches the tunnel.
             if (wasLastUsed)
                 lastUsedTunnel = null
-            tunnelMap.remove(tunnel)
+            tunnelMap.remove(tunnel.name)
 
             try {
                 if (originalState == Tunnel.State.UP)
