@@ -71,6 +71,7 @@ class ApplicationClass: ICSOpenVPNApplication(), SharedPreferences.OnSharedPrefe
         PRDownloader.initialize(applicationContext)
         initAdmob()
         WireGuardInitializer.onCreate(this)
+
     }
 
     private fun initAdmob() {

@@ -40,7 +40,9 @@ import com.ekovpn.android.view.compoundviews.countdowntimer.TimeMilliParser
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
 import com.ekovpn.android.view.main.locationselector.LocationSelectorDialog
 import com.ekovpn.android.view.main.profile.ProfileDialog
+import com.ekovpn.wireguard.WireGuardInitializer
 import com.google.android.gms.ads.AdRequest
+import com.wireguard.android.backend.Tunnel
 import de.blinkt.openvpn.LaunchVPN
 import de.blinkt.openvpn.VpnProfile
 import de.blinkt.openvpn.activities.DisconnectVPN
@@ -49,6 +51,7 @@ import de.blinkt.openvpn.core.VpnStatus
 import de.blinkt.openvpn.core.VpnStatus.StateListener
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.strongswan.android.logic.VpnStateService
@@ -299,8 +302,21 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                     startOrStopIKEv2(it)
                     viewModel.connectingToServer(server)
                 }
+            }else if (server is Server.WireGuardServer) {
+                startOrStopWireGuard(server.tunnelName)
+//                viewModel.getIKEv2ProfileForServer(server.tunnelName)?.let {
+//                    startOrStopIKEv2(it)
+//                    viewModel.connectingToServer(server)
+//                }
             }
         }
+    }
+
+
+    private fun startOrStopWireGuard(profile: String) {
+        val tunnel = WireGuardInitializer.getTunnelManager().getTunnel(profile)
+        Log.d(HomeFragment::class.java.simpleName, "tunnel: $tunnel config: ${tunnel?.config}")
+        WireGuardInitializer.getBackend().setState(tunnel, Tunnel.State.UP, tunnel?.config)
     }
 
     private fun startOrStopIKEv2(profile: org.strongswan.android.data.VpnProfile) {

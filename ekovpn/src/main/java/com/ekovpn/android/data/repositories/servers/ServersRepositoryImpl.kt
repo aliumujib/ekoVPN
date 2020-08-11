@@ -33,8 +33,10 @@ class ServersRepositoryImpl @Inject constructor(private val serversDao: ServersD
             it.map { server ->
                 if (server.serverCacheModel.protocol == Protocol.TCP.value || server.serverCacheModel.protocol == Protocol.UDP.value) {
                     Server.OVPNServer.fromServerCacheModel(server)
-                } else {
+                } else if (server.serverCacheModel.protocol == Protocol.IKEv2.value) {
                     Server.IkeV2Server.fromServerCacheModel(server)
+                } else {
+                    Server.WireGuardServer.fromServerCacheModel(server)
                 }
             }
         }
@@ -49,10 +51,16 @@ class ServersRepositoryImpl @Inject constructor(private val serversDao: ServersD
             it.filter {
                 it.serverCacheModel.serverId == settingsRepository.getLastServerId()
             }.map { serverLocationModel ->
-                if (serverLocationModel.serverCacheModel.protocol == Protocol.IKEv2.value) {
-                    Server.IkeV2Server.fromServerCacheModel(serverLocationModel)
-                } else {
-                    Server.OVPNServer.fromServerCacheModel(serverLocationModel)
+                when (serverLocationModel.serverCacheModel.protocol) {
+                    Protocol.IKEv2.value -> {
+                        Server.IkeV2Server.fromServerCacheModel(serverLocationModel)
+                    }
+                    Protocol.WIREGUARD.value -> {
+                        Server.WireGuardServer.fromServerCacheModel(serverLocationModel)
+                    }
+                    else -> {
+                        Server.OVPNServer.fromServerCacheModel(serverLocationModel)
+                    }
                 }
             }.firstOrNull()
         }.filter {

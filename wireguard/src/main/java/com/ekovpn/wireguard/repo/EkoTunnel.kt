@@ -8,8 +8,6 @@ import com.ekovpn.wireguard.utils.ExceptionLoggers
 import com.wireguard.android.backend.Statistics
 import com.wireguard.android.backend.Tunnel
 import com.wireguard.config.Config
-import java9.util.concurrent.CompletableFuture
-import java9.util.concurrent.CompletionStage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.onCompletion
@@ -63,14 +61,14 @@ class EkoTunnel internal constructor(
     var config = config
         get() {
             if (field == null)
-                manager.getTunnelConfig(this).onCompletion { ExceptionLoggers.E }
+                manager.getTunnelConfig(this)
             return field
         }
         private set
 
     val configAsync: Flow<Config>
         get() = if (this@EkoTunnel.config == null)
-            manager.getTunnelConfig(this)
+            manager.getTunnelConfigAsync(this)
         else
             flowOf(config!!)
 

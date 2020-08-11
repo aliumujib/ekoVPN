@@ -37,6 +37,10 @@ class TunnelManager constructor(private val configStore: ConfigStore, val contex
         return tunnel
     }
 
+    fun getTunnel(name: String): EkoTunnel? {
+        return tunnelMap[name]
+    }
+
     fun create(name: String, config: Config?): EkoTunnel {
 //        if (Tunnel.isNameInvalid(name))
 //            throw (IllegalArgumentException("Tunnel $name is not valid"))
@@ -81,9 +85,11 @@ class TunnelManager constructor(private val configStore: ConfigStore, val contex
                 getSharedPreferences().edit().remove(KEY_LAST_USED_TUNNEL).commit()
         }
 
-    fun getTunnelConfig(tunnel: EkoTunnel): Flow<Config> = flow {
+    fun getTunnelConfigAsync(tunnel: EkoTunnel): Flow<Config> = flow {
         emit(tunnel.onConfigChanged(configStore.load(tunnel.name))!!)
     }
+
+    fun getTunnelConfig(tunnel: EkoTunnel): Config? =  tunnel.onConfigChanged(configStore.load(tunnel.name))
 
 
     fun onCreate() {
