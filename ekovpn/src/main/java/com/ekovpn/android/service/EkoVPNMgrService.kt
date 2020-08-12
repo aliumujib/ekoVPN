@@ -29,6 +29,7 @@ import com.ekovpn.android.models.Server
 import com.ekovpn.android.utils.ext.isNOrLater
 import com.ekovpn.android.view.compoundviews.countdowntimer.TimeMilliParser
 import com.ekovpn.android.view.main.VpnActivity
+import com.ekovpn.wireguard.service.WireGuardService
 import de.blinkt.openvpn.core.IOpenVPNServiceInternal
 import de.blinkt.openvpn.core.OpenVPNService
 import de.blinkt.openvpn.core.VpnStatus
@@ -159,6 +160,8 @@ class EkoVPNMgrService : Service() {
                 disconnectIKEv2()
             } else if (server is Server.OVPNServer) {
                 disconnectOpenVPN()
+            }else if (server is Server.WireGuardServer) {
+                disconnectWireGuard()
             }
         } catch (e: Exception) {
 
@@ -179,6 +182,19 @@ class EkoVPNMgrService : Service() {
                         vpnStateService.state == VpnStateService.State.CONNECTING) {
                     vpnStateService.disconnect()
                 }
+            }
+        }, Context.BIND_AUTO_CREATE)
+    }
+
+    private fun disconnectWireGuard() {
+        val intent = Intent(this, WireGuardService::class.java)
+        bindService(intent, object : ServiceConnection {
+            override fun onServiceDisconnected(name: ComponentName?) {
+            }
+
+            override fun onServiceConnected(name: ComponentName?, service: IBinder) {
+               val wireGuardService = (service as WireGuardService.WireGuardServiceLocalBinder).getService()
+                wireGuardService.disconnect()
             }
         }, Context.BIND_AUTO_CREATE)
     }

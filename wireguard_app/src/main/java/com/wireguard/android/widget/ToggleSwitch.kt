@@ -13,6 +13,7 @@ import android.widget.Switch
 class ToggleSwitch @JvmOverloads constructor(context: Context?, attrs: AttributeSet? = null) : Switch(context, attrs) {
     private var isRestoringState = false
     private var listener: OnBeforeCheckedChangeListener? = null
+
     override fun onRestoreInstanceState(state: Parcelable) {
         isRestoringState = true
         super.onRestoreInstanceState(state)

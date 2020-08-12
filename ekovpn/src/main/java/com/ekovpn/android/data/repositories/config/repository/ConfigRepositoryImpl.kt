@@ -24,6 +24,7 @@ class ConfigRepositoryImpl @Inject constructor(private val context: Context,
                                                private val locationsDao: LocationsDao,
                                                private val serversDao: ServersDao,
                                                private val openVpnConfigurator: OpenVpnConfigurator,
+                                               private val wireGuardConfigurator: WireGuardConfigurator,
                                                private val iKev2CertificateImporter: IkeV2Configurator,
                                                private val settingsPrefManager: SettingsPrefManager) : ConfigRepository {
 
@@ -35,13 +36,13 @@ class ConfigRepositoryImpl @Inject constructor(private val context: Context,
         return settingsPrefManager.getHasCompletedSetup()
     }
 
-    override fun logOutAndClearData():Flow<Unit> {
-      return flow {
-          settingsPrefManager.setHasCompletedSetup(false)
-          locationsDao.deleteAll()
-          serversDao.deleteAll()
-          emit(Unit)
-      }.flowOn(Dispatchers.IO)
+    override fun logOutAndClearData(): Flow<Unit> {
+        return flow {
+            settingsPrefManager.setHasCompletedSetup(false)
+            locationsDao.deleteAll()
+            serversDao.deleteAll()
+            emit(Unit)
+        }.flowOn(Dispatchers.IO)
     }
 
 
@@ -69,7 +70,8 @@ class ConfigRepositoryImpl @Inject constructor(private val context: Context,
         }.toList()
 
         val configurationOperations = listOf(openVpnConfigurator.configureOVPNServers(serverConfigurations),
-                iKev2CertificateImporter.configureIkeV2Servers(serverConfigurations))
+                iKev2CertificateImporter.configureIkeV2Servers(serverConfigurations),
+                wireGuardConfigurator.configureWireGuardServers(serverConfigurations))
 
         return configurationOperations
                 .merge()
@@ -91,7 +93,7 @@ class ConfigRepositoryImpl @Inject constructor(private val context: Context,
 
 
     companion object {
-        const val FILE_NAME = "servers_new_ike.json"
+        const val FILE_NAME = "servers_wg.json"
     }
 
 }

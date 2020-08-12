@@ -19,6 +19,7 @@ import com.ekovpn.android.di.components.CoreComponent
 import com.ekovpn.android.di.components.DaggerCoreComponent
 import com.ekovpn.android.di.modules.ContextModule
 import com.ekovpn.android.utils.detectAllExpect
+import com.ekovpn.wireguard.WireGuardInitializer
 import com.google.android.gms.ads.MobileAds
 import de.blinkt.openvpn.core.ICSOpenVPNApplication
 import org.strongswan.android.security.LocalCertificateKeyStoreProvider
@@ -63,12 +64,14 @@ class ApplicationClass: ICSOpenVPNApplication(), SharedPreferences.OnSharedPrefe
         initCoreDependencyInjection()
         initAppDependencyInjection()
         initNotificationChannels()
-        handleAndroidOStrictModeViolations()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            handleAndroidOStrictModeViolations()
+        }
         ContextProvider.setContext(applicationContext)
         PRDownloader.initialize(applicationContext)
         initAdmob()
-        //WireGuardInitializer.onCreate(this)
-        //WireGuardInitializer.getSharedPreferences().registerOnSharedPreferenceChangeListener(this)
+        WireGuardInitializer.onCreate(this)
+
     }
 
     private fun initAdmob() {

@@ -43,4 +43,17 @@ open class Server(
             }
         }
     }
+
+    @Parcelize
+    data class WireGuardServer(val tunnelName: String,
+                           val id: Int,
+                           val location: Location) : Server(id, location, Protocol.IKEv2), Parcelable {
+        companion object {
+            fun fromServerCacheModel(serverLocationModel: ServerLocationModel): WireGuardServer {
+                return WireGuardServer(serverLocationModel.serverCacheModel.tunnelName!!,
+                        serverLocationModel.serverCacheModel.serverId,
+                        Location.fromLocationCacheModel(serverLocationModel.locationCacheModel))
+            }
+        }
+    }
 }

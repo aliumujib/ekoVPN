@@ -18,6 +18,7 @@ data class ServerCacheModel(
         val location: Int,
         val protocol: String,
         val ovpnProfileId: String?,
-        val ikeV2ProfileId: Long?
+        val ikeV2ProfileId: Long?,
+        val tunnelName:String?
 )
 

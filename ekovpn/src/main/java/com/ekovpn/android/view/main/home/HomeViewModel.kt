@@ -27,6 +27,8 @@ class HomeViewModel @Inject constructor(private val serversRepository: ServersRe
         return serversRepository.getIKEv2ProfileForServer(id)
     }
 
+
+
     fun connectingToServer(server: Server) {
         _state.value = state.value.copy(currentConnectionServer = server, connectionStatus = HomeState.ConnectionStatus.CONNECTING)
     }

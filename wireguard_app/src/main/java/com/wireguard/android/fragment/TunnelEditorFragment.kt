@@ -111,7 +111,7 @@ class TunnelEditorFragment : BaseFragment(), AppSelectionListener {
         val activity = activity ?: return
         val focusedView = activity.currentFocus
         if (focusedView != null) {
-            val inputManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            val inputManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMet hodManager
             inputManager?.hideSoftInputFromWindow(focusedView.windowToken,
                     InputMethodManager.HIDE_NOT_ALWAYS)
         }

@@ -46,6 +46,10 @@ class FileDownloader @Inject constructor(private val context: Context) {
         return downloadConfigFile(serverLocation, protocol, configFileURL)
     }
 
+    fun downloadWireGuardConfig(serverLocation: ServerLocation, configFileURL: String): Flow<Result<ServerSetUp>> {
+        return downloadConfigFile(serverLocation, Protocol.WIREGUARD, configFileURL)
+    }
+
 //  private  fun downloadConfigFile(serverLocation: ServerLocation, protocol: Protocol, configFileURL: String, ikeV2: IkeV2? = null): Flow<Result<ServerSetUp>> {
 //        val fileName = if (protocol == Protocol.TCP || protocol == Protocol.UDP) {
 //            "${serverLocation.city}_${serverLocation.country}_${protocol.value}.ovpn"
@@ -90,8 +94,10 @@ class FileDownloader @Inject constructor(private val context: Context) {
     private fun downloadConfigFile(serverLocation: ServerLocation, protocol: Protocol, configFileURL: String, ikeV2: IKEv2? = null): Flow<Result<ServerSetUp>> {
         val fileName = if (protocol == Protocol.TCP || protocol == Protocol.UDP) {
             "${serverLocation.city}_${serverLocation.country}_${protocol.value}.ovpn".replace(" ", "_")
-        } else {
+        } else if(protocol == Protocol.IKEv2) {
             "${serverLocation.city}_${serverLocation.country}_${protocol.value}.pem".replace(" ", "_")
+        }else{
+            "${serverLocation.city}_${serverLocation.country}_${protocol.value}.conf".replace(" ", "_")
         }
         val channel = ConflatedBroadcastChannel<Result<ServerSetUp>>()
 
@@ -108,8 +114,11 @@ class FileDownloader @Inject constructor(private val context: Context) {
                             if (protocol == Protocol.UDP || protocol == Protocol.TCP) {
                                 val result = ServerSetUp.OVPNSetup(File(filePath).toURI().toString(), serverLocation = serverLocation, protocol = protocol)
                                 channel.send(Result.success(result))
-                            } else {
+                            } else if(protocol == Protocol.IKEv2) {
                                 val result = ServerSetUp.IkeV2Setup(File(filePath).toURI().toString(), serverLocation = serverLocation, protocol = protocol, ikeV2 = ikeV2!!)
+                                channel.send(Result.success(result))
+                            }else{
+                                val result = ServerSetUp.WireGuardSetup(File(filePath).toURI().toString(), serverLocation = serverLocation, protocol = protocol)
                                 channel.send(Result.success(result))
                             }
                         }

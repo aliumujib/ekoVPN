@@ -8,6 +8,7 @@ package com.ekovpn.android.data.repositories.config
 import com.ekovpn.android.data.cache.room.entities.LocationCacheModel
 import com.ekovpn.android.data.cache.room.entities.ServerCacheModel
 import com.ekovpn.android.models.Protocol
+import com.ekovpn.wireguard.repo.EkoTunnel
 import com.google.gson.annotations.SerializedName
 
 
@@ -16,7 +17,9 @@ data class ServerConfig(
         val serverLocation: ServerLocation,
         val open_vpn: List<OpenVpn>,
         @SerializedName("ikev2")
-        val iKev2: IKEv2
+        val iKev2: IKEv2,
+        @SerializedName("wireguard")
+        val wireGuard: WireGuard
 )
 
 data class IKEv2(
@@ -43,6 +46,9 @@ data class OpenVpn(
         val protocol: String
 )
 
+data class WireGuard(
+        val configfileurl: String
+)
 
 sealed class ServerSetUp(val serverLocation_: ServerLocation,
                          val protocol_: Protocol) {
@@ -52,6 +58,8 @@ sealed class ServerSetUp(val serverLocation_: ServerLocation,
 
     data class IkeV2Setup(val pemFileDir: String, val pemProfileID: String = "N/A", val serverLocation: ServerLocation,
                           val ikeV2: IKEv2, val protocol: Protocol) : ServerSetUp(serverLocation, protocol)
+
+    data class WireGuardSetup(val confFileDir: String, val tunnel: EkoTunnel? = null, val serverLocation: ServerLocation, val protocol: Protocol) : ServerSetUp(serverLocation, protocol)
 }
 
 
@@ -62,7 +70,7 @@ sealed class VPNServer(
     data class OVPNServer(val openVpnProfile: de.blinkt.openvpn.VpnProfile, val serverLocation: ServerLocation, val protocol: Protocol) : VPNServer(serverLocation, protocol) {
         companion object {
             fun OVPNServer.toServerCacheModel(locationCacheModel: LocationCacheModel, protocol: Protocol): ServerCacheModel {
-                return ServerCacheModel(0, location = locationCacheModel.locationId, protocol = protocol.value, ovpnProfileId = openVpnProfile.uuidString, ikeV2ProfileId = null)
+                return ServerCacheModel(0, location = locationCacheModel.locationId, protocol = protocol.value, ovpnProfileId = openVpnProfile.uuidString, ikeV2ProfileId = null, tunnelName = null)
             }
         }
     }
@@ -70,7 +78,15 @@ sealed class VPNServer(
     data class IkeV2Server(val ikeV2Profile: org.strongswan.android.data.VpnProfile, val serverLocation: ServerLocation) : VPNServer(serverLocation, Protocol.IKEv2) {
         companion object {
             fun IkeV2Server.toServerCacheModel(locationCacheModel: LocationCacheModel): ServerCacheModel {
-                return ServerCacheModel(0, location = locationCacheModel.locationId, protocol = Protocol.IKEv2.value, ovpnProfileId = null, ikeV2ProfileId = ikeV2Profile.id)
+                return ServerCacheModel(0, location = locationCacheModel.locationId, protocol = Protocol.IKEv2.value, ovpnProfileId = null, ikeV2ProfileId = ikeV2Profile.id, tunnelName = null)
+            }
+        }
+    }
+
+    data class WireGuardServer(val tunnel: EkoTunnel, val serverLocation: ServerLocation) : VPNServer(serverLocation, Protocol.WIREGUARD) {
+        companion object {
+            fun WireGuardServer.toServerCacheModel(locationCacheModel: LocationCacheModel): ServerCacheModel {
+                return ServerCacheModel(0, location = locationCacheModel.locationId, protocol = protocol_.value, ovpnProfileId = null, ikeV2ProfileId = null, tunnelName = tunnel.name)
             }
         }
     }
