@@ -40,8 +40,11 @@ import com.ekovpn.android.view.compoundviews.countdowntimer.TimeMilliParser
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
 import com.ekovpn.android.view.main.locationselector.LocationSelectorDialog
 import com.ekovpn.android.view.main.profile.ProfileDialog
+import com.ekovpn.android.view.main.webview.WebViewDialog
 import com.ekovpn.wireguard.WireGuardInitializer
+import com.ekovpn.wireguard.service.WireGuardService
 import com.google.android.gms.ads.AdRequest
+import com.wireguard.android.backend.GoBackend
 import com.wireguard.android.backend.Tunnel
 import de.blinkt.openvpn.LaunchVPN
 import de.blinkt.openvpn.VpnProfile
@@ -51,7 +54,6 @@ import de.blinkt.openvpn.core.VpnStatus
 import de.blinkt.openvpn.core.VpnStatus.StateListener
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.strongswan.android.logic.VpnStateService
@@ -61,14 +63,22 @@ import javax.inject.Inject
 
 
 @ExperimentalCoroutinesApi
-class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener, EkoVPNMgrService.TimeLeftListener {
+class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener, EkoVPNMgrService.TimeLeftListener, WireGuardService.WireGuardListener {
 
     @Inject
     lateinit var viewModel: HomeViewModel
 
     private var iKEv2Service: VpnStateService? = null
     private var ekoVpnMgrService: EkoVPNMgrService? = null
+    private var wireGuardService: WireGuardService? = null
 
+    private val getUserVPNPermission = registerForActivityResult(GetWireGuardVPNPermissions()) {
+        if (it) {
+
+        } else {
+            Toast.makeText(context, "An error occurred while getting permissions", Toast.LENGTH_LONG).show()
+        }
+    }
 
     private val mIKEv2ServiceConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceDisconnected(name: ComponentName) {
@@ -96,6 +106,19 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
     }
 
 
+    private val mWireGuardServiceConnection: ServiceConnection = object : ServiceConnection {
+        override fun onServiceDisconnected(name: ComponentName) {
+            wireGuardService = null
+        }
+
+        override fun onServiceConnected(name: ComponentName, service: IBinder) {
+            wireGuardService = (service as WireGuardService.WireGuardServiceLocalBinder).getService()
+            wireGuardService?.registerListener(this@HomeFragment)
+            checkForExistingConnection()
+        }
+    }
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false)
@@ -113,6 +136,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         ApplicationClass.getInstance()?.let {
             it.bindService(Intent(it, VpnStateService::class.java), mIKEv2ServiceConnection, Service.BIND_AUTO_CREATE)
             it.bindService(Intent(it, EkoVPNMgrService::class.java), mTimerServiceConnection, Service.BIND_AUTO_CREATE)
+            it.bindService(Intent(it, WireGuardService::class.java), mWireGuardServiceConnection, Service.BIND_AUTO_CREATE)
         }
     }
 
@@ -131,12 +155,14 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         super.onStart()
         iKEv2Service?.registerListener(this)
         ekoVpnMgrService?.registerListener(this)
+        wireGuardService?.registerListener(this)
     }
 
     override fun onStop() {
         super.onStop()
         iKEv2Service?.unregisterListener(this)
         ekoVpnMgrService?.unregisterListener(this)
+        wireGuardService?.unregisterListener(this)
     }
 
     override fun onPause() {
@@ -149,6 +175,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         ApplicationClass.getInstance()?.let {
             it.unbindService(mTimerServiceConnection)
             it.unbindService(mIKEv2ServiceConnection)
+            it.unbindService(mWireGuardServiceConnection)
         }
     }
 
@@ -208,10 +235,10 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         }
 
         test_connection.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse("http://ipleak.net")
-            startActivity(intent)
-            //WebViewDialog.display(childFragmentManager, "http://ipleak.net", null)
+//            val intent = Intent(Intent.ACTION_VIEW)
+//            intent.data = Uri.parse("http://ipleak.net")
+//            startActivity(intent)
+            WebViewDialog.display(childFragmentManager, WebViewDialog.Companion.WebUrl("https://dnsleaktest.com/", "Connection Test"), null)
         }
 
     }
@@ -302,21 +329,39 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                     startOrStopIKEv2(it)
                     viewModel.connectingToServer(server)
                 }
-            }else if (server is Server.WireGuardServer) {
+            } else if (server is Server.WireGuardServer) {
+                if (checkIfWireGuardIsAuthorized()) {
+                    getUserVPNPermission.launch(Unit)
+                }
+                viewModel.connectingToServer(server)
                 startOrStopWireGuard(server.tunnelName)
-//                viewModel.getIKEv2ProfileForServer(server.tunnelName)?.let {
-//                    startOrStopIKEv2(it)
-//                    viewModel.connectingToServer(server)
-//                }
             }
         }
     }
 
+    private fun checkIfWireGuardIsAuthorized(): Boolean {
+        val backend = WireGuardInitializer.getBackend()
+        if (backend is GoBackend) {
+            val intent = GoBackend.VpnService.prepare(requireContext())
+            if (intent != null) {
+                return true
+            }
+        }
+        return false
+    }
 
-    private fun startOrStopWireGuard(profile: String) {
-        val tunnel = WireGuardInitializer.getTunnelManager().getTunnel(profile)
-        Log.d(HomeFragment::class.java.simpleName, "tunnel: $tunnel config: ${tunnel?.config}")
-        WireGuardInitializer.getBackend().setState(tunnel, Tunnel.State.UP, tunnel?.config)
+
+    private fun startOrStopWireGuard(tunnelName: String) {
+        if (wireGuardService?.getCurrentState() != Tunnel.State.UP) {
+            ApplicationClass.getInstance()?.let {
+                val intent = Intent(activity, WireGuardService::class.java)
+                intent.action = WireGuardService.CONNECT_TO_VPN
+                intent.putExtra(WireGuardService.TUNNEL_NAME, tunnelName)
+                ContextCompat.startForegroundService(it, intent)
+            }
+        } else {
+           ekoVpnMgrService?.disconnectCurrentVPN()
+        }
     }
 
     private fun startOrStopIKEv2(profile: org.strongswan.android.data.VpnProfile) {
@@ -453,6 +498,21 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
 
     }
 
+    override fun onStateChange(status: Tunnel.State) {
+        when (status) {
+            Tunnel.State.DOWN -> {
+                viewModel.setDisconnected()
+            }
+            Tunnel.State.TOGGLE -> {
+
+            }
+            Tunnel.State.UP -> {
+                viewModel.setConnected()
+                startCountDownTimerService(viewModel.state.value)
+            }
+        }
+    }
+
     override fun stateChanged(state: VpnStateService.State) {
         when (state) {
             VpnStateService.State.DISABLED -> {
@@ -472,7 +532,8 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
     }
 
     companion object {
-
+        private const val REQUEST_CODE_VPN_PERMISSION = 23491
     }
+
 
 }
