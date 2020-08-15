@@ -44,12 +44,14 @@ class AuthViewModel @Inject constructor(private val configRepository: ConfigRepo
                         Log.d(AuthViewModel::class.java.simpleName, "Success")
                     } else {
                         _state.value = _state.value.copy(error = Throwable("An error occurred"), isLoading = false, user = null)
-                        Log.d(AuthViewModel::class.java.simpleName, "Error")
                     }
-                }.onCompletion {
-                    if (it != null) {
+                }.onCompletion {error->
+                    Log.d(AuthViewModel::class.java.simpleName, "$error")
+                    if (error != null) {
+                        error.printStackTrace()
                         _state.value = _state.value.copy(error = Throwable("An error occurred"), isLoading = false, user = null)
                     } else {
+                        Log.d(AuthViewModel::class.java.simpleName, "Successfully configured all them things")
                         _state.value = _state.value.copy( isLoading = false, isFreshAccount = isFreshAccount, hasCompletedConfig = true)
                     }
                 }.catch {
@@ -69,7 +71,6 @@ class AuthViewModel @Inject constructor(private val configRepository: ConfigRepo
                     _state.value = _state.value.copy(isLoading = true)
                 }
                 .onEach {
-                    Log.d(AuthViewModel::class.java.simpleName, "$it")
                     fetchServers(false)
                 }.catch {
                     it.printStackTrace()
@@ -80,7 +81,6 @@ class AuthViewModel @Inject constructor(private val configRepository: ConfigRepo
 
     fun createAccount() {
         authRepository.createAccount().onEach {
-            Log.d(AuthViewModel::class.java.simpleName, "$it")
             fetchServers(true)
         }.onStart {
             _state.value = _state.value.copy(isLoading = true)
@@ -92,7 +92,6 @@ class AuthViewModel @Inject constructor(private val configRepository: ConfigRepo
 
     fun recoverAccount(orderNumber: String) {
         authRepository.fetchUserByOrderNumber(orderNumber.trim()).onEach {
-            Log.d(AuthViewModel::class.java.simpleName, "$it")
             fetchServers(true)
         }.onStart {
             _state.value = _state.value.copy(isLoading = true)

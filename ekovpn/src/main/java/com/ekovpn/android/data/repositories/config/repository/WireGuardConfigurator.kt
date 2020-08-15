@@ -58,7 +58,6 @@ class WireGuardConfigurator @Inject constructor(
     private fun configureWireGuardServer(configDetails: Triple<ServerLocation, Protocol, String>): Flow<ServerCacheModel> {
         return fileDownloader.downloadWireGuardConfig(configDetails.first, configDetails.third)
                 .map {
-                    Log.d(WireGuardConfigurator::class.java.simpleName, "Configuring WireGuard: ${it.getOrNull()}")
                     configureWireGuardTunnelForServer(it.getOrNull() as ServerSetUp.WireGuardSetup)
                 }.map { server ->
                     Log.d(WireGuardConfigurator::class.java.simpleName, "Saving WireGuard: $server")

@@ -77,7 +77,7 @@
     <string name="login">Login</string>
     <string name="create_free_account">Create Free Account</string>
     <string name="forgot_account_number">Forgot Account Number</string>
-    <string name="success">🎉 Success</string>
+    <string name="success">🎉 Success!</string>
     <string name="keep_acct_number_safe">This is your account number Keep it safe! Tap it to copy.</string>
     <string name="free_to_use">ekoVPN is free for everyone to use, you can watch Ads to get more free VPN Credits or pay a monthly fee for Unlimited Credits.</string>
     <string name="continue_free">Continue Free</string>

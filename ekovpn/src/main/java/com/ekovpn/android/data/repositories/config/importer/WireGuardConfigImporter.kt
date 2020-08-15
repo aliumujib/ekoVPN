@@ -72,10 +72,19 @@ class WireGuardConfigImporter @Inject constructor(private val context: Context) 
                 }
             }
         } else {
+//            try{
+//                tunnel = WireGuardInitializer.getTunnelManager().create(
+//                        name,
+//                        Config.parse(contentResolver.openInputStream(uri)!!))
+//            }catch (e:Exception){
+//                Log.d(WireGuardConfigImporter::class.java.simpleName, "Error making config $name")
+//                throw e
+//            }
             tunnel = WireGuardInitializer.getTunnelManager().create(
                     name,
                     Config.parse(contentResolver.openInputStream(uri)!!))
         }
+
         return tunnel!!
     }
 

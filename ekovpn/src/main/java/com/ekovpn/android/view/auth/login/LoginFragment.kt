@@ -7,6 +7,7 @@ package com.ekovpn.android.view.auth.login
 
 import android.os.Bundle
 import android.text.Html
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -109,6 +110,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun handleState(state: AuthState) {
+        Log.d(LoginFragment::class.java.simpleName, state.toString())
         if(state.isLoading){
             showProgress()
         }else if (state.user != null && state.hasCompletedConfig && state.isLoading.not()){
