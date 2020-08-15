@@ -122,7 +122,7 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:paddingStart="@dimen/four_spaces"
-        android:paddingEnd="@dimen/three_spaces"
+        android:paddingEnd="@dimen/four_spaces"
         android:layout_marginBottom="@dimen/four_spaces"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

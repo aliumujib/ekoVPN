@@ -115,7 +115,9 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
 
 
         initViews()
-        initAdControls()
+        if (viewModel.shouldShowAds()){
+            initAdControls()
+        }
 
         viewModel.state.onEach {
             handleStates(it)
@@ -153,14 +155,14 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
             viewModel.logOut()
         }
         referral_code.setActionButtonClickListener(View.OnClickListener {
-            viewModel.state.value.user?.referral_id?.let {
+            viewModel.fetchReferralId()?.let {
                 shareText(it)
             }
         })
     }
 
     private fun copyAccountNumberToClipBoard() {
-        viewModel.state.value.user?.account_id?.let {
+        viewModel.fetchAccountId()?.let {
             requireContext().copyToClipBoard(it)
             Toast.makeText(requireContext(), getString(R.string.account_number_copied), Toast.LENGTH_LONG).show()
         }
@@ -179,7 +181,7 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
         profileState.user?.account_id?.let {
             account_number.setActionSubTitle(getString(R.string.account_number_subtitle,insertPeriodically(it, " ", 4) ))
         }
-        account_type.setActionSubTitle(getString(R.string.account_type_subtitle, profileState.user?.account_type?.capitalize()))
+        account_type.setActionSubTitle(getString(R.string.account_type_subtitle, profileState.user?.account_type?.type?.capitalize()))
 
         renewal_date.setActionSubTitle(getString(R.string.renewal_date_subtitle, profileState.user?.renewal_at))
         referral_code.setActionSubTitle(getString(R.string.referral_sub_title, profileState.user?.referral_id))

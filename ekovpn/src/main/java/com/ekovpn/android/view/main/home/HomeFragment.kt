@@ -9,7 +9,6 @@ import android.app.Service
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
-import android.net.Uri
 import android.os.Bundle
 import android.os.IBinder
 import android.text.Html
@@ -20,6 +19,7 @@ import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.widget.Toast
+import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
@@ -186,7 +186,9 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         viewModel.fetchLocationForCurrentIP()
         observeStates()
         initButtonClickListeners()
-        initAdControls()
+        if(viewModel.shouldShowAds()){
+            initAdControls()
+        }
     }
 
     private fun initAdControls() {
@@ -229,6 +231,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
             })
         }
 
+        TooltipCompat.setTooltipText(connect, requireContext().getString(R.string.tap_to_connect));
 
         get_more_time.setOnClickListener {
             goToViewAdsScreen()
@@ -409,6 +412,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                     initCurrentConnectionUI(it)
                 }
                 stopCountDownTimerService()
+                connect_parent.startRippleAnimation()
             }
             HomeState.ConnectionStatus.CONNECTING -> {
                 connection_status_.text = resources.getString(R.string.connecting_status_)
@@ -418,6 +422,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                 connect.isEnabled = false
                 connect.isClickable = false
                 timer_view.text = timeMilliParser.parseTimeInMilliSeconds(it.timeLeft)
+                connect_parent.stopRippleAnimation()
             }
             HomeState.ConnectionStatus.CONNECTED -> {
                 connection_status_.text = resources.getString(R.string.connected_status_)
@@ -431,6 +436,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                 it.currentConnectionServer?.let {
                     initCurrentConnectionUI(it.location_)
                 }
+                connect_parent.stopRippleAnimation()
             }
         }
 

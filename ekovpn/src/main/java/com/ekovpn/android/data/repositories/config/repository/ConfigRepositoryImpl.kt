@@ -85,7 +85,7 @@ class ConfigRepositoryImpl @Inject constructor(private val context: Context,
                 }
                 .onCompletion {
                     if (it == null) {
-                        settingsPrefManager.setHasCompletedSetup(true)
+                        markSetupAsComplete()
                     }
                 }.map {
                     Log.d(ConfigRepositoryImpl::class.java.simpleName, "List $it")
@@ -94,9 +94,13 @@ class ConfigRepositoryImpl @Inject constructor(private val context: Context,
                 .flowOn(Dispatchers.IO)
     }
 
+   override fun markSetupAsComplete(){
+        settingsPrefManager.setHasCompletedSetup(true)
+    }
+
 
     companion object {
-        const val FILE_NAME = "servers_wg_edit.json"
+        const val FILE_NAME = "servers_wg.json"
     }
 
 }

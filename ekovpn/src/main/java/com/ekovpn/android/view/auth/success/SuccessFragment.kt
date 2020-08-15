@@ -18,6 +18,7 @@ import androidx.navigation.fragment.navArgs
 import com.ekovpn.android.R
 import com.ekovpn.android.di.auth.success.DaggerSuccessComponent
 import com.ekovpn.android.di.auth.success.SuccessModule
+import com.ekovpn.android.models.User
 import com.ekovpn.android.utils.ext.copyToClipBoard
 import com.ekovpn.android.utils.ext.hide
 import com.ekovpn.android.utils.ext.insertPeriodically
@@ -78,7 +79,7 @@ class SuccessFragment : Fragment() {
         }
 
         account_number.setOnClickListener {
-            viewModel.state.value?.user?.account_id?.let {
+            viewModel.fetchAccountId()?.let {
                 context?.copyToClipBoard(it)
             }
             Toast.makeText(requireContext(), getString(R.string.account_number_copied), Toast.LENGTH_LONG).show()
@@ -86,12 +87,11 @@ class SuccessFragment : Fragment() {
     }
 
 
-
     private fun handleState(state: AuthState) {
         state.user?.account_id?.let {
             account_number.text = insertPeriodically(it, " ", 4)
         }
-        if(state.user?.account_type == "paid"){
+        if(state.user?.account_type == User.AccountType.PAID){
             welcome_intro_text.text = getString(R.string.welcome_back)
             free_to_use_text.hide()
             start_free.hide()

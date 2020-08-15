@@ -138,6 +138,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines")
     implementation("io.coil-kt:coil:0.11.0")
+    implementation ("com.tomergoldst.android:tooltips:1.0.10")
+    implementation( "com.rodolfonavalon:ShapeRippleLibrary:1.0.0")
 
     implementation("androidx.navigation:navigation-fragment-ktx:2.3.0")
     implementation("androidx.navigation:navigation-ui-ktx:2.3.0")

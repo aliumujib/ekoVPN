@@ -31,7 +31,7 @@ class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPr
         setTimeLeft(new)
     }
 
-    override fun getCurrentUser(): Flow<User> {
+    override fun streamCurrentUser(): Flow<User> {
         return usersDao.streamUser()
                 .filter {
                     it != null

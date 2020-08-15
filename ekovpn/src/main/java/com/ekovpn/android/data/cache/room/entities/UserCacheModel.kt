@@ -29,7 +29,7 @@ data class UserCacheModel(
 ) {
 
     fun toUser(): User {
-        return User(id, account_id, account_type, active, createdAt, order_data
+        return User(id, account_id, User.AccountType.fromString(account_type), active, createdAt, order_data
                 , order_number, referral_id, referred_by
                 , renewal_at
                 , role, time_expiry, updatedAt, vpn_credits)

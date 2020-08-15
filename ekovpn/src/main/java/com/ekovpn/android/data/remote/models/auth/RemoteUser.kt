@@ -33,7 +33,7 @@ data class RemoteUser(
     }
 
     fun toUser(): User {
-        return User(_id, account_number, account_type, active, createdAt, order_data
+        return User(_id, account_number, User.AccountType.fromString(account_type), active, createdAt, order_data
                 ?: NOT_AVAILABLE, order_number ?: NOT_AVAILABLE, referral_code, referred_by
                 ?: NOT_AVAILABLE, renewal_at
                 ?: NOT_AVAILABLE, role, time_expiry, updatedAt, vpn_credits)

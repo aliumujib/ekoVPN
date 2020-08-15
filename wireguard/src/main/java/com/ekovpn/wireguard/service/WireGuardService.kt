@@ -88,7 +88,7 @@ class WireGuardService : Service() {
                         retryCount += 1
                         setTunnelStateWithPermissionsResult(checked)
                     }
-                    Toast.makeText(applicationContext, "An error occurred", Toast.LENGTH_LONG).show()
+                    //Toast.makeText(applicationContext, "An error occurred", Toast.LENGTH_LONG).show()
                 }?.launchIn(GlobalScope)
     }
 

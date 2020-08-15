@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ekovpn.android.data.repositories.config.repository.ConfigRepository
 import com.ekovpn.android.data.repositories.user.UserRepository
+import com.ekovpn.android.models.User
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
@@ -31,6 +32,18 @@ class ProfileViewModel @Inject constructor(val userRepository: UserRepository, p
                 }.launchIn(viewModelScope)
     }
 
+    fun fetchAccountId():String?{
+        return _state.value.user?.account_id
+    }
+
+    fun fetchReferralId():String?{
+        return _state.value.user?.referral_id
+    }
+
+    fun shouldShowAds(): Boolean {
+        return state.value?.user?.account_type == User.AccountType.FREE
+    }
+
     fun logOut() {
         configRepository.logOutAndClearData().onStart {
             _state.value = _state.value.copy(isLoading = true)
@@ -43,7 +56,7 @@ class ProfileViewModel @Inject constructor(val userRepository: UserRepository, p
     }
 
     init {
-        userRepository.getCurrentUser()
+        userRepository.streamCurrentUser()
                 .onStart {
                     _state.value = _state.value.copy(isLoading = true)
                 }.catch {
