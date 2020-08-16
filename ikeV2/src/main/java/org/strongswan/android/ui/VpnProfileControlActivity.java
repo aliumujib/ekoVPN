@@ -19,6 +19,7 @@ import android.app.Dialog;
 import android.app.Service;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -37,9 +38,11 @@ import org.strongswan.android.data.VpnType.VpnTypeFeature;
 import org.strongswan.android.logic.VpnStateService;
 import org.strongswan.android.logic.VpnStateService.State;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -348,16 +351,24 @@ public class VpnProfileControlActivity extends AppCompatActivity {
      * and then initiates the selected VPN profile if the user confirms the dialog.
      */
     public static class ConfirmationDialog extends AppCompatDialogFragment {
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setStyle(DialogFragment.STYLE_NO_TITLE, R.style.AlertDialogTheme_Base);
+
+        }
+
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             final Bundle profileInfo = getArguments();
-            int icon = android.R.drawable.ic_dialog_alert;
             int title = R.string.connect_profile_question;
             int message = R.string.replaces_active_connection;
             int button = R.string.connect;
 
+
+
             if (profileInfo.getBoolean(PROFILE_RECONNECT)) {
-                icon = android.R.drawable.ic_dialog_info;
                 title = R.string.vpn_connected;
                 message = R.string.vpn_profile_connected;
                 button = R.string.reconnect;
@@ -392,7 +403,6 @@ public class VpnProfileControlActivity extends AppCompatActivity {
             };
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                    .setIcon(icon)
                     .setTitle(String.format(getString(title), profileInfo.getString(PROFILE_NAME)))
                     .setMessage(message);
 

@@ -17,12 +17,15 @@ import com.ekovpn.android.R
 import com.ekovpn.android.di.main.profile.DaggerProfileComponent
 import com.ekovpn.android.di.main.profile.ProfileModule
 import com.ekovpn.android.utils.ext.copyToClipBoard
+import com.ekovpn.android.utils.ext.createAndLoadRewardedAd
 import com.ekovpn.android.utils.ext.insertPeriodically
 import com.ekovpn.android.utils.ext.recursivelyApplyToChildren
 import com.ekovpn.android.view.auth.AuthActivity
 import com.ekovpn.android.view.compoundviews.premiumpurchaseview.PremiumPurchaseView
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.rewarded.RewardItem
+import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import kotlinx.android.synthetic.main.profile_dialog.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -123,7 +126,14 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
             handleStates(it)
         }.launchIn(lifecycleScope)
 
-        //premium_options.submitPremiumPurchaseList(listOf("Unlimited for 1 Month\t\t $5.99", "Unlimited for 1 Year\t\t $49.99"))
+    }
+
+    private fun getCallback(): RewardedAdCallback {
+        return object : RewardedAdCallback() {
+            override fun onUserEarnedReward(p0: RewardItem) {
+
+            }
+        }
     }
 
     private fun shareText(text: String?) {
@@ -131,7 +141,7 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
         val title = "Eko VPN"
         val shareIntent: Intent = ShareCompat.IntentBuilder.from(requireActivity())
                 .setType(mimeType)
-                .setText(text)
+                .setText(resources.getText(R.string.share_referral, text))
                 .intent
         startActivity(shareIntent)
     }
@@ -147,6 +157,9 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
         (account_number as ViewGroup).recursivelyApplyToChildren {
             it.setOnClickListener {
                 copyAccountNumberToClipBoard()
+                if (viewModel.shouldShowAds()) {
+                    requireActivity().createAndLoadRewardedAd("ca-app-pub-3940256099942544/5224354917", getCallback())
+                }
             }
         }
 

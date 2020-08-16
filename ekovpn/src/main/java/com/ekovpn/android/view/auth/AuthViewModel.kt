@@ -37,6 +37,18 @@ class AuthViewModel @Inject constructor(private val configRepository: ConfigRepo
         return _state.value.user?.account_id
     }
 
+    fun updateUserWithOrderId(orderId: String) {
+        userRepository.updateUserWithOrderId(orderId)
+                .onStart {
+                    _state.value = _state.value.copy(isLoading = true)
+                }.catch {
+                    _state.value = _state.value.copy(error = it)
+                }
+                .onEach {
+                    _state.value = _state.value.copy(user = it, isLoading = false)
+                }.launchIn(viewModelScope)
+    }
+
     private fun fetchServers(isFreshAccount: Boolean) {
         configRepository.fetchAndConfigureServers()
                 .onStart {

@@ -25,6 +25,18 @@ class AdsViewModel @Inject constructor(adsRepository: AdsRepository,
         return state.value?.user?.account_type == User.AccountType.FREE
     }
 
+    fun updateUserWithOrderId(orderId: String) {
+        userRepository.updateUserWithOrderId(orderId)
+                .onStart {
+                    _state.value = _state.value.copy(isLoading = true)
+                }.catch {
+                    _state.value = _state.value.copy(error = it)
+                }
+                .onEach {
+                    _state.value = _state.value.copy(user = it, isLoading = false)
+                }.launchIn(viewModelScope)
+    }
+
     init {
         adsRepository.fetchAds()
                 .onEach {

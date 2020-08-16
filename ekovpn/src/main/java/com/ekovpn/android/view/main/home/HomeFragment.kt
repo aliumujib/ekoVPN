@@ -33,6 +33,7 @@ import com.ekovpn.android.di.main.home.HomeModule
 import com.ekovpn.android.models.Location
 import com.ekovpn.android.models.Server
 import com.ekovpn.android.service.EkoVPNMgrService
+import com.ekovpn.android.utils.ext.createAndLoadRewardedAd
 import com.ekovpn.android.utils.ext.delay
 import com.ekovpn.android.utils.ext.show
 import com.ekovpn.android.utils.ext.showAlertDialog
@@ -44,6 +45,8 @@ import com.ekovpn.android.view.main.webview.WebViewDialog
 import com.ekovpn.wireguard.WireGuardInitializer
 import com.ekovpn.wireguard.service.WireGuardService
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.rewarded.RewardItem
+import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import com.wireguard.android.backend.GoBackend
 import com.wireguard.android.backend.Tunnel
 import de.blinkt.openvpn.LaunchVPN
@@ -186,7 +189,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         viewModel.fetchLocationForCurrentIP()
         observeStates()
         initButtonClickListeners()
-        if(viewModel.shouldShowAds()){
+        if (viewModel.shouldShowAds()) {
             initAdControls()
         }
     }
@@ -213,6 +216,12 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
             }
         }
 
+        disconnect.setOnClickListener {
+            val server = viewModel.state.value.currentConnectionServer
+            if (server != null) {
+                connectToServer(server)
+            }
+        }
 
         activity?.findViewById<View>(R.id.settings_btn)?.setOnClickListener {
             findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToSettingsFragment())
@@ -237,10 +246,13 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
             goToViewAdsScreen()
         }
 
+        if(viewModel.shouldShowAds().not()){
+            get_more_time.visibility = View.GONE
+            timer_view.visibility = View.GONE
+            time_left_label.visibility = View.GONE
+        }
+
         test_connection.setOnClickListener {
-//            val intent = Intent(Intent.ACTION_VIEW)
-//            intent.data = Uri.parse("http://ipleak.net")
-//            startActivity(intent)
             WebViewDialog.display(childFragmentManager, WebViewDialog.Companion.WebUrl("https://dnsleaktest.com/", "Connection Test"), null)
         }
 
@@ -363,7 +375,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                 ContextCompat.startForegroundService(it, intent)
             }
         } else {
-           ekoVpnMgrService?.disconnectCurrentVPN()
+            ekoVpnMgrService?.disconnectCurrentVPN()
         }
     }
 
@@ -404,6 +416,8 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                 connection_status_.text = resources.getString(R.string.disconnected_status_)
                 connect.isEnabled = true
                 connect.isClickable = true
+                disconnect.visibility = View.GONE
+                connect.visibility = View.VISIBLE
                 progressBar.visibility = View.GONE
                 timer_view.text = timeMilliParser.parseTimeInMilliSeconds(it.timeLeft)
                 selected_title.text = resources.getString(R.string.current_location)
@@ -416,6 +430,8 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
             }
             HomeState.ConnectionStatus.CONNECTING -> {
                 connection_status_.text = resources.getString(R.string.connecting_status_)
+                disconnect.visibility = View.VISIBLE
+                connect.visibility = View.GONE
                 connect.setStrokeColorResource(R.color.white)
                 connection_status_.setIconTintResource(R.color.grey)
                 progressBar.visibility = View.VISIBLE
@@ -430,6 +446,8 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                 connect.setStrokeColorResource(R.color.connected_green)
                 connection_status_.setIconTintResource(R.color.connected_green)
                 progressBar.visibility = View.GONE
+                disconnect.visibility = View.GONE
+                connect.visibility = View.VISIBLE
                 connect.isEnabled = true
                 timer_view.text = timeMilliParser.parseTimeInMilliSeconds(it.timeLeft)
                 connect.isClickable = true
@@ -449,11 +467,13 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
     }
 
     private fun startCountDownTimerService(state: HomeState) {
-        ApplicationClass.getInstance()?.let {
-            val timerServiceIntent = Intent(it, EkoVPNMgrService::class.java)
-            timerServiceIntent.putExtra(EkoVPNMgrService.TIMER_SERVICE_VPN_PROFILE, state.currentConnectionServer)
-            timerServiceIntent.putExtra(EkoVPNMgrService.TIMER_SERVICE_TIME_LEFT, state.timeLeft)
-            ContextCompat.startForegroundService(it, timerServiceIntent)
+        if(viewModel.shouldShowAds()){
+            ApplicationClass.getInstance()?.let {
+                val timerServiceIntent = Intent(it, EkoVPNMgrService::class.java)
+                timerServiceIntent.putExtra(EkoVPNMgrService.TIMER_SERVICE_VPN_PROFILE, state.currentConnectionServer)
+                timerServiceIntent.putExtra(EkoVPNMgrService.TIMER_SERVICE_TIME_LEFT, state.timeLeft)
+                ContextCompat.startForegroundService(it, timerServiceIntent)
+            }
         }
     }
 
@@ -530,8 +550,19 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
             VpnStateService.State.CONNECTED -> {
                 startCountDownTimerService(viewModel.state.value)
                 viewModel.setConnected()
+                if (viewModel.shouldShowAds()) {
+                    requireActivity().createAndLoadRewardedAd("ca-app-pub-3940256099942544/5224354917", getCallback())
+                }
             }
             VpnStateService.State.DISCONNECTING -> {
+
+            }
+        }
+    }
+
+    private fun getCallback(): RewardedAdCallback {
+        return object : RewardedAdCallback() {
+            override fun onUserEarnedReward(p0: RewardItem) {
 
             }
         }

@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:paddingBottom="@dimen/three_spaces"
-        android:paddingStart="@dimen/four_spaces"
+        android:paddingStart="@dimen/three_spaces"
         android:paddingEnd="@dimen/three_spaces"
         android:paddingTop="@dimen/two_spaces"
         app:layout_constraintEnd_toEndOf="parent"

@@ -25,6 +25,7 @@ import com.ekovpn.android.utils.ext.insertPeriodically
 import com.ekovpn.android.view.auth.AuthActivity.Companion.authComponent
 import com.ekovpn.android.view.auth.AuthState
 import com.ekovpn.android.view.auth.AuthViewModel
+import com.ekovpn.android.view.compoundviews.premiumpurchaseview.PremiumPurchaseView
 import com.ekovpn.android.view.main.VpnActivity
 import kotlinx.android.synthetic.main.fragment_success.*
 import kotlinx.coroutines.flow.launchIn
@@ -32,7 +33,7 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 
-class SuccessFragment : Fragment() {
+class SuccessFragment : Fragment(), PremiumPurchaseView.PurchaseProcessListener {
 
 
     @Inject
@@ -78,6 +79,8 @@ class SuccessFragment : Fragment() {
             this.requireActivity().finish()
         }
 
+        premium_options.addListener(this)
+
         account_number.setOnClickListener {
             viewModel.fetchAccountId()?.let {
                 context?.copyToClipBoard(it)
@@ -94,7 +97,7 @@ class SuccessFragment : Fragment() {
         if(state.user?.account_type == User.AccountType.PAID){
             welcome_intro_text.text = getString(R.string.welcome_back)
             free_to_use_text.hide()
-            start_free.hide()
+            start_free.text = getString(R.string.continue_free)
             premium_options.hide()
         }else{
             if(state.isFreshAccount){
@@ -105,6 +108,18 @@ class SuccessFragment : Fragment() {
                 start_free.text = getString(R.string.continue_free)
             }
         }
+    }
+
+    override fun handleSuccessfulSubscription(orderId: String) {
+        viewModel.updateUserWithOrderId(orderId)
+    }
+
+    override fun handleUserCancellation() {
+
+    }
+
+    override fun handleOtherError(error: Int) {
+
     }
 
 }

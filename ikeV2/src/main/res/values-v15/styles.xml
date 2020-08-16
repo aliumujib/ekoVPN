@@ -20,8 +20,6 @@
         <item name="android:selectableItemBackground">@drawable/activated_background</item>
     </style>
 
-    <style name="AlertDialogTheme" parent="AlertDialogTheme.Base">
-        <item name="android:windowBackground">@android:color/transparent</item>
-    </style>
+
 
 </resources>

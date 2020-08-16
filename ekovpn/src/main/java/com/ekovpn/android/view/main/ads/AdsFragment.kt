@@ -31,15 +31,18 @@ import com.ekovpn.android.view.compoundviews.countdowntimer.TimeMilliParser
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
 import com.ekovpn.android.view.main.ads.adapter.AdAdapter
 import com.ekovpn.android.utils.SelectionListener
+import com.ekovpn.android.view.compoundviews.premiumpurchaseview.PremiumPurchaseView
 import io.cabriole.decorator.ColumnProvider
 import io.cabriole.decorator.GridMarginDecoration
 import kotlinx.android.synthetic.main.fragment_ad.*
+import kotlinx.android.synthetic.main.fragment_ad.premium_options
+import kotlinx.android.synthetic.main.profile_dialog.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 
-class AdsFragment : Fragment(), SelectionListener<Ad>, EkoVPNMgrService.TimeLeftListener {
+class AdsFragment : Fragment(), SelectionListener<Ad>, EkoVPNMgrService.TimeLeftListener, PremiumPurchaseView.PurchaseProcessListener {
 
     @Inject
     lateinit var viewModel: AdsViewModel
@@ -135,6 +138,7 @@ class AdsFragment : Fragment(), SelectionListener<Ad>, EkoVPNMgrService.TimeLeft
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        premium_options.addListener(this)
 
         ads_types.apply {
             layoutManager = GridLayoutManager(context, 2)
@@ -172,6 +176,18 @@ class AdsFragment : Fragment(), SelectionListener<Ad>, EkoVPNMgrService.TimeLeft
 
     override fun onTimeUpdate(timeLeftMillis: Long, timeLeftFormatted: String) {
         timer_view.text = timeLeftFormatted
+    }
+
+    override fun handleSuccessfulSubscription(orderId: String) {
+        viewModel.updateUserWithOrderId(orderId)
+    }
+
+    override fun handleUserCancellation() {
+
+    }
+
+    override fun handleOtherError(error: Int) {
+
     }
 
 

@@ -18,6 +18,7 @@ package com.ekovpn.android.di.main.settings
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.PRIVATE
 import com.ekovpn.android.data.repositories.settings.SettingsRepository
+import com.ekovpn.android.data.repositories.user.UserRepository
 import com.ekovpn.android.di.scopes.FragmentScope
 import com.ekovpn.android.utils.ext.viewModel
 import com.ekovpn.android.view.main.settings.SettingsFragment
@@ -38,8 +39,8 @@ class SettingsModule(@VisibleForTesting(otherwise = PRIVATE) val fragment: Setti
 
     @FragmentScope
     @Provides
-    fun providesViewModel(settingsRepository: SettingsRepository) = fragment.viewModel {
-        SettingsViewModel(settingsRepository)
+    fun providesViewModel(settingsRepository: SettingsRepository, userRepository: UserRepository) = fragment.viewModel {
+        SettingsViewModel(userRepository,settingsRepository)
     }
 
 }

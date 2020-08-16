@@ -27,9 +27,12 @@ import com.ekovpn.android.R
 import com.ekovpn.android.models.Protocol
 import com.ekovpn.android.di.main.settings.DaggerSettingsComponent
 import com.ekovpn.android.di.main.settings.SettingsModule
+import com.ekovpn.android.utils.ext.createAndLoadRewardedAd
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
 import com.ekovpn.android.view.main.home.HomeFragmentDirections
 import com.ekovpn.android.view.main.webview.WebViewDialog
+import com.google.android.gms.ads.rewarded.RewardItem
+import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
@@ -53,6 +56,13 @@ class SettingsFragment : Fragment() {
         injectDependencies()
     }
 
+    private fun getCallback(): RewardedAdCallback {
+        return object : RewardedAdCallback() {
+            override fun onUserEarnedReward(p0: RewardItem) {
+
+            }
+        }
+    }
 
     private val checkChangeListener = RadioGroup.OnCheckedChangeListener { group, checkedId ->
         when (checkedId) {
@@ -68,6 +78,9 @@ class SettingsFragment : Fragment() {
             else -> {
                 viewModel.selectProtocol(Protocol.WIREGUARD)
             }
+        }
+        if (viewModel.shouldShowAds()) {
+            requireActivity().createAndLoadRewardedAd("ca-app-pub-3940256099942544/5224354917", getCallback())
         }
         Toast.makeText(requireContext(), getString(R.string.new_protocol_selected), Toast.LENGTH_LONG).show()
     }
@@ -119,11 +132,7 @@ class SettingsFragment : Fragment() {
         }
 
         contact_support.setOnClickListener {
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.type = ClipDescription.MIMETYPE_TEXT_PLAIN
-            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("support@ekovpn.com"))
-            intent.putExtra(Intent.EXTRA_SUBJECT,"HELP WITH")
-            startActivity(Intent.createChooser(intent,"Send Email"))
+            WebViewDialog.display(childFragmentManager, WebViewDialog.Companion.WebUrl("https://www.ekovpn.com/support", "Contact Support"), null)
         }
 
         privacy.setOnClickListener {

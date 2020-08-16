@@ -15,7 +15,7 @@
     <dimen name="text_headline">16sp</dimen>
     <dimen name="text_small">11sp</dimen>
     <dimen name="one_half_space">12dp</dimen>
-    <dimen name="ripple_radius">15dp</dimen>
+    <dimen name="ripple_radius">12dp</dimen>
     <dimen name="three_spaces">24dp</dimen>
     <dimen name="eight_spaces">64dp</dimen>
     <dimen name="six_spaces">48dp</dimen>

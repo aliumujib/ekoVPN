@@ -6,15 +6,12 @@
 package com.ekovpn.android.view.main.settings
 
 import com.ekovpn.android.models.Protocol
+import com.ekovpn.android.models.User
 
 
-sealed class SettingsState(
-        val isLoading: Boolean,
+data class SettingsState(
+        val isLoading: Boolean = false,
         val selectedProtocol: Protocol,
-        val error: Throwable?
-) {
-
-    data class Init(val protocol: Protocol) : SettingsState(true, protocol, null)
-    data class Idle(val protocol: Protocol) : SettingsState(false, protocol, null)
-
-}
+        val error: Throwable?,
+        val user: User? = null
+)

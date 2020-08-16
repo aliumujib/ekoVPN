@@ -76,7 +76,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="@dimen/four_spaces"
-                android:paddingEnd="@dimen/three_spaces"
+                android:paddingEnd="@dimen/four_spaces"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/renewal_date" />
@@ -85,7 +85,7 @@
                 android:id="@+id/divider"
                 android:layout_width="wrap_content"
                 android:layout_height="1dp"
-                android:background="?dividerHorizontal"
+                android:background="@color/divider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/premium_options" />
@@ -127,7 +127,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/four_spaces"
-                android:layout_marginEnd="@dimen/three_spaces"
+                android:layout_marginEnd="@dimen/four_spaces"
                 android:layout_marginBottom="@dimen/three_spaces"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
