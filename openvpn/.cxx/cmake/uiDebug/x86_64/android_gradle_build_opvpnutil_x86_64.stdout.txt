@@ -1,8 +1,1 @@
-[1/8] cd /Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/uiDebug/x86_64 && /Users/aliumujib/Library/Android/sdk/cmake/3.6.4111459/bin/cmake -E make_directory /Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/src/main/cpp/../../../build/ovpnassets
-[2/8] Building C object CMakeFiles/pie_openvpn.x86_64.dir/minivpn/minivpn.c.o
-[3/8] Building C object CMakeFiles/nopie_openvpn.x86_64.dir/minivpn/minivpn.c.o
-[4/8] Linking C executable pie_openvpn.x86_64
-[5/8] Linking C executable nopie_openvpn.x86_64
-[6/8] Building C object CMakeFiles/opvpnutil.dir/opvpnutil/scan_ifs.c.o
-[7/8] Building C object CMakeFiles/opvpnutil.dir/opvpnutil/jniglue.c.o
-[8/8] Linking C shared library /Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/build/intermediates/cmake/uiDebug/obj/x86_64/libopvpnutil.so
+[1/1] cd /Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/.cxx/cmake/uiDebug/x86_64 && /Users/aliumujib/Library/Android/sdk/cmake/3.6.4111459/bin/cmake -E make_directory /Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/src/main/cpp/../../../build/ovpnassets

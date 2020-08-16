@@ -41,7 +41,7 @@ class ProfileViewModel @Inject constructor(val userRepository: UserRepository, p
     }
 
     fun shouldShowAds(): Boolean {
-        return state.value.user?.account_type == User.AccountType.FREE
+        return state.value.user?.account_type != User.AccountType.PAID
     }
 
     fun logOut() {

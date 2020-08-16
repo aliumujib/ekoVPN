@@ -29,7 +29,7 @@ class HomeViewModel @Inject constructor(private val serversRepository: ServersRe
     }
 
     fun shouldShowAds(): Boolean {
-        return state.value.user?.account_type == User.AccountType.FREE
+        return state.value.user?.account_type != User.AccountType.PAID
     }
 
     fun connectingToServer(server: Server) {

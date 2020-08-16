@@ -22,7 +22,7 @@ class AdsViewModel @Inject constructor(adsRepository: AdsRepository,
     val state: StateFlow<AdsState> = _state
 
     fun shouldViewAds(): Boolean {
-        return state.value?.user?.account_type == User.AccountType.FREE
+        return state.value.user?.account_type != User.AccountType.PAID
     }
 
     fun updateUserWithOrderId(orderId: String) {

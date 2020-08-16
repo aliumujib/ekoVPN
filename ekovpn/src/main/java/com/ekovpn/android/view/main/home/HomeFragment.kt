@@ -189,14 +189,16 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         viewModel.fetchLocationForCurrentIP()
         observeStates()
         initButtonClickListeners()
-        if (viewModel.shouldShowAds()) {
-            initAdControls()
-        }
+        initAdControls()
     }
 
     private fun initAdControls() {
-        val adRequest = AdRequest.Builder().build()
-        adView.loadAd(adRequest)
+       delay({
+           if (viewModel.shouldShowAds()) {
+               val adRequest = AdRequest.Builder().build()
+               adView.loadAd(adRequest)
+           }
+       })
     }
 
     private fun initButtonClickListeners() {
@@ -204,22 +206,19 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
             val server = viewModel.state.value.lastUsedServer
             val hasTimeLeft = viewModel.state.value.timeLeft > 0
             Log.d(HomeFragment::class.java.simpleName, "${viewModel.state.value}")
-            if (hasTimeLeft) {
-                if (server != null) {
-                    connectToServer(server)
-                } else {
-                    Toast.makeText(context, "Please pick a location", Toast.LENGTH_LONG).show()
-                }
-            } else {
+            if (hasTimeLeft.not() &&viewModel.shouldShowAds()) {
                 Toast.makeText(context, "Please view some ads or buy premium", Toast.LENGTH_LONG).show()
                 goToViewAdsScreen()
+            } else if(server == null) {
+                Toast.makeText(context, "Please pick a location", Toast.LENGTH_LONG).show()
+            }else{
+                connectToServer(server)
             }
         }
 
         disconnect.setOnClickListener {
-            val server = viewModel.state.value.currentConnectionServer
-            if (server != null) {
-                connectToServer(server)
+            viewModel.state.value.currentConnectionServer?.let {
+                connectToServer(it)
             }
         }
 
@@ -246,11 +245,13 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
             goToViewAdsScreen()
         }
 
-        if(viewModel.shouldShowAds().not()){
-            get_more_time.visibility = View.GONE
-            timer_view.visibility = View.GONE
-            time_left_label.visibility = View.GONE
-        }
+        delay({
+            if(viewModel.shouldShowAds().not()){
+                get_more_time.visibility = View.GONE
+                timer_view.visibility = View.GONE
+                time_left_label.visibility = View.GONE
+            }
+        },300)
 
         test_connection.setOnClickListener {
             WebViewDialog.display(childFragmentManager, WebViewDialog.Companion.WebUrl("https://dnsleaktest.com/", "Connection Test"), null)

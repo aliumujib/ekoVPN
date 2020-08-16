@@ -41,6 +41,7 @@ class ConfigRepositoryImpl @Inject constructor(private val context: Context,
             settingsPrefManager.setHasCompletedSetup(false)
             locationsDao.deleteAll()
             serversDao.deleteAll()
+            wireGuardConfigurator.deleteAllTunnels()
             emit(Unit)
         }.flowOn(Dispatchers.IO)
     }

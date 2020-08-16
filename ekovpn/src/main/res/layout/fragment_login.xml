@@ -10,7 +10,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingHorizontal="@dimen/four_spaces"
     android:paddingBottom="@dimen/two_spaces"
-    android:paddingTop="?actionBarSize"
+    android:paddingTop="@dimen/two_spaces"
     android:layout_height="match_parent"
     tools:context=".view.auth.login.LoginFragment">
 

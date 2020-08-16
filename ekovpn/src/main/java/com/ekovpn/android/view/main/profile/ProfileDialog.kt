@@ -16,10 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import com.ekovpn.android.R
 import com.ekovpn.android.di.main.profile.DaggerProfileComponent
 import com.ekovpn.android.di.main.profile.ProfileModule
-import com.ekovpn.android.utils.ext.copyToClipBoard
-import com.ekovpn.android.utils.ext.createAndLoadRewardedAd
-import com.ekovpn.android.utils.ext.insertPeriodically
-import com.ekovpn.android.utils.ext.recursivelyApplyToChildren
+import com.ekovpn.android.utils.ext.*
 import com.ekovpn.android.view.auth.AuthActivity
 import com.ekovpn.android.view.compoundviews.premiumpurchaseview.PremiumPurchaseView
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
@@ -118,9 +115,8 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
 
 
         initViews()
-        if (viewModel.shouldShowAds()){
-            initAdControls()
-        }
+        initAdControls()
+
 
         viewModel.state.onEach {
             handleStates(it)
@@ -201,8 +197,12 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
     }
 
     private fun initAdControls() {
-        val adRequest = AdRequest.Builder().build()
-        adView.loadAd(adRequest)
+      delay({
+          if (viewModel.shouldShowAds()){
+              val adRequest = AdRequest.Builder().build()
+              adView.loadAd(adRequest)
+          }
+      })
     }
 
     override fun onStop() {

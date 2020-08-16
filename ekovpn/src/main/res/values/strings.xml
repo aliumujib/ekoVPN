@@ -88,6 +88,7 @@
     <string name="confirm">Confirm</string>
     <string name="tap_to_connect">Tap to connect</string>
     <string name="share_referral">Hey there, use my referral code %1$s to get 1 Free hour on ekoVPN” “LINK TO APP”</string>
+    <string name="order_number">Order Number</string>
 
     <plurals name="plural_videos">
         <item quantity="one">Watch %d video</item>

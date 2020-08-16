@@ -1,2 +1,1 @@
-[1/2] Building C object CMakeFiles/osslspeedtest.dir/opvpnutil/sslspeed.c.o
-[2/2] Linking C shared library /Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/build/intermediates/cmake/uiDebug/obj/x86/libosslspeedtest.so
+ninja: no work to do.

@@ -20,5 +20,6 @@
     <dimen name="eight_spaces">64dp</dimen>
     <dimen name="six_spaces">48dp</dimen>
     <dimen name="ripple_stroke_width">10dp</dimen>
+    <dimen name="app_bar_height">120dp</dimen>
 
 </resources>

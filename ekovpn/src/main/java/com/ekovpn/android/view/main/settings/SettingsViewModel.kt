@@ -23,7 +23,7 @@ class SettingsViewModel @Inject constructor(private val userRepository: UserRepo
     }
 
     fun shouldShowAds(): Boolean {
-        return state.value.user?.account_type == User.AccountType.FREE
+        return state.value.user?.account_type != User.AccountType.PAID
     }
 
 
