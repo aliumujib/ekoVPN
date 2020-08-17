@@ -21,6 +21,14 @@ class PremiumPurchaseAdapter(private val selectionListener: SelectionListener<Sk
         )
     }
 
+    fun getItemAtPosition(position: Int): SkuDetails? {
+        return if(position <= all.lastIndex){
+            all[position]
+        }else{
+            null
+        }
+    }
+
     override fun getItemCount(): Int {
         return all.size
     }

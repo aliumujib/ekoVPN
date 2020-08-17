@@ -50,54 +50,13 @@ class FileDownloader @Inject constructor(private val context: Context) {
         return downloadConfigFile(serverLocation, Protocol.WIREGUARD, configFileURL)
     }
 
-//  private  fun downloadConfigFile(serverLocation: ServerLocation, protocol: Protocol, configFileURL: String, ikeV2: IkeV2? = null): Flow<Result<ServerSetUp>> {
-//        val fileName = if (protocol == Protocol.TCP || protocol == Protocol.UDP) {
-//            "${serverLocation.city}_${serverLocation.country}_${protocol.value}.ovpn"
-//        } else {
-//            "${serverLocation.city}_${serverLocation.country}_${protocol.value}.pem"
-//        }
-//        val channel = ConflatedBroadcastChannel<Result<ServerSetUp>>()
-//        val task = DownloadTask.Builder(configFileURL, File(getRootDirPath(context)))
-//                .setFilename(fileName)
-//                .setMinIntervalMillisCallbackProcess(30)
-//                .setPassIfAlreadyCompleted(false)
-//                .build()
-//
-//        task.enqueue(object : DownloadListener2() {
-//            override fun taskStart(task: DownloadTask) {
-//
-//            }
-//
-//            override fun taskEnd(task: DownloadTask, cause: EndCause, realCause: Exception?) {
-//                GlobalScope.launch(Dispatchers.IO) {
-//                    if (cause == EndCause.COMPLETED) {
-//                        Log.d(FileDownloader::class.java.simpleName, "Downloaded: ${task.file?.absolutePath}")
-//                        if (protocol == Protocol.UDP || protocol == Protocol.TCP) {
-//                            val result = ServerSetUp.OVPNSetup(task.file?.toURI().toString(), serverLocation = serverLocation, protocol = protocol)
-//                            channel.send(Result.success(result))
-//                        } else {
-//                            val result = ServerSetUp.IkeV2Setup(task.file?.toURI().toString(), serverLocation = serverLocation, protocol = protocol, ikeV2 = ikeV2!!)
-//                            channel.send(Result.success(result))
-//                        }
-//                    } else {
-//                        Log.d(FileDownloader::class.java.simpleName, "Error downloading ${task.url}, protocol: $protocol", realCause)
-//                        channel.send(Result.failure(FileDownloaderException(realCause?.localizedMessage ?: "An error occurred")))
-//                    }
-//                }
-//            }
-//        })
-//
-//        return channel.asFlow()
-//    }
-
-
     private fun downloadConfigFile(serverLocation: ServerLocation, protocol: Protocol, configFileURL: String, ikeV2: IKEv2? = null): Flow<Result<ServerSetUp>> {
         val fileName = if (protocol == Protocol.TCP || protocol == Protocol.UDP) {
             "${serverLocation.city}_${serverLocation.country}_${protocol.value}.ovpn".replace(" ", "_")
         } else if(protocol == Protocol.IKEv2) {
             "${serverLocation.city}_${serverLocation.country}_${protocol.value}.pem".replace(" ", "_")
         }else{
-            "${serverLocation.city}_${serverLocation.country}_${protocol.value}.conf".replace(" ", "_")
+            "${serverLocation.city}_${serverLocation.country_code}.conf".replace(" ", "_")
         }
         val channel = ConflatedBroadcastChannel<Result<ServerSetUp>>()
 

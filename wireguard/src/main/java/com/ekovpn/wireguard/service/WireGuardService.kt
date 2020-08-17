@@ -83,12 +83,14 @@ class WireGuardService : Service() {
                     }
                     retryCount = 0
                 }?.catch { throwable ->
+                    listeners.forEach {
+                        it.failed(throwable)
+                    }
                     throwable.printStackTrace()
                     if(retryCount < 4){
                         retryCount += 1
                         setTunnelStateWithPermissionsResult(checked)
                     }
-                    //Toast.makeText(applicationContext, "An error occurred", Toast.LENGTH_LONG).show()
                 }?.launchIn(GlobalScope)
     }
 
@@ -102,6 +104,7 @@ class WireGuardService : Service() {
 
     interface WireGuardListener {
         fun onStateChange(status: Tunnel.State)
+        fun failed(error:Throwable)
     }
 
     companion object {

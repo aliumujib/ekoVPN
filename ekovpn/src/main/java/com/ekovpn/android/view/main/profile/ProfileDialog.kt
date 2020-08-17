@@ -150,6 +150,9 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
         account_number.setOnClickListener {
             copyAccountNumberToClipBoard()
         }
+        account_type.setActionButtonClickListener(View.OnClickListener {
+            premium_options.triggerItemPurchase(0)
+        })
         (account_number as ViewGroup).recursivelyApplyToChildren {
             it.setOnClickListener {
                 copyAccountNumberToClipBoard()
@@ -202,7 +205,8 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
               val adRequest = AdRequest.Builder().build()
               adView.loadAd(adRequest)
           }
-      })
+      }, 300)
+
     }
 
     override fun onStop() {

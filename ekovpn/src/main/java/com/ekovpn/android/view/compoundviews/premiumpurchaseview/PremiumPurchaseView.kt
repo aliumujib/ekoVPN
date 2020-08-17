@@ -115,6 +115,11 @@ class PremiumPurchaseView : LinearLayout {
         })
     }
 
+    fun triggerItemPurchase(position: Int) {
+        premiumPurchaseAdapter.getItemAtPosition(position)?.let {
+            launchBillingFlow(it)
+        }
+    }
 
     fun querySkuDetails() {
         Log.d(PremiumPurchaseView::class.simpleName, "querying skus")
@@ -155,7 +160,7 @@ class PremiumPurchaseView : LinearLayout {
                 listeners.forEach {
                     it.handleSuccessfulSubscription(purchase.orderId)
                 }
-            }else{
+            } else {
                 listeners.forEach {
                     it.handleOtherError(billingResult.responseCode)
                 }

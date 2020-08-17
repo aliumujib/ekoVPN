@@ -27,7 +27,7 @@ class CreditCardMask(private val editText: EditText) {
                 val userInput = s.toString().replace("[^\\d]".toRegex(), "")
                 if (userInput.length <= 22) {
                     val sb = StringBuilder()
-                    for (i in 0..userInput.length - 1) {
+                    for (i in userInput.indices) {
                         if (i % 4 == 0 && i > 0) {
                             sb.append(" ")
                         }

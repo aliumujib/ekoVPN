@@ -33,9 +33,9 @@
     <string name="help">Help</string>
     <string name="privacy_policy">Privacy\nPolicy</string>
     <string name="app_version">App version %1$s</string>
-    <string name="connecting_status_">Status: Connecting</string>
-    <string name="connected_status_">Status: Connected</string>
-    <string name="disconnected_status_">Status: Disconnected</string>
+    <string name="connecting_status_">Connecting</string>
+    <string name="connected_status_">Connected</string>
+    <string name="disconnected_status_">Disconnected</string>
     <string name="selected_location">Selected Location:</string>
     <string name="current_location">Current Location:</string>
     <string name="usa_new_york">USA - New York</string>

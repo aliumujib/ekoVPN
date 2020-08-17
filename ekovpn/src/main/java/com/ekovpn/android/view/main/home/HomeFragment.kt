@@ -525,6 +525,13 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
 
     }
 
+    override fun failed(error: Throwable) {
+        viewModel.state.value.currentConnectionServer?.let {
+            viewModel.connectingToServer(it)
+        }
+        Toast.makeText(context, "There was an error connecting you, we are retrying", Toast.LENGTH_LONG).show()
+    }
+
     override fun onStateChange(status: Tunnel.State) {
         when (status) {
             Tunnel.State.DOWN -> {
