@@ -16,10 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EkoVPN">
 
-        <activity android:name=".view.auth.AuthActivity" />
+        <activity android:name=".view.auth.AuthActivity"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".view.main.ads.AdViewingActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.EkoVPN" />
 
         <meta-data
@@ -28,6 +30,7 @@
 
         <activity
             android:name=".view.main.VpnActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_vpn"
             android:theme="@style/Theme.EkoVPN" />
 
@@ -38,6 +41,7 @@
 
         <activity
             android:name=".view.splash.SplashActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.EkoVPN">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

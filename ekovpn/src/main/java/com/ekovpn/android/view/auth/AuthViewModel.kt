@@ -12,7 +12,6 @@ import com.ekovpn.android.data.repositories.auth.AuthRepository
 import com.ekovpn.android.data.repositories.config.repository.ConfigRepository
 import com.ekovpn.android.data.repositories.user.UserRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
@@ -29,9 +28,25 @@ class AuthViewModel @Inject constructor(private val configRepository: ConfigRepo
     val navigation: StateFlow<NavCommand> = _navigation
 
     init {
-        userRepository.getCurrentUser().onEach {
+        userRepository.streamCurrentUser().onEach {
             _state.value = _state.value.copy(user = it, isLoading = false)
         }.launchIn(viewModelScope)
+    }
+
+    fun fetchAccountId():String?{
+        return _state.value.user?.account_id
+    }
+
+    fun updateUserWithOrderId(orderId: String) {
+        userRepository.updateUserWithOrderId(orderId)
+                .onStart {
+                    _state.value = _state.value.copy(isLoading = true)
+                }.catch {
+                    _state.value = _state.value.copy(error = it)
+                }
+                .onEach {
+                    _state.value = _state.value.copy(user = it, isLoading = false)
+                }.launchIn(viewModelScope)
     }
 
     private fun fetchServers(isFreshAccount: Boolean) {
@@ -44,12 +59,14 @@ class AuthViewModel @Inject constructor(private val configRepository: ConfigRepo
                         Log.d(AuthViewModel::class.java.simpleName, "Success")
                     } else {
                         _state.value = _state.value.copy(error = Throwable("An error occurred"), isLoading = false, user = null)
-                        Log.d(AuthViewModel::class.java.simpleName, "Error")
                     }
-                }.onCompletion {
-                    if (it != null) {
+                }.onCompletion {error->
+                    Log.d(AuthViewModel::class.java.simpleName, "$error")
+                    if (error != null) {
+                        error.printStackTrace()
                         _state.value = _state.value.copy(error = Throwable("An error occurred"), isLoading = false, user = null)
                     } else {
+                        configRepository.markSetupAsComplete()
                         _state.value = _state.value.copy( isLoading = false, isFreshAccount = isFreshAccount, hasCompletedConfig = true)
                     }
                 }.catch {
@@ -69,7 +86,6 @@ class AuthViewModel @Inject constructor(private val configRepository: ConfigRepo
                     _state.value = _state.value.copy(isLoading = true)
                 }
                 .onEach {
-                    Log.d(AuthViewModel::class.java.simpleName, "$it")
                     fetchServers(false)
                 }.catch {
                     it.printStackTrace()
@@ -80,7 +96,6 @@ class AuthViewModel @Inject constructor(private val configRepository: ConfigRepo
 
     fun createAccount() {
         authRepository.createAccount().onEach {
-            Log.d(AuthViewModel::class.java.simpleName, "$it")
             fetchServers(true)
         }.onStart {
             _state.value = _state.value.copy(isLoading = true)
@@ -92,7 +107,6 @@ class AuthViewModel @Inject constructor(private val configRepository: ConfigRepo
 
     fun recoverAccount(orderNumber: String) {
         authRepository.fetchUserByOrderNumber(orderNumber.trim()).onEach {
-            Log.d(AuthViewModel::class.java.simpleName, "$it")
             fetchServers(true)
         }.onStart {
             _state.value = _state.value.copy(isLoading = true)

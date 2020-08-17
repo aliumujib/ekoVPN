@@ -7,6 +7,7 @@ plugins {
     id("com.google.firebase.crashlytics")
     id("kotlin-kapt")
     id("androidx.navigation.safeargs.kotlin")
+    //id("com.onesignal.androidsdk.onesignal-gradle-plugin")
     kotlin("android")
     kotlin("android.extensions")
 }
@@ -20,6 +21,7 @@ android {
         versionCode = 1
         versionName = "0.0.8"
         resConfigs(listOf("en"))
+        //setManifestPlaceholders(mapOf("onesignal_app_id" to "3016495d-8f12-4187-a7d2-4217b8ce7563", "onesignal_google_project_number" to "REMOTE"))
     }
 
     compileOptions {
@@ -138,6 +140,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines")
     implementation("io.coil-kt:coil:0.11.0")
+    implementation("com.tomergoldst.android:tooltips:1.0.10")
+    implementation("com.rodolfonavalon:ShapeRippleLibrary:1.0.0")
 
     implementation("androidx.navigation:navigation-fragment-ktx:2.3.0")
     implementation("androidx.navigation:navigation-ui-ktx:2.3.0")
@@ -146,6 +150,10 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.mindorks.android:prdownloader:0.6.0")
+//    implementation("com.onesignal:OneSignal:3.15.2"){
+//        exclude(group = "com.google.firebase", module = "firebase-messaging")
+//    }
+
 
     implementation("net.sourceforge.streamsupport:android-retrofuture:$streamsupportVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.7")

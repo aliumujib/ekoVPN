@@ -104,5 +104,5 @@ class EkoTunnel internal constructor(
         return statistics
     }
 
-    fun delete(): Flow<Unit> = manager.delete(this)
+    fun delete(): Flow<Unit> = manager.deleteAsync(this)
 }

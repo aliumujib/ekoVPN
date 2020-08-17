@@ -10,6 +10,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.SharedPreferences
+import android.net.TrafficStats
 import android.os.Build
 import android.os.StrictMode
 import androidx.annotation.RequiresApi
@@ -27,7 +28,7 @@ import org.strongswan.android.utils.ContextProvider
 import java.security.Security
 
 
-class ApplicationClass: ICSOpenVPNApplication(), SharedPreferences.OnSharedPreferenceChangeListener {
+class ApplicationClass: ICSOpenVPNApplication() {
 
 
     lateinit var coreComponent: CoreComponent
@@ -43,36 +44,25 @@ class ApplicationClass: ICSOpenVPNApplication(), SharedPreferences.OnSharedPrefe
     }
 
 
-    override fun attachBaseContext(context: Context) {
-        super.attachBaseContext(context)
-//        if (BuildConfig.MIN_SDK_VERSION > Build.VERSION.SDK_INT) {
-//            val intent = Intent(Intent.ACTION_MAIN)
-//            intent.addCategory(Intent.CATEGORY_HOME)
-//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//            startActivity(intent)
-//            exitProcess(0)
-//        }
-//        if (BuildConfig.DEBUG) {
-//            StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder().detectAll().penaltyLog().build())
-//        }
-    }
-
     override fun onCreate() {
         super.onCreate()
-
         initCoreDependencyInjection()
         initAppDependencyInjection()
         initNotificationChannels()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            handleAndroidOStrictModeViolations()
-        }
+        //initPushNotifications()
         ContextProvider.setContext(applicationContext)
         PRDownloader.initialize(applicationContext)
         initAdmob()
         WireGuardInitializer.onCreate(this)
-
     }
+
+//    private fun initPushNotifications() {
+//        OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE);
+//        OneSignal.startInit(this)
+//                .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+//                .unsubscribeWhenNotificationsAreDisabled(true)
+//                .init()
+//    }
 
     private fun initAdmob() {
         MobileAds.initialize(this, BuildConfig.ADMOB_APP_ID)
@@ -91,10 +81,6 @@ class ApplicationClass: ICSOpenVPNApplication(), SharedPreferences.OnSharedPrefe
         }
     }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-//        if ("multiple_tunnels" == key && WireGuardInitializer.getBackend() is WgQuickBackend)
-//            (WireGuardInitializer.getBackend() as WgQuickBackend).setMultipleTunnels(sharedPreferences.getBoolean(key, false))
-    }
 
     @RequiresApi(Build.VERSION_CODES.P)
     private fun handleAndroidOStrictModeViolations() {
@@ -103,6 +89,7 @@ class ApplicationClass: ICSOpenVPNApplication(), SharedPreferences.OnSharedPrefe
                         .detectAllExpect("android.os.StrictMode.onUntaggedSocket")
                         .build())
 
+        StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder().detectAll().penaltyLog().build())
     }
 
 

@@ -16,7 +16,7 @@ interface UserRepository {
 
     fun addToTimeLeft(newTime: Long)
 
-    fun getCurrentUser(): Flow<User>
+    fun streamCurrentUser(): Flow<User>
 
     fun updateUserWithOrderId(orderId: String) : Flow<User>
 

@@ -1,5 +1,6 @@
 package com.ekovpn.android.data.remote.retrofit
 
+import android.net.TrafficStats
 import com.ekovpn.android.data.cache.manager.TokenManager
 import com.ekovpn.android.data.remote.retrofit.tokens.AuthInterceptor
 import com.ekovpn.android.data.remote.retrofit.tokens.AuthTokenRefresherInterceptor
@@ -11,6 +12,8 @@ import java.util.concurrent.TimeUnit
 import com.google.gson.GsonBuilder
 import com.google.gson.Gson
 import okhttp3.logging.HttpLoggingInterceptor
+import java.io.IOException
+import java.net.Socket
 
 
 object APIServiceFactory {
@@ -24,10 +27,10 @@ object APIServiceFactory {
         httpClientBuilder.readTimeout(60, TimeUnit.SECONDS)
 
         val retrofit = Retrofit.Builder()
-            .baseUrl(apiURL)
-            .client(httpClientBuilder.build())
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
+                .baseUrl(apiURL)
+                .client(httpClientBuilder.build())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build()
 
         return retrofit.create(IPStackApiService::class.java)
     }
@@ -54,12 +57,9 @@ object APIServiceFactory {
         logging.level = HttpLoggingInterceptor.Level.BODY
         val httpClientBuilder = OkHttpClient.Builder()
                 .addInterceptor(authInterceptor)
-                .addInterceptor(
-                        AuthTokenRefresherInterceptor(
-                                tokenManager,
-                                tokenRefresher
-                        )
-                )
+                .addInterceptor(AuthTokenRefresherInterceptor(
+                        tokenManager,
+                        tokenRefresher))
         httpClientBuilder.addInterceptor(logging)
 
         httpClientBuilder.connectTimeout(60, TimeUnit.SECONDS)
@@ -94,8 +94,8 @@ object APIServiceFactory {
 
     private fun makeGson(): Gson {
         return GsonBuilder()
-            .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-            .create()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                .create()
     }
 
 }

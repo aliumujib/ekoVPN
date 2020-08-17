@@ -28,7 +28,7 @@ interface EkoVPNApiService {
     @GET("user/order/{orderNumber}")
     suspend fun fetchExistingUserByOrderNumber(@Path("orderNumber") orderNumber: String): EkoVPNAPIResponse<RemoteUser>
 
-    @PUT("user/account/{userId}")
+    @PUT("user/id/{userId}")
     @FormUrlEncoded
     suspend fun updateUserAccount(@Path("userId") userAccount: String, @FieldMap query: Map<String, @JvmSuppressWildcards Any>): EkoVPNAPIResponse<RemoteUser>
 

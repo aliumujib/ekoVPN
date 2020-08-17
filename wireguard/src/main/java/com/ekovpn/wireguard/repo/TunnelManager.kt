@@ -51,7 +51,29 @@ class TunnelManager constructor(private val configStore: ConfigStore, val contex
         return (addToList(name, configuration, Tunnel.State.DOWN)!!)
     }
 
-    fun delete(tunnel: EkoTunnel): Flow<Unit> {
+
+    fun deleteAll(){
+       val tunnels =  tunnelMap.entries.map {
+           it.value
+       }
+        tunnels.forEach{
+            delete(it)
+        }
+    }
+
+    fun delete(tunnel: EkoTunnel) {
+        val originalState = tunnel.state
+        val wasLastUsed = tunnel == lastUsedTunnel
+        // Make sure nothing touches the tunnel.
+        if (wasLastUsed)
+            lastUsedTunnel = null
+        tunnelMap.remove(tunnel.name)
+        if (originalState == Tunnel.State.UP)
+            getBackend().setState(tunnel, Tunnel.State.DOWN, null)
+        configStore.delete(tunnel.name)
+    }
+
+    fun deleteAsync(tunnel: EkoTunnel): Flow<Unit> {
         return flow {
             val originalState = tunnel.state
             val wasLastUsed = tunnel == lastUsedTunnel
@@ -89,7 +111,7 @@ class TunnelManager constructor(private val configStore: ConfigStore, val contex
         emit(tunnel.onConfigChanged(configStore.load(tunnel.name))!!)
     }
 
-    fun getTunnelConfig(tunnel: EkoTunnel): Config? =  tunnel.onConfigChanged(configStore.load(tunnel.name))
+    fun getTunnelConfig(tunnel: EkoTunnel): Config? = tunnel.onConfigChanged(configStore.load(tunnel.name))
 
 
     fun onCreate() {
@@ -152,7 +174,7 @@ class TunnelManager constructor(private val configStore: ConfigStore, val contex
                 if (originalState == Tunnel.State.UP)
                     getBackend().setState(tunnel, Tunnel.State.UP, tunnel.config)
                 emit(newName)
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 getTunnelState(tunnel)
                 // Add the tunnel back to the manager, under whatever name it thinks it has.
                 tunnelMap[tunnel.name] = tunnel
@@ -164,7 +186,7 @@ class TunnelManager constructor(private val configStore: ConfigStore, val contex
     }
 
     fun setTunnelState(tunnel: EkoTunnel, state: Tunnel.State): Flow<Tunnel.State> = tunnel.configAsync
-            .map { getBackend().setState(tunnel, state, it)}
+            .map { getBackend().setState(tunnel, state, it) }
             .onCompletion { e ->
                 // Ensure onStateChanged is always called (failure or not), and with the correct state.
                 tunnel.onStateChanged(if (e == null) state else tunnel.state)
@@ -204,7 +226,7 @@ class TunnelManager constructor(private val configStore: ConfigStore, val contex
         emit(tunnel.onStateChanged(state))
     }
 
-    fun getTunnelStatistics(tunnel: EkoTunnel): Flow<Statistics> = flow{
+    fun getTunnelStatistics(tunnel: EkoTunnel): Flow<Statistics> = flow {
         val stats = getBackend().getStatistics(tunnel)
         emit(tunnel.onStatisticsChanged(stats)!!)
     }

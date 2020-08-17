@@ -28,7 +28,6 @@ class AuthActivity : AppCompatActivity() {
     @Inject
     lateinit var viewModel: AuthViewModel
 
-
     private val pagerAdapter by lazy {
         ViewPagerAdapter(this)
     }
@@ -42,7 +41,7 @@ class AuthActivity : AppCompatActivity() {
         pager.adapter = pagerAdapter
 
         val tabLayoutMediator = TabLayoutMediator(tab_layout, pager, true, TabLayoutMediator.TabConfigurationStrategy { tab, position ->
-            tab.view.isClickable = false;
+            tab.view.isClickable = false
         })
         tabLayoutMediator.attach()
 

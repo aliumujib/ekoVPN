@@ -32,7 +32,7 @@ interface UsersDao {
     suspend fun insert(menu: UserCacheModel)
 
     @Query("SELECT * FROM UserCacheModel LIMIT 1")
-    suspend fun getUser(): UserCacheModel?
+    fun getUser(): UserCacheModel?
 
     @Query("SELECT * FROM UserCacheModel")
      fun streamUser(): Flow<UserCacheModel>

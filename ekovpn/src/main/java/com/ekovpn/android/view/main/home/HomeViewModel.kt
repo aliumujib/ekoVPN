@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.ekovpn.android.data.repositories.servers.ServersRepository
 import com.ekovpn.android.data.repositories.user.UserRepository
 import com.ekovpn.android.models.Server
+import com.ekovpn.android.models.User
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
@@ -27,7 +28,9 @@ class HomeViewModel @Inject constructor(private val serversRepository: ServersRe
         return serversRepository.getIKEv2ProfileForServer(id)
     }
 
-
+    fun shouldShowAds(): Boolean {
+        return state.value.user?.account_type != User.AccountType.PAID
+    }
 
     fun connectingToServer(server: Server) {
         _state.value = state.value.copy(currentConnectionServer = server, connectionStatus = HomeState.ConnectionStatus.CONNECTING)
@@ -82,6 +85,15 @@ class HomeViewModel @Inject constructor(private val serversRepository: ServersRe
                 .onEach {
                     _state.value = _state.value.copy(lastUsedServer = it)
                 }.launchIn(viewModelScope)
+
+
+        userRepository.streamCurrentUser()
+                .catch {
+                    _state.value = _state.value.copy(_error = it)
+                }
+                .onEach {
+                    _state.value = _state.value.copy(user = it)
+                }.launchIn(viewModelScope)
     }
 
     fun fetchServersForCurrentProtocol() {
@@ -94,9 +106,9 @@ class HomeViewModel @Inject constructor(private val serversRepository: ServersRe
                     val sortedList = it.sortedBy { server ->
                         server.location_.country
                     }
-                    val lastUsed = if(_state.value.lastUsedServer == null){
+                    val lastUsed = if (_state.value.lastUsedServer == null) {
                         sortedList.firstOrNull()
-                    }else{
+                    } else {
                         _state.value.lastUsedServer
                     }
                     _state.value = _state.value.copy(_serversList = sortedList, lastUsedServer = lastUsed)

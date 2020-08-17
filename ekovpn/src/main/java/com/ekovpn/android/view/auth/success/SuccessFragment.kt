@@ -18,12 +18,14 @@ import androidx.navigation.fragment.navArgs
 import com.ekovpn.android.R
 import com.ekovpn.android.di.auth.success.DaggerSuccessComponent
 import com.ekovpn.android.di.auth.success.SuccessModule
+import com.ekovpn.android.models.User
 import com.ekovpn.android.utils.ext.copyToClipBoard
 import com.ekovpn.android.utils.ext.hide
 import com.ekovpn.android.utils.ext.insertPeriodically
 import com.ekovpn.android.view.auth.AuthActivity.Companion.authComponent
 import com.ekovpn.android.view.auth.AuthState
 import com.ekovpn.android.view.auth.AuthViewModel
+import com.ekovpn.android.view.compoundviews.premiumpurchaseview.PremiumPurchaseView
 import com.ekovpn.android.view.main.VpnActivity
 import kotlinx.android.synthetic.main.fragment_success.*
 import kotlinx.coroutines.flow.launchIn
@@ -31,7 +33,7 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 
-class SuccessFragment : Fragment() {
+class SuccessFragment : Fragment(), PremiumPurchaseView.PurchaseProcessListener {
 
 
     @Inject
@@ -77,8 +79,10 @@ class SuccessFragment : Fragment() {
             this.requireActivity().finish()
         }
 
+        premium_options.addListener(this)
+
         account_number.setOnClickListener {
-            viewModel.state.value?.user?.account_id?.let {
+            viewModel.fetchAccountId()?.let {
                 context?.copyToClipBoard(it)
             }
             Toast.makeText(requireContext(), getString(R.string.account_number_copied), Toast.LENGTH_LONG).show()
@@ -86,15 +90,14 @@ class SuccessFragment : Fragment() {
     }
 
 
-
     private fun handleState(state: AuthState) {
         state.user?.account_id?.let {
             account_number.text = insertPeriodically(it, " ", 4)
         }
-        if(state.user?.account_type == "paid"){
+        if(state.user?.account_type == User.AccountType.PAID){
             welcome_intro_text.text = getString(R.string.welcome_back)
             free_to_use_text.hide()
-            start_free.hide()
+            start_free.text = getString(R.string.continue_free)
             premium_options.hide()
         }else{
             if(state.isFreshAccount){
@@ -105,6 +108,18 @@ class SuccessFragment : Fragment() {
                 start_free.text = getString(R.string.continue_free)
             }
         }
+    }
+
+    override fun handleSuccessfulSubscription(orderId: String) {
+        viewModel.updateUserWithOrderId(orderId)
+    }
+
+    override fun handleUserCancellation() {
+
+    }
+
+    override fun handleOtherError(error: Int) {
+
     }
 
 }

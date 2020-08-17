@@ -18,7 +18,4 @@
     <style name="ApplicationTheme" parent="ApplicationTheme.Base">
     </style>
 
-    <style name="AlertDialogTheme" parent="AlertDialogTheme.Base">
-    </style>
-
 </resources>

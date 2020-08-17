@@ -15,4 +15,5 @@ interface ConfigRepository {
 
     fun logOutAndClearData():Flow<Unit>
 
+    fun markSetupAsComplete()
 }

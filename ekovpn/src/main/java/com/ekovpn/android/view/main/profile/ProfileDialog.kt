@@ -16,13 +16,13 @@ import androidx.lifecycle.lifecycleScope
 import com.ekovpn.android.R
 import com.ekovpn.android.di.main.profile.DaggerProfileComponent
 import com.ekovpn.android.di.main.profile.ProfileModule
-import com.ekovpn.android.utils.ext.copyToClipBoard
-import com.ekovpn.android.utils.ext.insertPeriodically
-import com.ekovpn.android.utils.ext.recursivelyApplyToChildren
+import com.ekovpn.android.utils.ext.*
 import com.ekovpn.android.view.auth.AuthActivity
 import com.ekovpn.android.view.compoundviews.premiumpurchaseview.PremiumPurchaseView
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.rewarded.RewardItem
+import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import kotlinx.android.synthetic.main.profile_dialog.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -117,11 +117,19 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
         initViews()
         initAdControls()
 
+
         viewModel.state.onEach {
             handleStates(it)
         }.launchIn(lifecycleScope)
 
-        //premium_options.submitPremiumPurchaseList(listOf("Unlimited for 1 Month\t\t $5.99", "Unlimited for 1 Year\t\t $49.99"))
+    }
+
+    private fun getCallback(): RewardedAdCallback {
+        return object : RewardedAdCallback() {
+            override fun onUserEarnedReward(p0: RewardItem) {
+
+            }
+        }
     }
 
     private fun shareText(text: String?) {
@@ -129,7 +137,7 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
         val title = "Eko VPN"
         val shareIntent: Intent = ShareCompat.IntentBuilder.from(requireActivity())
                 .setType(mimeType)
-                .setText(text)
+                .setText(resources.getText(R.string.share_referral, text))
                 .intent
         startActivity(shareIntent)
     }
@@ -142,9 +150,15 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
         account_number.setOnClickListener {
             copyAccountNumberToClipBoard()
         }
+        account_type.setActionButtonClickListener(View.OnClickListener {
+            premium_options.triggerItemPurchase(0)
+        })
         (account_number as ViewGroup).recursivelyApplyToChildren {
             it.setOnClickListener {
                 copyAccountNumberToClipBoard()
+                if (viewModel.shouldShowAds()) {
+                    requireActivity().createAndLoadRewardedAd("ca-app-pub-3940256099942544/5224354917", getCallback())
+                }
             }
         }
 
@@ -153,14 +167,14 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
             viewModel.logOut()
         }
         referral_code.setActionButtonClickListener(View.OnClickListener {
-            viewModel.state.value.user?.referral_id?.let {
+            viewModel.fetchReferralId()?.let {
                 shareText(it)
             }
         })
     }
 
     private fun copyAccountNumberToClipBoard() {
-        viewModel.state.value.user?.account_id?.let {
+        viewModel.fetchAccountId()?.let {
             requireContext().copyToClipBoard(it)
             Toast.makeText(requireContext(), getString(R.string.account_number_copied), Toast.LENGTH_LONG).show()
         }
@@ -179,15 +193,20 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
         profileState.user?.account_id?.let {
             account_number.setActionSubTitle(getString(R.string.account_number_subtitle,insertPeriodically(it, " ", 4) ))
         }
-        account_type.setActionSubTitle(getString(R.string.account_type_subtitle, profileState.user?.account_type?.capitalize()))
+        account_type.setActionSubTitle(getString(R.string.account_type_subtitle, profileState.user?.account_type?.type?.capitalize()))
 
         renewal_date.setActionSubTitle(getString(R.string.renewal_date_subtitle, profileState.user?.renewal_at))
         referral_code.setActionSubTitle(getString(R.string.referral_sub_title, profileState.user?.referral_id))
     }
 
     private fun initAdControls() {
-        val adRequest = AdRequest.Builder().build()
-        adView.loadAd(adRequest)
+      delay({
+          if (viewModel.shouldShowAds()){
+              val adRequest = AdRequest.Builder().build()
+              adView.loadAd(adRequest)
+          }
+      }, 300)
+
     }
 
     override fun onStop() {

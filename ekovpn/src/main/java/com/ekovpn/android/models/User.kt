@@ -8,7 +8,7 @@ package com.ekovpn.android.models
 data class User(
         val id: String,
         val account_id: String,
-        val account_type: String,
+        val account_type: AccountType,
         val active: Boolean,
         val createdAt: String,
         val order_data: String,
@@ -20,4 +20,17 @@ data class User(
         val time_expiry: String,
         val updatedAt: String,
         val vpn_credits: Int
-)
+){
+
+    enum class AccountType(val type: String) {
+        PAID("paid"),
+        FREE("free");
+
+        companion object {
+            @JvmStatic
+            fun fromString(type: String): AccountType =
+                    values().find { value -> value.type.toLowerCase() == type.toLowerCase() }
+                            ?: FREE
+        }
+    }
+}

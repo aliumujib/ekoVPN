@@ -6,11 +6,13 @@
 package com.ekovpn.android.view.main.ads
 
 import com.ekovpn.android.models.Ad
+import com.ekovpn.android.models.User
 
 
 data class AdsState(
         val timeLeft: Long = 0L,
         val isLoading: Boolean = false,
         val ads: List<Ad> = emptyList(),
-        val error: Throwable? = null
+        val error: Throwable? = null,
+        val user: User? = null
 )

@@ -43,7 +43,7 @@
         android:layout_marginHorizontal="@dimen/two_spaces"
         app:hintTextColor="@color/solid_field_colors"
         app:layout_constraintTop_toBottomOf="@+id/existing_user"
-        android:hint="@string/account_number_hint">
+        android:hint="@string/order_number">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"

@@ -20,6 +20,9 @@
       "username": "north_virginia",
       "password": "NORTH_VIRGINIA_2020",
       "ip": "54.80.119.49"
+    },
+    "wireguard": {
+      "configfileurl": "https://wireguard-conig-files.s3.amazonaws.com/north_virginia.conf.txt"
     }
   },
   {
@@ -43,6 +46,9 @@
       "username": "california",
       "password": "CALIFORNIA_2020",
       "ip": "54.176.103.209"
+    },
+    "wireguard": {
+      "configfileurl": "https://wireguard-conig-files.s3.amazonaws.com/california.conf.txt"
     }
   },
   {
@@ -66,6 +72,9 @@
       "username": "ohio",
       "password": "OHIO_2020",
       "ip": "3.129.106.106"
+    },
+    "wireguard": {
+      "configfileurl": "https://wireguard-conig-files.s3.amazonaws.com/ohio.conf.txt"
     }
   },
   {
@@ -89,6 +98,9 @@
       "username": "oregon",
       "password": "OREGON_2020",
       "ip": "44.232.148.70"
+    },
+    "wireguard": {
+      "configfileurl": "https://wireguard-conig-files.s3.amazonaws.com/oregon.conf.txt"
     }
   },
   {
@@ -112,6 +124,9 @@
       "username": "stockholm",
       "password": "SE_STOCKHOLM_2020",
       "ip": "13.49.114.83"
+    },
+    "wireguard": {
+      "configfileurl": "https://wireguard-conig-files.s3.amazonaws.com/stockholm.conf.txt"
     }
   },
   {
@@ -135,6 +150,9 @@
       "username": "seoul",
       "password": "SK_SEOUL_2020",
       "ip": "3.34.244.178"
+    },
+    "wireguard": {
+      "configfileurl": "https://wireguard-conig-files.s3.amazonaws.com/seoul.conf.txt"
     }
   },
   {
@@ -158,6 +176,9 @@
       "username": "capetown",
       "password": "CAPETOWN_2020",
       "ip": "13.245.51.145"
+    },
+    "wireguard": {
+      "configfileurl": "https://wireguard-conig-files.s3.amazonaws.com/capetown.conf.txt"
     }
   },
   {
@@ -181,6 +202,9 @@
       "username": "tokyo",
       "password": "JP_TOKYO_2020",
       "ip": "54.64.216.31"
+    },
+    "wireguard": {
+      "configfileurl": "https://wireguard-conig-files.s3.amazonaws.com/california.conf.txt"
     }
   },
   {
@@ -204,6 +228,9 @@
       "username": "milan",
       "password": "EU_MILAN_2020",
       "ip": "15.161.5.132"
+    },
+    "wireguard": {
+      "configfileurl": "https://wireguard-conig-files.s3.amazonaws.com/tokyo.conf.txt"
     }
   },
   {
@@ -227,6 +254,9 @@
       "username": "ireland",
       "password": "EU_IRELAND_2020",
       "ip": "54.73.87.233"
+    },
+    "wireguard": {
+      "configfileurl": "https://wireguard-conig-files.s3.amazonaws.com/ireland.conf.txt"
     }
   },
   {
@@ -250,6 +280,9 @@
       "username": "mumbai",
       "password": "MUMBAI_2020",
       "ip": "65.0.0.160"
+    },
+    "wireguard": {
+      "configfileurl": "https://wireguard-conig-files.s3.amazonaws.com/india.conf.txt"
     }
   },
   {
@@ -273,6 +306,9 @@
       "username": "hong_kong",
       "password": "HONG_KONG_2020",
       "ip": "18.166.111.204"
+    },
+    "wireguard": {
+      "configfileurl": "https://wireguard-conig-files.s3.amazonaws.com/hongkong.conf.txt"
     }
   },
   {
@@ -296,6 +332,9 @@
       "username": "frankfurt",
       "password": "DE_FRANKFURT_2020",
       "ip": "18.158.247.126"
+    },
+    "wireguard": {
+      "configfileurl": "https://wireguard-conig-files.s3.amazonaws.com/frankfurt.conf.txt"
     }
   },
   {
@@ -319,6 +358,9 @@
       "username": "paris",
       "password": "FR_PARIS_2020",
       "ip": "15.236.197.136"
+    },
+    "wireguard": {
+      "configfileurl": "https://wireguard-conig-files.s3.amazonaws.com/paris.conf.txt"
     }
   },
   {
@@ -342,6 +384,9 @@
       "username": "canada",
       "password": "CANADA_2020",
       "ip": "15.222.200.189"
+    },
+    "wireguard": {
+      "configfileurl": "https://wireguard-conig-files.s3.amazonaws.com/canada.conf.txt"
     }
   },
   {
@@ -365,6 +410,9 @@
       "username": "london",
       "password": "EU_LONDON_2020",
       "ip": "18.133.107.184"
+    },
+    "wireguard": {
+      "configfileurl": "https://wireguard-conig-files.s3.amazonaws.com/london.conf.txt"
     }
   },
   {
@@ -388,6 +436,9 @@
       "username": "saopaulo",
       "password": "BR_SAOPAULO_2020",
       "ip": "177.71.152.74"
+    },
+    "wireguard": {
+      "configfileurl": "https://wireguard-conig-files.s3.amazonaws.com/brazil.conf.txt"
     }
   },
   {
@@ -411,6 +462,9 @@
       "username": "bahrain",
       "password": "BAHRAIN_2020",
       "ip": "15.185.180.231"
+    },
+    "wireguard": {
+      "configfileurl": "https://wireguard-conig-files.s3.amazonaws.com/bahrain.conf.txt"
     }
   },
   {
@@ -434,6 +488,9 @@
       "username": "sydney",
       "password": "AU_SYDNEY_2020",
       "ip": "54.153.246.196"
+    },
+    "wireguard": {
+      "configfileurl": "https://wireguard-conig-files.s3.amazonaws.com/sydney.conf.txt"
     }
   },
   {
@@ -457,6 +514,9 @@
       "username": "singapore",
       "password": "SINGAPORE_2020",
       "ip": "54.179.15.125"
+    },
+    "wireguard": {
+      "configfileurl": "https://wireguard-conig-files.s3.amazonaws.com/singapore.conf.txt"
     }
   }
 ]

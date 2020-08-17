@@ -41,6 +41,7 @@ class ConfigRepositoryImpl @Inject constructor(private val context: Context,
             settingsPrefManager.setHasCompletedSetup(false)
             locationsDao.deleteAll()
             serversDao.deleteAll()
+            wireGuardConfigurator.deleteAllTunnels()
             emit(Unit)
         }.flowOn(Dispatchers.IO)
     }
@@ -81,14 +82,21 @@ class ConfigRepositoryImpl @Inject constructor(private val context: Context,
                     locationsDao.insert(listOfCachedLocations)
                 }.catch {
                     it.printStackTrace()
+                    throw it
                 }
                 .onCompletion {
-                    settingsPrefManager.setHasCompletedSetup(true)
+                    if (it == null) {
+                        markSetupAsComplete()
+                    }
                 }.map {
                     Log.d(ConfigRepositoryImpl::class.java.simpleName, "List $it")
                     Result.success(Unit)
                 }.take(configurationOperations.size)
                 .flowOn(Dispatchers.IO)
+    }
+
+   override fun markSetupAsComplete(){
+        settingsPrefManager.setHasCompletedSetup(true)
     }
 
 

@@ -31,7 +31,7 @@ class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPr
         setTimeLeft(new)
     }
 
-    override fun getCurrentUser(): Flow<User> {
+    override fun streamCurrentUser(): Flow<User> {
         return usersDao.streamUser()
                 .filter {
                     it != null
@@ -46,7 +46,9 @@ class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPr
             val userId = usersDao.getUser()!!.id
             val map = mutableMapOf<String, String>()
             map["order_number"] = orderId
+            map["account_type"] = "paid"
             val user = ekoVPNApiService.updateUserAccount(userId, map).data
+            usersDao.insert(user!!.toUserCacheModel())
             emit(user!!.toUser())
         }.flowOn(Dispatchers.IO)
     }
