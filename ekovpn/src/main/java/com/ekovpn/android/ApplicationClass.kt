@@ -49,11 +49,20 @@ class ApplicationClass: ICSOpenVPNApplication() {
         initCoreDependencyInjection()
         initAppDependencyInjection()
         initNotificationChannels()
+        //initPushNotifications()
         ContextProvider.setContext(applicationContext)
         PRDownloader.initialize(applicationContext)
         initAdmob()
         WireGuardInitializer.onCreate(this)
     }
+
+//    private fun initPushNotifications() {
+//        OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE);
+//        OneSignal.startInit(this)
+//                .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+//                .unsubscribeWhenNotificationsAreDisabled(true)
+//                .init()
+//    }
 
     private fun initAdmob() {
         MobileAds.initialize(this, BuildConfig.ADMOB_APP_ID)

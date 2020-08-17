@@ -115,6 +115,7 @@ class PremiumPurchaseView : LinearLayout {
         })
     }
 
+
     fun querySkuDetails() {
         Log.d(PremiumPurchaseView::class.simpleName, "querying skus")
         val skuList = ArrayList<String>()

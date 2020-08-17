@@ -271,13 +271,16 @@
 
                 <TextView
                     android:id="@+id/location_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/one_space"
+                    android:singleLine="true"
+                    android:layout_marginEnd="@dimen/two_spaces"
                     android:text="@string/usa_new_york"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                     android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="@+id/country_flag"
+                    app:layout_constraintEnd_toStartOf="@+id/test_connection"
                     app:layout_constraintStart_toEndOf="@+id/country_flag"
                     app:layout_constraintTop_toTopOf="@+id/country_flag" />
 
