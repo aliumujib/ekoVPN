@@ -17,7 +17,8 @@ data class HomeState(
         val currentLocation: Location? = null,
         val _error: Throwable? = null,
         val timeLeft: Long  = 0L,
-        val user: User?  = null
+        val user: User?  = null,
+        val hasShownBalloonCTA:Boolean = false
 ) {
     enum class ConnectionStatus(val status: Int) {
         CONNECTED(1),

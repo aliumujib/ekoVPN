@@ -137,7 +137,7 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
         val title = "Eko VPN"
         val shareIntent: Intent = ShareCompat.IntentBuilder.from(requireActivity())
                 .setType(mimeType)
-                .setText(resources.getText(R.string.share_referral, text))
+                .setText(resources.getString(R.string.share_referral, text))
                 .intent
         startActivity(shareIntent)
     }
@@ -171,6 +171,10 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
                 shareText(it)
             }
         })
+
+        delete_this_device.setOnClickListener {
+            viewModel.deleteDevice(context?.getDeviceId())
+        }
     }
 
     private fun copyAccountNumberToClipBoard() {
@@ -182,21 +186,25 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
 
     private fun handleStates(profileState: ProfileState) {
         Log.d(ProfileDialog::class.java.simpleName, profileState.toString())
-        if(profileState.isLoggedOut){
-            val intent = Intent(requireContext(), AuthActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-            requireActivity().finish()
-            return
-        }
+        if(profileState.error == null){
+            if(profileState.isLoggedOut){
+                val intent = Intent(requireContext(), AuthActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+                requireActivity().finish()
+                return
+            }
 
-        profileState.user?.account_id?.let {
-            account_number.setActionSubTitle(getString(R.string.account_number_subtitle,insertPeriodically(it, " ", 4) ))
-        }
-        account_type.setActionSubTitle(getString(R.string.account_type_subtitle, profileState.user?.account_type?.type?.capitalize()))
+            profileState.user?.account_id?.let {
+                account_number.setActionSubTitle(getString(R.string.account_number_subtitle,insertPeriodically(it, " ", 4) ))
+            }
+            account_type.setActionSubTitle(getString(R.string.account_type_subtitle, profileState.user?.account_type?.type?.capitalize()))
 
-        renewal_date.setActionSubTitle(getString(R.string.renewal_date_subtitle, profileState.user?.renewal_at))
-        referral_code.setActionSubTitle(getString(R.string.referral_sub_title, profileState.user?.referral_id))
+            renewal_date.setActionSubTitle(getString(R.string.renewal_date_subtitle, profileState.user?.renewal_at))
+            referral_code.setActionSubTitle(getString(R.string.referral_sub_title, profileState.user?.referral_id))
+        }else{
+            Toast.makeText(requireContext(), getString(R.string.error_performing_request), Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun initAdControls() {

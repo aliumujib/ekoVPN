@@ -22,6 +22,7 @@ import com.ekovpn.android.di.modules.ContextModule
 import com.ekovpn.android.utils.detectAllExpect
 import com.ekovpn.wireguard.WireGuardInitializer
 import com.google.android.gms.ads.MobileAds
+import com.onesignal.OneSignal
 import de.blinkt.openvpn.core.ICSOpenVPNApplication
 import org.strongswan.android.security.LocalCertificateKeyStoreProvider
 import org.strongswan.android.utils.ContextProvider
@@ -49,20 +50,20 @@ class ApplicationClass: ICSOpenVPNApplication() {
         initCoreDependencyInjection()
         initAppDependencyInjection()
         initNotificationChannels()
-        //initPushNotifications()
+        initPushNotifications()
         ContextProvider.setContext(applicationContext)
         PRDownloader.initialize(applicationContext)
         initAdmob()
         WireGuardInitializer.onCreate(this)
     }
 
-//    private fun initPushNotifications() {
-//        OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE);
-//        OneSignal.startInit(this)
-//                .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
-//                .unsubscribeWhenNotificationsAreDisabled(true)
-//                .init()
-//    }
+    private fun initPushNotifications() {
+        OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE);
+        OneSignal.startInit(this)
+                .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+                .unsubscribeWhenNotificationsAreDisabled(true)
+                .init()
+    }
 
     private fun initAdmob() {
         MobileAds.initialize(this, BuildConfig.ADMOB_APP_ID)

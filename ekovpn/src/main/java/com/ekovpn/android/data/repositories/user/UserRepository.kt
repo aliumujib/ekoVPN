@@ -20,4 +20,6 @@ interface UserRepository {
 
     fun updateUserWithOrderId(orderId: String) : Flow<User>
 
+    fun deleteDevice(imei:String): Flow<User>
+
 }

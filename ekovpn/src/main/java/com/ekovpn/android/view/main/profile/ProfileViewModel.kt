@@ -55,6 +55,22 @@ class ProfileViewModel @Inject constructor(val userRepository: UserRepository, p
                 .launchIn(viewModelScope)
     }
 
+    fun deleteDevice(imei: String?) {
+        if (imei.isNullOrEmpty()) {
+            _state.value = _state.value.copy(error = Throwable("There was an error un-registering your device, please contact support"), isLoading = false, user = null)
+            return
+        }
+        userRepository.deleteDevice(imei)
+                .onStart {
+                    _state.value = _state.value.copy(isLoading = true)
+                }.catch {
+                    _state.value = _state.value.copy(error = it)
+                }
+                .onEach {
+                    _state.value = _state.value.copy(user = it, isLoading = false, isLoggedOut = true, error = null)
+                }.launchIn(viewModelScope)
+    }
+
     init {
         userRepository.streamCurrentUser()
                 .onStart {

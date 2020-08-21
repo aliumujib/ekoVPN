@@ -15,14 +15,18 @@
  */
 package com.ekovpn.android.utils.ext
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
-import android.content.DialogInterface
+import android.content.Context.TELEPHONY_SERVICE
 import android.net.wifi.WifiManager
+import android.os.Build
+import android.provider.Settings
+import android.telephony.TelephonyManager
 import android.util.DisplayMetrics
 import android.widget.Button
 import androidx.annotation.ColorRes
@@ -118,3 +122,30 @@ fun Context.showAlertDialog(positiveAction: () -> Unit, negativeAction: () -> Un
 }
 
 
+@SuppressLint("HardwareIds")
+fun Context.getDeviceId(): String? {
+    val mTelephony: TelephonyManager = this.getSystemService(TELEPHONY_SERVICE) as TelephonyManager
+    var deviceId: String? = null
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        deviceId =if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            Settings.Secure.getString(
+                    contentResolver,
+                    Settings.Secure.ANDROID_ID)
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (mTelephony.phoneCount == 2) {
+                mTelephony.getImei(0)
+            } else {
+                mTelephony.imei
+            }
+        } else {
+            if (mTelephony.phoneCount == 2) {
+                mTelephony.getDeviceId(0)
+            } else {
+                mTelephony.deviceId
+            }
+        }
+    } else {
+        deviceId = mTelephony.deviceId
+    }
+    return deviceId
+}

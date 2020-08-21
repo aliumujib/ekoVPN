@@ -45,7 +45,7 @@ class HomeViewModel @Inject constructor(private val serversRepository: ServersRe
 
     fun setConnected() {
         saveLastUsedLocation()
-        _state.value = state.value.copy(connectionStatus = HomeState.ConnectionStatus.CONNECTED)
+        _state.value = state.value.copy(connectionStatus = HomeState.ConnectionStatus.CONNECTED, hasShownBalloonCTA = true)
     }
 
     private fun saveLastUsedLocation() {

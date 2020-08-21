@@ -20,10 +20,14 @@ interface EkoVPNApiService {
     suspend fun appLogin(@FieldMap query: Map<String, @JvmSuppressWildcards Any>): EkoVPNAPIAuthResponse<RemoteApp>
 
     @POST("user")
-    suspend fun createNewUser(): EkoVPNAPIResponse<RemoteUser>
+    @FormUrlEncoded
+    suspend fun createNewUser(@FieldMap query: Map<String, @JvmSuppressWildcards Any>): EkoVPNAPIResponse<RemoteUser>
 
-    @GET("user/account/{userAccount}")
-    suspend fun fetchExistingUser(@Path("userAccount") userAccount: String): EkoVPNAPIResponse<RemoteUser>
+    @GET("user/account/{userAccount}/imei/{imei}")
+    suspend fun fetchExistingUser(@Path("userAccount") userAccount: String,@Path("imei")  imei: String): EkoVPNAPIResponse<RemoteUser>
+
+    @DELETE("user/account/{userAccount}/imei/{imei}")
+    suspend fun deleteDeviceFromUserIMEI(@Path("userAccount") userAccount: String,@Path("imei")  imei: String): EkoVPNAPIResponse<RemoteUser>
 
     @GET("user/order/{orderNumber}")
     suspend fun fetchExistingUserByOrderNumber(@Path("orderNumber") orderNumber: String): EkoVPNAPIResponse<RemoteUser>
@@ -31,6 +35,10 @@ interface EkoVPNApiService {
     @PUT("user/id/{userId}")
     @FormUrlEncoded
     suspend fun updateUserAccount(@Path("userId") userAccount: String, @FieldMap query: Map<String, @JvmSuppressWildcards Any>): EkoVPNAPIResponse<RemoteUser>
+
+    @PUT("user/add-referral/{userId}")
+    @FormUrlEncoded
+    suspend fun updateUserByReferralId(@Path("userId") userAccount: String, @FieldMap query: Map<String, @JvmSuppressWildcards Any>): EkoVPNAPIResponse<RemoteUser>
 
     @GET("json/ads")
     suspend fun fetchAdsData(): EkoVPNAPIResponse<List<RemoteAd>>

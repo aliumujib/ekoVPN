@@ -5,6 +5,7 @@
 
 package com.ekovpn.android.data.repositories.user
 
+import android.content.Context
 import com.ekovpn.android.data.cache.room.dao.UsersDao
 import com.ekovpn.android.data.cache.settings.UserPrefManager
 import com.ekovpn.android.data.remote.retrofit.EkoVPNApiService
@@ -39,6 +40,19 @@ class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPr
                 .map {
                     it.toUser()
                 }.flowOn(Dispatchers.IO)
+    }
+
+
+    override fun deleteDevice(imei: String): Flow<User> {
+        return flow {
+            val oldUser = usersDao.getUser()
+            val user = ekoVPNApiService.deleteDeviceFromUserIMEI(oldUser?.account_id!!, imei)
+            usersDao.deleteAll()
+            user.data?.toUserCacheModel()?.let {
+                usersDao.insert(it)
+            }
+            emit(usersDao.getUser()?.toUser()!!)
+        }.flowOn(Dispatchers.IO)
     }
 
     override fun updateUserWithOrderId(orderId: String): Flow<User> {

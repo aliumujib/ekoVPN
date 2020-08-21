@@ -123,6 +123,26 @@
 
 
             <Button
+                android:id="@+id/delete_this_device"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/four_spaces"
+                android:layout_marginEnd="@dimen/four_spaces"
+                android:layout_marginBottom="@dimen/three_spaces"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:layout_marginTop="@dimen/two_spaces"
+                android:text="Delete this device from your account"
+                android:textAllCaps="false"
+                android:letterSpacing="0"
+                app:layout_constraintTop_toBottomOf="@+id/adView"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:strokeColor="@color/eko_red" />
+
+            <Button
                 android:id="@+id/logout"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="0dp"
@@ -136,7 +156,7 @@
                 android:text="Log Out"
                 android:textAllCaps="false"
                 android:letterSpacing="0"
-                app:layout_constraintTop_toBottomOf="@+id/adView"
+                app:layout_constraintTop_toBottomOf="@+id/delete_this_device"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
