@@ -20,6 +20,4 @@ interface AuthRepository {
 
     fun fetchUserByOrderNumber(orderNumber: String): Flow<User>
 
-    fun redeemReferral(referralCode: String):Flow<User>
-
 }

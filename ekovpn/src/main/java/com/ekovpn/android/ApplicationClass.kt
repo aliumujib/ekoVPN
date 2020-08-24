@@ -22,6 +22,9 @@ import com.ekovpn.android.di.modules.ContextModule
 import com.ekovpn.android.utils.detectAllExpect
 import com.ekovpn.wireguard.WireGuardInitializer
 import com.google.android.gms.ads.MobileAds
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.onesignal.OneSignal
 import de.blinkt.openvpn.core.ICSOpenVPNApplication
 import org.strongswan.android.security.LocalCertificateKeyStoreProvider
@@ -29,7 +32,7 @@ import org.strongswan.android.utils.ContextProvider
 import java.security.Security
 
 
-class ApplicationClass: ICSOpenVPNApplication() {
+class ApplicationClass : ICSOpenVPNApplication() {
 
 
     lateinit var coreComponent: CoreComponent
@@ -56,6 +59,7 @@ class ApplicationClass: ICSOpenVPNApplication() {
         initAdmob()
         WireGuardInitializer.onCreate(this)
     }
+
 
     private fun initPushNotifications() {
         OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE);

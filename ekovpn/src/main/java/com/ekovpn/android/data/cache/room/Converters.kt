@@ -15,20 +15,25 @@
  */
 package com.ekovpn.android.data.cache.room
 
+import androidx.room.TypeConverter
+import com.ekovpn.android.data.cache.room.entities.DeviceCacheModel
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+
 class Converters {
 
-//    @TypeConverter
-//    fun fromBankMenuModelString(value: String?): List<BankMenuModel>? {
-//        val listType = object : TypeToken<List<BankMenuModel>?>() {
-//        }.type
-//        return Gson().fromJson(value, listType)
-//    }
-//
-//    @TypeConverter
-//    fun fromBankMenuModelList(data: List<BankMenuModel>?): String {
-//        val gson = Gson()
-//        return gson.toJson(data)
-//    }
+    @TypeConverter
+    fun fromDeviceCacheModelString(value: String?): List<DeviceCacheModel>? {
+        val listType = object : TypeToken<List<DeviceCacheModel>?>() {
+        }.type
+        return Gson().fromJson(value, listType)
+    }
+
+    @TypeConverter
+    fun fromDeviceCacheModel(data: List<DeviceCacheModel>?): String {
+        val gson = Gson()
+        return gson.toJson(data)
+    }
 
 
 }

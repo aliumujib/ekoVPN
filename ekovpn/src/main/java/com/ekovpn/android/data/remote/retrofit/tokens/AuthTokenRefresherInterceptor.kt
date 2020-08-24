@@ -5,51 +5,15 @@ import com.ekovpn.android.BuildConfig
 import com.ekovpn.android.data.cache.manager.TokenManager
 import com.ekovpn.android.data.remote.models.EkoVPNAPIResponse
 import com.google.gson.Gson
-import okhttp3.Interceptor
-import okhttp3.Response
-import okhttp3.ResponseBody
+import okhttp3.*
 import java.io.IOException
 
 class AuthTokenRefresherInterceptor(
         private val tokenManager: TokenManager,
         private val tokenRefresher: TokenRefresher
-) : Interceptor {
+) : Authenticator {
 
     private var countOfRetry: Int = 0
-
-    @Throws(IOException::class)
-    override fun intercept(chain: Interceptor.Chain): Response? {
-        val response = chain.proceed(chain.request())
-        var errorMessage: String? = getErrorMessageIfExists(response)
-        if (response?.code() == 401 && countOfRetry < 4 && errorMessage?.contains("auth token") == true) {
-            // We need to have a token in order to refresh it.
-            Log.d(AuthTokenRefresherInterceptor::class.java.simpleName, "ReAuthenticating token")
-
-            val login = BuildConfig.ANDROID_APP_LOGIN
-            val password = BuildConfig.ANDROID_APP_PASSWORD
-
-            val newToken = tokenRefresher.refreshToken(login, password)
-            tokenManager.saveToken(newToken)
-
-            countOfRetry++
-
-            Log.d(
-                    AuthTokenRefresherInterceptor::class.java.simpleName,
-                "Re authenticating token success on retry $countOfRetry"
-            )
-            val request = response.request().newBuilder()
-                .header("Authorization", "Bearer " + tokenManager.getToken())
-                .build()
-
-            return chain.proceed(request)
-
-        } else {
-            countOfRetry = 0
-            Log.d(AuthTokenRefresherInterceptor::class.java.simpleName, "No need to refresh token")
-            return chain.proceed(chain.request())
-        }
-    }
-
 
     data class Error(
             val message: String,
@@ -82,5 +46,37 @@ class AuthTokenRefresherInterceptor(
 
     companion object {
         private val TAG = AuthTokenRefresherInterceptor::class.java.canonicalName
+    }
+
+    override fun authenticate(route: Route?, response: Response): Request? {
+
+        var errorMessage: String? = getErrorMessageIfExists(response)
+        if (response.code() == 401 && countOfRetry < 4 && errorMessage?.contains("auth token") == true) {
+            // We need to have a token in order to refresh it.
+            Log.d(AuthTokenRefresherInterceptor::class.java.simpleName, "ReAuthenticating token")
+
+            val login = BuildConfig.ANDROID_APP_LOGIN
+            val password = BuildConfig.ANDROID_APP_PASSWORD
+
+            val newToken = tokenRefresher.refreshToken(login, password)
+            tokenManager.saveToken(newToken)
+
+            countOfRetry++
+
+            Log.d(
+                    AuthTokenRefresherInterceptor::class.java.simpleName,
+                    "Re authenticating token success on retry $countOfRetry"
+            )
+            val request = response.request().newBuilder()
+                    .header("Authorization", "Bearer " + tokenManager.getToken())
+                    .build()
+
+            return request
+
+        } else {
+            countOfRetry = 0
+            Log.d(AuthTokenRefresherInterceptor::class.java.simpleName, "No need to refresh token")
+            return null
+        }
     }
 }

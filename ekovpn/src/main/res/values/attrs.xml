@@ -23,6 +23,10 @@
         <attr name="bold_title" format="boolean"/>
     </declare-styleable>
 
+    <declare-styleable name="DevicesView">
+        <attr name="dv_show_divider" format="boolean"/>
+    </declare-styleable>
+
     <declare-styleable name="ProfileActionView">
         <attr name="action_title" format="reference|string"/>
         <attr name="action_subtitle" format="reference|string"/>

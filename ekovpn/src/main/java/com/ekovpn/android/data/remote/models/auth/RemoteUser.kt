@@ -5,8 +5,11 @@
 
 package com.ekovpn.android.data.remote.models.auth
 
+import com.ekovpn.android.data.cache.room.entities.DeviceCacheModel
 import com.ekovpn.android.data.cache.room.entities.UserCacheModel
 import com.ekovpn.android.models.User
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 data class RemoteUser(
         val __v: Int,
@@ -23,20 +26,33 @@ data class RemoteUser(
         val role: String,
         val time_expiry: String,
         val updatedAt: String,
-        val vpn_credits: Int
+        val vpn_credits: Int,
+        val imeis: List<String>
 ) {
+
+
+    fun fromDeviceCacheModelString(value: String): RemoteDevice {
+        val listType = object : TypeToken<RemoteDevice>() {
+        }.type
+        return Gson().fromJson(value, listType)
+    }
+
     fun toUserCacheModel(): UserCacheModel {
         return UserCacheModel(_id, account_number, account_type, active, createdAt, order_data
                 ?: NOT_AVAILABLE, order_number ?: NOT_AVAILABLE, referral_code, referred_by
                 ?: NOT_AVAILABLE, renewal_at
-                ?: NOT_AVAILABLE, role, time_expiry, updatedAt, vpn_credits)
+                ?: NOT_AVAILABLE, role, time_expiry, updatedAt, vpn_credits, imeis.map {
+            fromDeviceCacheModelString(it).toDeviceCacheModel()
+        })
     }
 
     fun toUser(): User {
         return User(_id, account_number, User.AccountType.fromString(account_type), active, createdAt, order_data
                 ?: NOT_AVAILABLE, order_number ?: NOT_AVAILABLE, referral_code, referred_by
                 ?: NOT_AVAILABLE, renewal_at
-                ?: NOT_AVAILABLE, role, time_expiry, updatedAt, vpn_credits)
+                ?: NOT_AVAILABLE, role, time_expiry, updatedAt, vpn_credits, imeis.map {
+            fromDeviceCacheModelString(it).toDevice()
+        })
     }
 
     companion object {

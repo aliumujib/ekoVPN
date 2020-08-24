@@ -105,6 +105,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/premium_options" />
 
 
+            <com.ekovpn.android.view.compoundviews.devicesview.DevicesView
+                android:id="@+id/devices_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/four_spaces"
+                android:paddingEnd="@dimen/four_spaces"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/referral_code" />
+
+
             <!--PROD: ca-app-pub-7604868220609576/2561495917 -->
             <!--TEST: ca-app-pub-3940256099942544/6300978111 -->
 
@@ -119,28 +130,8 @@
                 app:adUnitId="ca-app-pub-3940256099942544/6300978111"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/referral_code" />
+                app:layout_constraintTop_toBottomOf="@+id/devices_view" />
 
-
-            <Button
-                android:id="@+id/delete_this_device"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/four_spaces"
-                android:layout_marginEnd="@dimen/four_spaces"
-                android:layout_marginBottom="@dimen/three_spaces"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:layout_marginTop="@dimen/two_spaces"
-                android:text="Delete this device from your account"
-                android:textAllCaps="false"
-                android:letterSpacing="0"
-                app:layout_constraintTop_toBottomOf="@+id/adView"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:strokeColor="@color/eko_red" />
 
             <Button
                 android:id="@+id/logout"
@@ -156,7 +147,7 @@
                 android:text="Log Out"
                 android:textAllCaps="false"
                 android:letterSpacing="0"
-                app:layout_constraintTop_toBottomOf="@+id/delete_this_device"
+                app:layout_constraintTop_toBottomOf="@+id/adView"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

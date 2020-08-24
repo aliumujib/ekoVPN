@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ekovpn.android.data.repositories.config.repository.ConfigRepository
 import com.ekovpn.android.data.repositories.user.UserRepository
+import com.ekovpn.android.models.Device
 import com.ekovpn.android.models.User
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
@@ -32,11 +33,11 @@ class ProfileViewModel @Inject constructor(val userRepository: UserRepository, p
                 }.launchIn(viewModelScope)
     }
 
-    fun fetchAccountId():String?{
+    fun fetchAccountId(): String? {
         return _state.value.user?.account_id
     }
 
-    fun fetchReferralId():String?{
+    fun fetchReferralId(): String? {
         return _state.value.user?.referral_id
     }
 
@@ -46,7 +47,7 @@ class ProfileViewModel @Inject constructor(val userRepository: UserRepository, p
 
     fun logOut() {
         configRepository.logOutAndClearData().onStart {
-            _state.value = _state.value.copy(isLoading = true)
+            _state.value = _state.value.copy(isLoading = true, error = null)
         }.catch {
             _state.value = _state.value.copy(error = it)
         }.onEach {
@@ -55,26 +56,26 @@ class ProfileViewModel @Inject constructor(val userRepository: UserRepository, p
                 .launchIn(viewModelScope)
     }
 
-    fun deleteDevice(imei: String?) {
-        if (imei.isNullOrEmpty()) {
-            _state.value = _state.value.copy(error = Throwable("There was an error un-registering your device, please contact support"), isLoading = false, user = null)
-            return
-        }
-        userRepository.deleteDevice(imei)
+    fun deleteDevice(device: Device, currentDeviceId: String) {
+        userRepository.deleteDevice(device)
                 .onStart {
-                    _state.value = _state.value.copy(isLoading = true)
+                    _state.value = _state.value.copy(isLoading = true, error = null)
                 }.catch {
                     _state.value = _state.value.copy(error = it)
                 }
                 .onEach {
-                    _state.value = _state.value.copy(user = it, isLoading = false, isLoggedOut = true, error = null)
+                    if (it.devices.find { it.imei == currentDeviceId } != null) {
+                        _state.value = _state.value.copy(user = it, isLoading = false, isLoggedOut = false, error = null)
+                    }else{
+                        _state.value = _state.value.copy(user = it, isLoading = false, isLoggedOut = true, error = null)
+                    }
                 }.launchIn(viewModelScope)
     }
 
     init {
         userRepository.streamCurrentUser()
                 .onStart {
-                    _state.value = _state.value.copy(isLoading = true)
+                    _state.value = _state.value.copy(isLoading = true, error = null)
                 }.catch {
                     _state.value = _state.value.copy(error = it)
                 }

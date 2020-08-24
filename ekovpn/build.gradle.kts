@@ -163,6 +163,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics:17.4.4")
     implementation("com.google.firebase:firebase-crashlytics:17.1.1")
     implementation("com.google.android.gms:play-services-ads:19.3.0")
+    implementation( "com.google.android.play:core:1.6.4")
     implementation("com.android.billingclient:billing-ktx:$billing_version")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     dependencies.add("uiImplementation", project(":openvpn"))

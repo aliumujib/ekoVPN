@@ -5,6 +5,7 @@
 
 package com.ekovpn.android.data.repositories.user
 
+import com.ekovpn.android.models.Device
 import com.ekovpn.android.models.User
 import kotlinx.coroutines.flow.Flow
 
@@ -20,6 +21,12 @@ interface UserRepository {
 
     fun updateUserWithOrderId(orderId: String) : Flow<User>
 
-    fun deleteDevice(imei:String): Flow<User>
+    fun deleteDevice(device: Device): Flow<User>
+
+    fun claimReferralRewards(): Flow<Unit>
+
+    fun redeemReferral(referralCode: String):Flow<User>
+
+    fun refreshCurrentUser(): Flow<Unit>
 
 }

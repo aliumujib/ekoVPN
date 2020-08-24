@@ -16,8 +16,10 @@ import androidx.lifecycle.lifecycleScope
 import com.ekovpn.android.R
 import com.ekovpn.android.di.main.profile.DaggerProfileComponent
 import com.ekovpn.android.di.main.profile.ProfileModule
+import com.ekovpn.android.models.Device
 import com.ekovpn.android.utils.ext.*
 import com.ekovpn.android.view.auth.AuthActivity
+import com.ekovpn.android.view.compoundviews.devicesview.DevicesView
 import com.ekovpn.android.view.compoundviews.premiumpurchaseview.PremiumPurchaseView
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
 import com.google.android.gms.ads.AdRequest
@@ -29,7 +31,7 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 
-class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListener {
+class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListener, DevicesView.DeviceOpListener {
 
     private var toolbar: Toolbar? = null
     private var clicksListener: ClicksListener? = null
@@ -162,7 +164,6 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
             }
         }
 
-        premium_options.addListener(this)
         logout.setOnClickListener {
             viewModel.logOut()
         }
@@ -172,9 +173,6 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
             }
         })
 
-        delete_this_device.setOnClickListener {
-            viewModel.deleteDevice(context?.getDeviceId())
-        }
     }
 
     private fun copyAccountNumberToClipBoard() {
@@ -195,8 +193,9 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
                 return
             }
 
-            profileState.user?.account_id?.let {
-                account_number.setActionSubTitle(getString(R.string.account_number_subtitle,insertPeriodically(it, " ", 4) ))
+            profileState.user?.let {
+                account_number.setActionSubTitle(getString(R.string.account_number_subtitle,insertPeriodically(it.account_id, " ", 4) ))
+                devices_view.submitDeviceList(it.devices)
             }
             account_type.setActionSubTitle(getString(R.string.account_type_subtitle, profileState.user?.account_type?.type?.capitalize()))
 
@@ -217,9 +216,16 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        premium_options.addListener(this)
+        devices_view.addDeviceOpListener(this)
+    }
+
     override fun onStop() {
         super.onStop()
         premium_options.removeListener(this)
+        devices_view.removeDeviceOpListener(this)
     }
 
     companion object {
@@ -229,13 +235,13 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
         fun display(
                 fragmentManager: FragmentManager,
                 onCloseClicked: ClicksListener? = null): ProfileDialog {
-            val webViewDialog = ProfileDialog()
-            webViewDialog.clicksListener = onCloseClicked
-            webViewDialog.arguments = Bundle().apply {
+            val profileDialog = ProfileDialog()
+            profileDialog.clicksListener = onCloseClicked
+            profileDialog.arguments = Bundle().apply {
 
             }
-            webViewDialog.show(fragmentManager, TAG)
-            return webViewDialog
+            profileDialog.show(fragmentManager, TAG)
+            return profileDialog
         }
     }
 
@@ -249,6 +255,14 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
 
     override fun handleOtherError(error: Int) {
         Toast.makeText(context, "Failed to complete purchase, any debits will be automatically refunded", Toast.LENGTH_LONG).show()
+    }
+
+    override fun onDeleteClickListener(device: Device) {
+        requireContext().showAlertDialog({
+            viewModel.deleteDevice(device, requireContext().getDeviceId())
+        }, {
+
+        }, "Are you sure you want to remove this device?")
     }
 
 }

@@ -120,7 +120,7 @@ class SuccessFragment : Fragment(), PremiumPurchaseView.PurchaseProcessListener 
 
     private fun showBottomSheet() {
         RedeemReferralCodeBottomSheet() {
-            viewModel.applyRefferalCode(it)
+            viewModel.applyReferralCode(it)
         }.show(childFragmentManager, javaClass.simpleName)
     }
 

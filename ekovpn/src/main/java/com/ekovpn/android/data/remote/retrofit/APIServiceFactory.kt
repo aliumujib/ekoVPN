@@ -57,7 +57,7 @@ object APIServiceFactory {
         logging.level = HttpLoggingInterceptor.Level.BODY
         val httpClientBuilder = OkHttpClient.Builder()
                 .addInterceptor(authInterceptor)
-                .addInterceptor(AuthTokenRefresherInterceptor(
+                .authenticator(AuthTokenRefresherInterceptor(
                         tokenManager,
                         tokenRefresher))
         httpClientBuilder.addInterceptor(logging)

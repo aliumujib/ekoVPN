@@ -19,6 +19,9 @@ import com.ekovpn.android.di.main.VPNComponent
 import com.ekovpn.android.di.main.VPNModule
 import com.ekovpn.android.utils.ext.hide
 import com.ekovpn.android.utils.ext.show
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import kotlinx.android.synthetic.main.activity_vpn.*
 
 
@@ -56,9 +59,25 @@ class VpnActivity : AppCompatActivity() {
             findNavController(this@VpnActivity, R.id.nav_host_fragment).navigate(R.id.AdsFragment)
         }
 
+        checkForUpdate()
     }
 
 
+    private fun checkForUpdate() {
+        val appUpdateManager = AppUpdateManagerFactory.create(this)
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                appUpdateManager.startUpdateFlowForResult(
+                        appUpdateInfo,
+                        AppUpdateType.IMMEDIATE,
+                        this,
+                        1234)
+            }
+        }
+    }
 
 
     private fun injectDependencies() {
