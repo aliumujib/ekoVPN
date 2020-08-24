@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import com.ekovpn.android.R
 import com.ekovpn.android.di.auth.login.DaggerLoginComponent
 import com.ekovpn.android.di.auth.login.LoginModule
+import com.ekovpn.android.utils.ext.getDeviceId
 import com.ekovpn.android.utils.ext.hideKeyboard
 import com.ekovpn.android.utils.input.CreditCardMask
 import com.ekovpn.android.view.auth.AuthActivity.Companion.authComponent
@@ -58,6 +59,7 @@ class LoginFragment : Fragment() {
         login_btn.visibility = View.GONE
         sign_up.visibility = View.GONE
         forgot_account_number.visibility = View.GONE
+        no_email_required.visibility = View.GONE
         new_user.visibility = View.GONE
         login_btn.isEnabled = false
         sign_up.isEnabled = false
@@ -68,6 +70,7 @@ class LoginFragment : Fragment() {
         login_btn.visibility = View.VISIBLE
         sign_up.visibility = View.VISIBLE
         new_user.visibility = View.VISIBLE
+        no_email_required.visibility = View.VISIBLE
         forgot_account_number.visibility = View.VISIBLE
         login_btn.isEnabled = true
         sign_up.isEnabled = true
@@ -104,7 +107,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun showBottomSheet() {
-        AccountRecoveryBottomSheet() {
+        AccountRecoveryBottomSheet {
             authViewModel.recoverAccount(it)
         }.show(childFragmentManager, javaClass.simpleName)
     }

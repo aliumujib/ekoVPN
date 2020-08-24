@@ -33,10 +33,7 @@ import com.ekovpn.android.di.main.home.HomeModule
 import com.ekovpn.android.models.Location
 import com.ekovpn.android.models.Server
 import com.ekovpn.android.service.EkoVPNMgrService
-import com.ekovpn.android.utils.ext.createAndLoadRewardedAd
-import com.ekovpn.android.utils.ext.delay
-import com.ekovpn.android.utils.ext.show
-import com.ekovpn.android.utils.ext.showAlertDialog
+import com.ekovpn.android.utils.ext.*
 import com.ekovpn.android.view.compoundviews.countdowntimer.TimeMilliParser
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
 import com.ekovpn.android.view.main.locationselector.LocationSelectorDialog
@@ -47,6 +44,9 @@ import com.ekovpn.wireguard.service.WireGuardService
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewarded.RewardedAdCallback
+import com.skydoves.balloon.Balloon
+import com.skydoves.balloon.BalloonAnimation
+import com.skydoves.balloon.createBalloon
 import com.wireguard.android.backend.GoBackend
 import com.wireguard.android.backend.Tunnel
 import de.blinkt.openvpn.LaunchVPN
@@ -74,6 +74,8 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
     private var iKEv2Service: VpnStateService? = null
     private var ekoVpnMgrService: EkoVPNMgrService? = null
     private var wireGuardService: WireGuardService? = null
+
+    private var balloon:Balloon?= null
 
     private val getUserVPNPermission = registerForActivityResult(GetWireGuardVPNPermissions()) {
         if (it) {
@@ -171,6 +173,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
     override fun onPause() {
         super.onPause()
         stopBlinkingAnimation()
+        balloon?.dismiss()
     }
 
     override fun onDestroy() {
@@ -193,12 +196,12 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
     }
 
     private fun initAdControls() {
-       delay({
-           if (viewModel.shouldShowAds()) {
-               val adRequest = AdRequest.Builder().build()
-               adView.loadAd(adRequest)
-           }
-       })
+        delay({
+            if (viewModel.shouldShowAds()) {
+                val adRequest = AdRequest.Builder().build()
+                adView.loadAd(adRequest)
+            }
+        })
     }
 
     private fun initButtonClickListeners() {
@@ -206,12 +209,12 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
             val server = viewModel.state.value.lastUsedServer
             val hasTimeLeft = viewModel.state.value.timeLeft > 0
             Log.d(HomeFragment::class.java.simpleName, "${viewModel.state.value}")
-            if (hasTimeLeft.not() &&viewModel.shouldShowAds()) {
+            if (hasTimeLeft.not() && viewModel.shouldShowAds()) {
                 Toast.makeText(context, "Please view some ads or buy premium", Toast.LENGTH_LONG).show()
                 goToViewAdsScreen()
-            } else if(server == null) {
+            } else if (server == null) {
                 Toast.makeText(context, "Please pick a location", Toast.LENGTH_LONG).show()
-            }else{
+            } else {
                 connectToServer(server)
             }
         }
@@ -246,17 +249,30 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         }
 
         delay({
-            if(viewModel.shouldShowAds().not()){
+            if (viewModel.shouldShowAds().not()) {
                 get_more_time.visibility = View.GONE
                 timer_view.visibility = View.GONE
                 time_left_label.visibility = View.GONE
             }
-        },300)
+        }, 300)
 
         test_connection.setOnClickListener {
             WebViewDialog.display(childFragmentManager, WebViewDialog.Companion.WebUrl("https://dnsleaktest.com/", "Connection Test"), null)
         }
 
+        balloon = createBalloon(requireContext()) {
+            setArrowSize(10)
+            setWidthRatio(0.4f)
+            setHeight(50)
+            setArrowPosition(0.5f)
+            setCornerRadius(4f)
+            setAlpha(0.9f)
+            setText("Click here to connect")
+            setTextColorResource(R.color.black)
+            setBackgroundColorResource(R.color.grey)
+            setBalloonAnimation(BalloonAnimation.FADE)
+            setLifecycleOwner(lifecycleOwner)
+        }
     }
 
     private fun startBlinkingAnimation() {
@@ -428,6 +444,11 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                 }
                 stopCountDownTimerService()
                 connect_parent.startRippleAnimation()
+                if(it.hasShownBalloonCTA){
+                    balloon?.dismiss()
+                }else{
+                    balloon?.showAlignTop(connect)
+                }
             }
             HomeState.ConnectionStatus.CONNECTING -> {
                 connection_status_.text = resources.getString(R.string.connecting_status_)
@@ -455,6 +476,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                 it.currentConnectionServer?.let {
                     initCurrentConnectionUI(it.location_)
                 }
+                balloon?.dismiss()
                 connect_parent.stopRippleAnimation()
             }
         }
@@ -467,15 +489,20 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         }
     }
 
-    private fun startCountDownTimerService(state: HomeState) {
-        if(viewModel.shouldShowAds()){
-            ApplicationClass.getInstance()?.let {
-                val timerServiceIntent = Intent(it, EkoVPNMgrService::class.java)
+    private fun startManagerService(state: HomeState) {
+        ApplicationClass.getInstance()?.let {
+            val timerServiceIntent = Intent(it, EkoVPNMgrService::class.java)
+            if (viewModel.shouldShowAds()) {
                 timerServiceIntent.putExtra(EkoVPNMgrService.TIMER_SERVICE_VPN_PROFILE, state.currentConnectionServer)
                 timerServiceIntent.putExtra(EkoVPNMgrService.TIMER_SERVICE_TIME_LEFT, state.timeLeft)
-                ContextCompat.startForegroundService(it, timerServiceIntent)
+                timerServiceIntent.action = EkoVPNMgrService.TIMER_ACTION_START_FREE
+            }else{
+                timerServiceIntent.putExtra(EkoVPNMgrService.TIMER_SERVICE_VPN_PROFILE, state.currentConnectionServer)
+                timerServiceIntent.action = EkoVPNMgrService.TIMER_ACTION_START_PAID
             }
+            ContextCompat.startForegroundService(it, timerServiceIntent)
         }
+
     }
 
     private fun stopCountDownTimerService() {
@@ -514,7 +541,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
     override fun updateState(state: String?, logmessage: String?, localizedResId: Int, level: ConnectionStatus?, Intent: Intent?) {
         if (level == ConnectionStatus.LEVEL_CONNECTED) {
             viewModel.setConnected()
-            startCountDownTimerService(viewModel.state.value)
+            startManagerService(viewModel.state.value)
         } else if (level == ConnectionStatus.LEVEL_NOTCONNECTED) {
             viewModel.setDisconnected()
             viewModel.fetchLocationForCurrentIP()
@@ -542,7 +569,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
             }
             Tunnel.State.UP -> {
                 viewModel.setConnected()
-                startCountDownTimerService(viewModel.state.value)
+                startManagerService(viewModel.state.value)
             }
         }
     }
@@ -556,7 +583,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
 
             }
             VpnStateService.State.CONNECTED -> {
-                startCountDownTimerService(viewModel.state.value)
+                startManagerService(viewModel.state.value)
                 viewModel.setConnected()
                 if (viewModel.shouldShowAds()) {
                     requireActivity().createAndLoadRewardedAd("ca-app-pub-3940256099942544/5224354917", getCallback())

@@ -105,6 +105,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/premium_options" />
 
 
+            <com.ekovpn.android.view.compoundviews.devicesview.DevicesView
+                android:id="@+id/devices_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/four_spaces"
+                android:paddingEnd="@dimen/four_spaces"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/referral_code" />
+
+
             <!--PROD: ca-app-pub-7604868220609576/2561495917 -->
             <!--TEST: ca-app-pub-3940256099942544/6300978111 -->
 
@@ -119,7 +130,7 @@
                 app:adUnitId="ca-app-pub-3940256099942544/6300978111"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/referral_code" />
+                app:layout_constraintTop_toBottomOf="@+id/devices_view" />
 
 
             <Button

@@ -168,6 +168,7 @@ class PremiumPurchaseView : LinearLayout {
         }
         if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
             if (!purchase.isAcknowledged) {
+                Log.d("PremiumPurchaseView", "$purchase.purchaseToken")
                 val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
                         .setPurchaseToken(purchase.purchaseToken)
                 billingClient.acknowledgePurchase(acknowledgePurchaseParams.build(), acknowledgePurchaseResponseListener)

@@ -71,10 +71,16 @@ class EkoVPNMgrService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        if(intent.action == TIMER_SERVICE_INCREASE_TIME_LEFT_ACTION){
-            increaseTimeLeft(intent)
-        }else{
-            timeVPNConnection(intent)
+        when (intent.action) {
+            TIMER_SERVICE_INCREASE_TIME_LEFT_ACTION -> {
+                increaseTimeLeft(intent)
+            }
+            TIMER_ACTION_START_FREE -> {
+                timeVPNConnection(intent)
+            }
+            TIMER_ACTION_START_PAID -> {
+                runUnlimitedVPNConnection(intent)
+            }
         }
         return START_NOT_STICKY
     }
@@ -83,13 +89,21 @@ class EkoVPNMgrService : Service() {
         intent.getLongExtra(TIMER_SERVICE_INCREMENT, 0L).let {
             if (it > 0L) {
                 countDownTimer?.cancel()
-
                 Log.d(EkoVPNMgrService::class.java.simpleName, "Server: ${server.toString()}")
                 userRepository.addToTimeLeft(it)
                 timeLeft = userRepository.getTimeLeft()
                 runCountDownTimer()
-                runNotification()
+                runTimerNotification()
             }
+        }
+    }
+
+    private fun runUnlimitedVPNConnection(intent: Intent) {
+        intent.getParcelableExtra<Server>(TIMER_SERVICE_VPN_PROFILE)?.let {
+            countDownTimer?.cancel()
+            server = intent.getParcelableExtra(TIMER_SERVICE_VPN_PROFILE)
+            Log.d(EkoVPNMgrService::class.java.simpleName, "Server: ${server.toString()}")
+            runPaidNotification()
         }
     }
 
@@ -103,7 +117,7 @@ class EkoVPNMgrService : Service() {
 
             Log.d(EkoVPNMgrService::class.java.simpleName, "Server: ${server.toString()}")
             runCountDownTimer()
-            runNotification()
+            runTimerNotification()
         }
     }
 
@@ -164,7 +178,6 @@ class EkoVPNMgrService : Service() {
                 disconnectWireGuard()
             }
         } catch (e: Exception) {
-
             VpnStatus.logException(e)
             e.printStackTrace()
         }
@@ -225,8 +238,21 @@ class EkoVPNMgrService : Service() {
         return super.stopService(name)
     }
 
+    private fun runPaidNotification() {
+        val notificationIntent = Intent(this, VpnActivity::class.java)
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0)
+        val notification: NotificationCompat.Builder = NotificationCompat.Builder(this, EKO_NOTIFICATION_CHANNEL_ID)
+                .setContentTitle(resources.getString(R.string.app_name))
+                .setContentText("Connected")
+                .setSmallIcon(R.drawable.eko_notifications)
+                .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+                .setContentIntent(pendingIntent)
+        val notificationBuild = notification.build()
+        notificationBuild.flags = Notification.FLAG_AUTO_CANCEL
+        startForeground(1, notificationBuild)
+    }
 
-    private fun runNotification() {
+    private fun runTimerNotification() {
 
         // Compute some values required below.
         val base: Long = getChronometerBase()
@@ -297,6 +323,10 @@ class EkoVPNMgrService : Service() {
 
         const val TIMER_SERVICE_VPN_PROFILE = "TIMER_SERVICE_VPN_PROFILE"
         const val TIMER_SERVICE_TIME_LEFT = "TIMER_SERVICE_TIME_LEFT"
+
+        const val TIMER_ACTION_START_PAID = "TIMER_ACTION_START_PAID"
+        const val TIMER_ACTION_START_FREE = "TIMER_ACTION_START_FREE"
+        const val TIMER_ACTION_STOP = "TIMER_ACTION_STOP"
 
         const val TIMER_SERVICE_INCREASE_TIME_LEFT_ACTION = "TIMER_SERVICE_INCREASE_TIME_LEFT_ACTION"
         const val TIMER_SERVICE_INCREMENT = "TIMER_SERVICE_INCREMENT"

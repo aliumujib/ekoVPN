@@ -1,4 +1,5 @@
 plugins {
+    id("com.onesignal.androidsdk.onesignal-gradle-plugin")
     id("com.android.application")
     id("checkstyle")
     id("kotlin-android")
@@ -7,7 +8,6 @@ plugins {
     id("com.google.firebase.crashlytics")
     id("kotlin-kapt")
     id("androidx.navigation.safeargs.kotlin")
-    //id("com.onesignal.androidsdk.onesignal-gradle-plugin")
     kotlin("android")
     kotlin("android.extensions")
 }
@@ -21,7 +21,7 @@ android {
         versionCode = 1
         versionName = "0.0.8"
         resConfigs(listOf("en"))
-        //setManifestPlaceholders(mapOf("onesignal_app_id" to "3016495d-8f12-4187-a7d2-4217b8ce7563", "onesignal_google_project_number" to "REMOTE"))
+        manifestPlaceholders = mapOf("onesignal_app_id" to "3016495d-8f12-4187-a7d2-4217b8ce7563", "onesignal_google_project_number" to "REMOTE")
     }
 
     compileOptions {
@@ -150,11 +150,11 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.mindorks.android:prdownloader:0.6.0")
-//    implementation("com.onesignal:OneSignal:3.15.2"){
-//        exclude(group = "com.google.firebase", module = "firebase-messaging")
-//    }
+    implementation("com.onesignal:OneSignal:3.15.2"){
+        exclude(group = "com.google.firebase", module = "firebase-messaging")
+    }
 
-
+    implementation ("com.github.skydoves:balloon:1.1.5")
     implementation("net.sourceforge.streamsupport:android-retrofuture:$streamsupportVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.7")
     implementation("com.google.code.gson:gson:2.8.6")
@@ -163,6 +163,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics:17.4.4")
     implementation("com.google.firebase:firebase-crashlytics:17.1.1")
     implementation("com.google.android.gms:play-services-ads:19.3.0")
+    implementation( "com.google.android.play:core:1.6.4")
     implementation("com.android.billingclient:billing-ktx:$billing_version")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     dependencies.add("uiImplementation", project(":openvpn"))

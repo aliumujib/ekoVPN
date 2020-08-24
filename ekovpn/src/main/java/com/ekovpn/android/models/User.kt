@@ -5,6 +5,7 @@
 
 package com.ekovpn.android.models
 
+
 data class User(
         val id: String,
         val account_id: String,
@@ -19,7 +20,8 @@ data class User(
         val role: String,
         val time_expiry: String,
         val updatedAt: String,
-        val vpn_credits: Int
+        val vpn_credits: Int,
+        val devices: List<Device>
 ){
 
     enum class AccountType(val type: String) {

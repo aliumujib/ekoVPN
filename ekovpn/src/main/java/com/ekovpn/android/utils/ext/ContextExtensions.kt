@@ -15,14 +15,17 @@
  */
 package com.ekovpn.android.utils.ext
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
-import android.content.DialogInterface
+import android.content.Context.TELEPHONY_SERVICE
 import android.net.wifi.WifiManager
+import android.provider.Settings
+import android.telephony.TelephonyManager
 import android.util.DisplayMetrics
 import android.widget.Button
 import androidx.annotation.ColorRes
@@ -87,34 +90,36 @@ fun Context.showAlertDialog(positiveAction: () -> Unit, negativeAction: () -> Un
     val builder1: AlertDialog.Builder = AlertDialog.Builder(this)
     builder1.setMessage(title)
     builder1.setCancelable(false)
-
     builder1.setPositiveButton(
             "Yes"
-    ) { dialog, id ->
+    ) { dialog, _ ->
         positiveAction.invoke()
         dialog.cancel()
     }
-
     builder1.setNegativeButton(
             "No"
-    ) { dialog, id ->
+    ) { dialog, _ ->
         negativeAction.invoke()
         dialog.cancel()
     }
-
     val alert11: AlertDialog = builder1.create()
-
     alert11.setOnShowListener {
         val negativeBtn: Button = alert11.getButton(DatePickerDialog.BUTTON_NEGATIVE)
         negativeBtn.setColors()
-
         val positiveBtn: Button = alert11.getButton(DatePickerDialog.BUTTON_POSITIVE)
         positiveBtn.setColors()
     }
-
-
-
     alert11.show()
 }
 
 
+@SuppressLint("HardwareIds")
+fun Context.getDeviceId(): String {
+    return Settings.Secure.getString(
+            contentResolver,
+            Settings.Secure.ANDROID_ID)
+}
+
+fun Any.getModelName(): String {
+    return android.os.Build.MODEL
+}

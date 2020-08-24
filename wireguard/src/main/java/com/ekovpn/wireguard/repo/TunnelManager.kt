@@ -42,8 +42,8 @@ class TunnelManager constructor(private val configStore: ConfigStore, val contex
     }
 
     fun create(name: String, config: Config?): EkoTunnel {
-//        if (Tunnel.isNameInvalid(name))
-//            throw (IllegalArgumentException("Tunnel $name is not valid"))
+        if (Tunnel.isNameInvalid(name))
+            throw (IllegalArgumentException("Tunnel $name is not valid"))
         if (tunnelMap.containsKey(name))
             throw (IllegalArgumentException("Tunnel $name is already existing"))
 

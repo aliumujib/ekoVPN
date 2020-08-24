@@ -10,12 +10,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ekovpn.android.data.repositories.auth.AuthRepository
 import com.ekovpn.android.data.repositories.config.repository.ConfigRepository
+import com.ekovpn.android.data.repositories.user.UserRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-class SplashViewModel @Inject constructor(private val configRepository: ConfigRepository, private val authRepository: AuthRepository) : ViewModel() {
+class SplashViewModel @Inject constructor(private val configRepository: ConfigRepository,
+                                          private val userRepository: UserRepository,
+                                          private val authRepository: AuthRepository) : ViewModel() {
 
     private val  _state = MutableStateFlow<SetUpState>(SetUpState.Idle)
     val state: StateFlow<SetUpState> = _state
@@ -28,10 +31,22 @@ class SplashViewModel @Inject constructor(private val configRepository: ConfigRe
         if (configRepository.hasConfiguredServers().not()) {
             login()
         } else {
-            _state.value = SetUpState.Finished
+            fetchUser()
         }
     }
 
+    private fun fetchUser() {
+        userRepository.refreshCurrentUser()
+                .onStart {
+
+                }
+                .onEach {
+                    _state.value = SetUpState.Finished
+                }.catch {
+                    it.printStackTrace()
+                    _state.value = SetUpState.Failed
+                }.launchIn(viewModelScope)
+    }
 
 
     private fun login() {

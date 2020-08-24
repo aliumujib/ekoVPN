@@ -18,6 +18,7 @@ package com.ekovpn.android.data.cache.room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.ekovpn.android.data.cache.room.dao.LocationsDao
 import com.ekovpn.android.data.cache.room.dao.ServersDao
 import com.ekovpn.android.data.cache.room.dao.UsersDao
@@ -30,6 +31,7 @@ import com.ekovpn.android.data.cache.room.entities.UserCacheModel
     entities = [LocationCacheModel::class, ServerCacheModel::class, UserCacheModel::class],
     version = 1, exportSchema = false
 )
+@TypeConverters(Converters::class)
 abstract class DBClass : RoomDatabase() {
 
     abstract fun locationsDao(): LocationsDao
