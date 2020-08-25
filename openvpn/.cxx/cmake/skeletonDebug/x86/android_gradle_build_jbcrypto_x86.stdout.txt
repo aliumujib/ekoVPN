@@ -1,1 +1,2 @@
-ninja: no work to do.
+[1/2] Building CXX object CMakeFiles/jbcrypto.dir/jbcrypto/jbcrypto.cpp.o
+[2/2] Linking CXX shared library /Users/aliumujib/Desktop/Android_Projects/ics-openvpn/openvpn/build/intermediates/cmake/skeletonDebug/obj/x86/libjbcrypto.so

@@ -80,7 +80,7 @@ class SettingsFragment : Fragment() {
             }
         }
         if (viewModel.shouldShowAds()) {
-            requireActivity().createAndLoadRewardedAd("ca-app-pub-3940256099942544/5224354917", getCallback())
+            requireActivity().createAndLoadRewardedAd(resources.getString(R.string.rewarded_ad_after_action), getCallback())
         }
         Toast.makeText(requireContext(), getString(R.string.new_protocol_selected), Toast.LENGTH_LONG).show()
     }

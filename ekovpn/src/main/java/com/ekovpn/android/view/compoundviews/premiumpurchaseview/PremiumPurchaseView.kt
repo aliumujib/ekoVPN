@@ -158,7 +158,8 @@ class PremiumPurchaseView : LinearLayout {
         val acknowledgePurchaseResponseListener = AcknowledgePurchaseResponseListener { billingResult ->
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                 listeners.forEach {
-                    it.handleSuccessfulSubscription(purchase.orderId)
+                    Log.d(PremiumPurchaseView::class.java.simpleName, purchase.purchaseToken)
+                    it.handleSuccessfulSubscription(purchase.purchaseToken)
                 }
             } else {
                 listeners.forEach {

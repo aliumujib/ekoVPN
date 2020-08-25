@@ -30,7 +30,7 @@ class IkeV2Configurator @Inject constructor(
 ) {
 
 
-    fun configureIkeV2Servers(serverConfig: Array<ServerConfig>): Flow<List<ServerCacheModel>> {
+    fun configureIkeV2Servers(serverConfig: List<ServerConfig>): Flow<List<ServerCacheModel>> {
         vpnProfileDataSource.deleteAllVpnProfiles()
 
         val pemConfigs: MutableList<Pair<ServerLocation, IKEv2>> = mutableListOf()

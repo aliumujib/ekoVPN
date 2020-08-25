@@ -159,7 +159,7 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
             it.setOnClickListener {
                 copyAccountNumberToClipBoard()
                 if (viewModel.shouldShowAds()) {
-                    requireActivity().createAndLoadRewardedAd("ca-app-pub-3940256099942544/5224354917", getCallback())
+                    requireActivity().createAndLoadRewardedAd(resources.getString(R.string.rewarded_ad_after_action), getCallback())
                 }
             }
         }
@@ -185,14 +185,7 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
     private fun handleStates(profileState: ProfileState) {
         Log.d(ProfileDialog::class.java.simpleName, profileState.toString())
         if(profileState.error == null){
-            if(profileState.isLoggedOut){
-                val intent = Intent(requireContext(), AuthActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
-                requireActivity().finish()
-                return
-            }
-
+            if (handlePossibilityOfLogout(profileState)) return
             profileState.user?.let {
                 account_number.setActionSubTitle(getString(R.string.account_number_subtitle,insertPeriodically(it.account_id, " ", 4) ))
                 devices_view.submitDeviceList(it.devices)
@@ -204,6 +197,17 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
         }else{
             Toast.makeText(requireContext(), getString(R.string.error_performing_request), Toast.LENGTH_LONG).show()
         }
+    }
+
+    private fun handlePossibilityOfLogout(profileState: ProfileState): Boolean {
+        if (profileState.isLoggedOut) {
+            val intent = Intent(requireContext(), AuthActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+            requireActivity().finish()
+            return true
+        }
+        return false
     }
 
     private fun initAdControls() {

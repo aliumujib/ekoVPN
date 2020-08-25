@@ -262,12 +262,11 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
 
         balloon = createBalloon(requireContext()) {
             setArrowSize(10)
-            setWidthRatio(0.4f)
             setHeight(50)
             setArrowPosition(0.5f)
             setCornerRadius(4f)
             setAlpha(0.9f)
-            setText("Click here to connect")
+            setText("   Click here to connect   ")
             setTextColorResource(R.color.black)
             setBackgroundColorResource(R.color.grey)
             setBalloonAnimation(BalloonAnimation.FADE)
@@ -586,7 +585,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                 startManagerService(viewModel.state.value)
                 viewModel.setConnected()
                 if (viewModel.shouldShowAds()) {
-                    requireActivity().createAndLoadRewardedAd("ca-app-pub-3940256099942544/5224354917", getCallback())
+                    requireActivity().createAndLoadRewardedAd(resources.getString(R.string.rewarded_ad_after_action), getCallback())
                 }
             }
             VpnStateService.State.DISCONNECTING -> {

@@ -23,13 +23,13 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 class AdViewingActivity : AppCompatActivity() {
 
 
-    private val listOfAdUnitIds = mutableListOf("ca-app-pub-3940256099942544/5224354917",
-            "ca-app-pub-3940256099942544/5224354917", "ca-app-pub-3940256099942544/5224354917",
-            "ca-app-pub-3940256099942544/5224354917", "ca-app-pub-3940256099942544/5224354917",
-            "ca-app-pub-3940256099942544/5224354917", "ca-app-pub-3940256099942544/5224354917",
-            "ca-app-pub-3940256099942544/5224354917", "ca-app-pub-3940256099942544/5224354917",
-            "ca-app-pub-3940256099942544/5224354917", "ca-app-pub-3940256099942544/5224354917",
-            "ca-app-pub-3940256099942544/5224354917", "ca-app-pub-3940256099942544/5224354917")
+    private val listOfAdUnitIds = mutableListOf(R.string.rewarded_ad_1,
+            R.string.rewarded_ad_2, R.string.rewarded_ad_3,
+            R.string.rewarded_ad_4, R.string.rewarded_ad_5,
+            R.string.rewarded_ad_6, R.string.rewarded_ad_7,
+            R.string.rewarded_ad_8, R.string.rewarded_ad_9,
+            R.string.rewarded_ad_10, R.string.rewarded_ad_11,
+            R.string.rewarded_ad_12, R.string.rewarded_ad_13)
 
     var current = 0
     val ad: Ad by lazy {
@@ -42,7 +42,7 @@ class AdViewingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ad_viewing)
 
-        createAndLoadRewardedAd(listOfAdUnitIds[current])
+        createAndLoadRewardedAd(resources.getString(listOfAdUnitIds[current]))
         current += 1
 
     }
@@ -60,7 +60,7 @@ class AdViewingActivity : AppCompatActivity() {
                 Log.d(AdsFragment::class.java.simpleName, "Ad $current closed")
                 if (current < ad.count && adLeaveCheck == 2) {
                     current += 1
-                    createAndLoadRewardedAd(listOfAdUnitIds[current])
+                    createAndLoadRewardedAd(resources.getString(listOfAdUnitIds[current]))
                 }else if (current == ad.count && adLeaveCheck == 2) {
                     val intent = Intent()
                     intent.putExtra(AD_ACTIVITY_OPERATION_RESULT, ad)

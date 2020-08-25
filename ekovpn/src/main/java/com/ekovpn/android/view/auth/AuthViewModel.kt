@@ -122,11 +122,12 @@ class AuthViewModel @Inject constructor(private val configRepository: ConfigRepo
     }
 
     fun applyReferralCode(referralCode: String) {
-        userRepository.redeemReferral(referralCode.trim()).onStart {
+        userRepository.redeemReferral(referralCode.trim())
+                .onStart {
             _state.value = _state.value.copy(isLoading = true, error = null)
         }.catch {
             it.printStackTrace()
-            _state.value = _state.value.copy(error = Throwable("An error occurred while recovering your account ${it.message}, please contact support."), isLoading = false, user = null)
+            _state.value = _state.value.copy(error = it, isLoading = false, user = null)
         }.launchIn(viewModelScope)
     }
 

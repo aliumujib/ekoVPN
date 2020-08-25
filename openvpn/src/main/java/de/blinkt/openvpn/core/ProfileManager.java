@@ -16,6 +16,7 @@ import java.io.ObjectOutputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
@@ -209,6 +210,12 @@ public class ProfileManager {
         }
     }
 
+    public void deleteAllProfiles(Context context){
+        Collection<VpnProfile> profilesList = profiles.values();
+        for (VpnProfile profile : profilesList){
+            removeProfile(context, profile);
+        }
+    }
 
     public void removeProfile(Context context, VpnProfile profile) {
         String vpnentry = profile.getUUID().toString();

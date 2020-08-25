@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2012-2020 Abdul-Mujeeb Aliu for ekoVPN
+  ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
+  -->
+
+<resources>
+    <string name="home_banner_ad_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="profile_banner_ad_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="rewarded_ad_1">ca-app-pub-3940256099942544/5224354917</string>
+    <string name="rewarded_ad_2">ca-app-pub-3940256099942544/5224354917</string>
+    <string name="rewarded_ad_3">ca-app-pub-3940256099942544/5224354917</string>
+    <string name="rewarded_ad_4">ca-app-pub-3940256099942544/5224354917</string>
+    <string name="rewarded_ad_5">ca-app-pub-3940256099942544/5224354917</string>
+    <string name="rewarded_ad_6">ca-app-pub-3940256099942544/5224354917</string>
+    <string name="rewarded_ad_7">ca-app-pub-3940256099942544/5224354917</string>
+    <string name="rewarded_ad_8">ca-app-pub-3940256099942544/5224354917</string>
+    <string name="rewarded_ad_9">ca-app-pub-3940256099942544/5224354917</string>
+    <string name="rewarded_ad_10">ca-app-pub-3940256099942544/5224354917</string>
+    <string name="rewarded_ad_11">ca-app-pub-3940256099942544/5224354917</string>
+    <string name="rewarded_ad_12">ca-app-pub-3940256099942544/5224354917</string>
+    <string name="rewarded_ad_13">ca-app-pub-3940256099942544/5224354917</string>
+    <string name="rewarded_ad_after_action">ca-app-pub-3940256099942544/5224354917</string>
+
+</resources>

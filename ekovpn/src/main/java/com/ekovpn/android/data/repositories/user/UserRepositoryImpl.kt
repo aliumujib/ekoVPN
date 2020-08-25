@@ -59,8 +59,10 @@ class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPr
             user.data?.toUserCacheModel()?.let {
                 userDao.insert(it)
             }
+            addToTimeLeft(3600000L)
             emit(userDao.getUser()?.toUser()!!)
         }.flowOn(Dispatchers.IO)
+                .handleHttpErrors()
     }
 
     override fun refreshCurrentUser(): Flow<Unit> {
@@ -77,14 +79,9 @@ class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPr
         return flow {
             val oldUser = userDao.getUser()
             val count = ekoVPNAPIService.claimUserReferrals(oldUser?.account_id!!).data
-            count?.let {
-                repeat(it) {
-                    addToTimeLeft(3600000L)
-                }
-            }
+            addToTimeLeft(3600000L * count!!)
             emit(Unit)
-        }
-                .handleHttpErrors()
+        }.handleHttpErrors()
                 .flowOn(Dispatchers.IO)
     }
 
@@ -99,6 +96,7 @@ class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPr
             }
             emit(userDao.getUser()?.toUser()!!)
         }.flowOn(Dispatchers.IO)
+                .handleHttpErrors()
     }
 
     override fun updateUserWithOrderId(orderId: String): Flow<User> {
@@ -109,7 +107,7 @@ class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPr
             map["account_type"] = "paid"
             val user = ekoVPNAPIService.updateUserAccount(userId, map).data
             userDao.insert(user!!.toUserCacheModel())
-            emit(user!!.toUser())
+            emit(user.toUser())
         }.flowOn(Dispatchers.IO)
     }
 

@@ -94,26 +94,32 @@ class SuccessFragment : Fragment(), PremiumPurchaseView.PurchaseProcessListener 
 
 
     private fun handleState(state: AuthState) {
-        if(state.error == null){
-            state.user?.account_id?.let {
+        if (state.error == null && state.isLoading.not()) {
+            val user = state.user
+            user?.account_id?.let {
                 account_number.text = insertPeriodically(it, " ", 4)
             }
+            if(user?.referred_by != "N/A"){
+                redeem_code.visibility = View.GONE
+            }
             Toast.makeText(context, "Success!!, thank you for using ekoVPN", Toast.LENGTH_LONG).show()
-            if(state.user?.account_type == User.AccountType.PAID){
+            if (user?.account_type == User.AccountType.PAID) {
                 welcome_intro_text.text = getString(R.string.welcome_back)
                 free_to_use_text.hide()
                 start_free.text = getString(R.string.continue_free)
                 premium_options.hide()
-            }else{
-                if(state.isFreshAccount){
+            } else {
+                if (state.isFreshAccount) {
                     welcome_intro_text.text = getString(R.string.keep_acct_number_safe)
                     start_free.text = getString(R.string.start_free)
-                }else{
+                } else {
                     welcome_intro_text.text = getString(R.string.welcome_back)
                     start_free.text = getString(R.string.continue_free)
                 }
             }
-        }else{
+        } else if (state.isLoading) {
+            Toast.makeText(context, "Working ;)", Toast.LENGTH_SHORT).show()
+        } else {
             Toast.makeText(context, "An error occurred", Toast.LENGTH_LONG).show()
         }
     }

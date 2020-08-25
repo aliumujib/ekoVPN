@@ -36,7 +36,7 @@ class WireGuardConfigurator @Inject constructor(
         WireGuardInitializer.getTunnelManager().deleteAll()
     }
 
-    fun configureWireGuardServers(serverConfigurations: Array<ServerConfig>): Flow<List<ServerCacheModel>> {
+    fun configureWireGuardServers(serverConfigurations: List<ServerConfig>): Flow<List<ServerCacheModel>> {
         serverConfigurations.forEach {
             Log.d(WireGuardConfigurator::class.java.simpleName, "WIRE_GUARD ${it.serverLocation}")
         }
