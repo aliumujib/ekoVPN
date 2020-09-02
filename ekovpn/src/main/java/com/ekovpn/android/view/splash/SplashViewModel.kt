@@ -28,7 +28,7 @@ class SplashViewModel @Inject constructor(private val configRepository: ConfigRe
     }
 
     fun runSetupIfNeeded() {
-        if (configRepository.hasConfiguredServers().not()) {
+        if (configRepository.hasConfiguredServers().not() && userRepository.isSignedIn().not()) {
             login()
         } else {
             fetchUser()

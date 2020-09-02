@@ -14,6 +14,7 @@ import android.net.TrafficStats
 import android.os.Build
 import android.os.StrictMode
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatDelegate
 import com.downloader.PRDownloader
 import com.ekovpn.android.di.app.DaggerApplicationComponent
 import com.ekovpn.android.di.components.CoreComponent
@@ -58,6 +59,7 @@ class ApplicationClass : ICSOpenVPNApplication() {
         PRDownloader.initialize(applicationContext)
         initAdmob()
         WireGuardInitializer.onCreate(this)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
     }
 
 

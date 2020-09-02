@@ -16,10 +16,11 @@ android {
     compileSdkVersion(29)
 
     defaultConfig {
+        applicationId  = "com.ekovpn.android"
         minSdkVersion(21)
         targetSdkVersion(29)
-        versionCode = 1
-        versionName = "0.0.8"
+        versionCode = 4
+        versionName = "1.0.0"
         resConfigs(listOf("en"))
         manifestPlaceholders = mapOf("onesignal_app_id" to "3016495d-8f12-4187-a7d2-4217b8ce7563", "onesignal_google_project_number" to "REMOTE")
     }
@@ -54,7 +55,6 @@ android {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("release")
-            isDebuggable = true
         }
         getByName("debug") {
             signingConfig = signingConfigs.getByName("debug")
@@ -69,11 +69,11 @@ android {
             buildConfigField("String", "IP_STACK_API_KEY", "\"c1aab8424db6187a6d0e5baa164afc13\"")
             buildConfigField("String", "IP_STACK_BASE_URL", "\"http://api.ipstack.com/\"")
             buildConfigField("String", "AWS_IP_BASE_URL", "\"http://checkip.amazonaws.com/\"")
-            buildConfigField("String", "EKO_VPN_BASE_URL", "\"http://184.73.71.255:3001/api/v1/app/\"")
+            buildConfigField("String", "EKO_VPN_BASE_URL", "\"http://staging.ekovpnserver.com:3001/api/v1/app/\"")
             buildConfigField("String", "ANDROID_APP_LOGIN", "\"66868\"")
             buildConfigField("String", "ANDROID_APP_PASSWORD", "\"I52nvt29\"")
             buildConfigField("String", "ADMOB_APP_ID", "\"ca-app-pub-7604868220609576~8057365177\"")
-            setDimension("implementation")
+            dimension = "implementation"
             matchingFallbacks = mutableListOf("uiRelease")
         }
         create("skeleton") {
@@ -81,10 +81,10 @@ android {
             buildConfigField("String", "IP_STACK_BASE_URL", "\"http://api.ipstack.com/\"")
             buildConfigField("String", "AWS_IP_BASE_URL", "\"http://checkip.amazonaws.com/\"")
             buildConfigField("String", "ADMOB_APP_ID", "\"ca-app-pub-7604868220609576~8057365177\"")
-            buildConfigField("String", "EKO_VPN_BASE_URL", "\"http://184.73.71.255:3001/api/v1/app/\"")
+            buildConfigField("String", "EKO_VPN_BASE_URL", "\"http://staging.ekovpnserver.com:3001/api/v1/app/\"")
             buildConfigField("String", "ANDROID_APP_LOGIN", "\"66868\"")
             buildConfigField("String", "ANDROID_APP_PASSWORD", "\"I52nvt29\"")
-            setDimension("implementation")
+            dimension = "implementation"
             matchingFallbacks = mutableListOf("skeletonRelease")
         }
     }
@@ -160,7 +160,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics:17.4.4")
     implementation("com.google.firebase:firebase-crashlytics:17.1.1")
     implementation("com.google.android.gms:play-services-ads:19.3.0")
-    implementation( "com.google.android.play:core:1.8.0")
+    implementation( "com.google.android.play:core-ktx:1.8.0")
     implementation("com.android.billingclient:billing-ktx:$billing_version")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     dependencies.add("uiImplementation", project(":openvpn"))

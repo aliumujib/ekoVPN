@@ -7,8 +7,10 @@ package com.ekovpn.android.data.repositories.user
 
 import android.content.Context
 import com.ekovpn.android.data.cache.room.dao.UsersDao
+import com.ekovpn.android.data.cache.room.entities.UserCacheModel
 import com.ekovpn.android.data.cache.settings.UserPrefManager
 import com.ekovpn.android.data.remote.models.auth.RemoteDevice
+import com.ekovpn.android.data.remote.models.auth.RemoteUser
 import com.ekovpn.android.data.remote.retrofit.EkoVPNApiService
 import com.ekovpn.android.data.repositories.auth.AuthRepository
 import com.ekovpn.android.models.Device
@@ -50,14 +52,17 @@ class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPr
                 }.flowOn(Dispatchers.IO)
     }
 
+    override fun isSignedIn():Boolean{
+        return userPrefManager.getUserId() != null
+    }
+
     override fun redeemReferral(referralCode: String): Flow<User> {
         return flow {
             val oldUser = userDao.getUser()!!.id
             val mapOfArgs = mapOf("referred_by" to referralCode)
             val user = ekoVPNAPIService.updateUserByReferralId(oldUser, mapOfArgs)
-            userDao.deleteAll()
             user.data?.toUserCacheModel()?.let {
-                userDao.insert(it)
+                saveCurrentUser(it)
             }
             addToTimeLeft(3600000L)
             emit(userDao.getUser()?.toUser()!!)
@@ -66,13 +71,14 @@ class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPr
     }
 
     override fun refreshCurrentUser(): Flow<Unit> {
-        return userDao.streamUser().filter {
-            it != null
+        return flow{
+            emit(userPrefManager.getUserId()!!)
         }.flatMapConcat {
-            authRepository.fetchUserByAccountNumber(it.account_id)
+            authRepository.fetchUserByAccountNumber(it)
         }.take(1).flatMapConcat {
             claimReferralRewards()
-        }.handleHttpErrors()
+        }.flowOn(Dispatchers.IO)
+                .handleHttpErrors()
     }
 
     override fun claimReferralRewards(): Flow<Unit> {
@@ -90,13 +96,18 @@ class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPr
             val oldUser = userDao.getUser()
             val deviceRemote = RemoteDevice(device.imei, device.device)
             val user = ekoVPNAPIService.deleteDeviceFromUserIMEI(oldUser?.account_id!!, deviceRemote.toJSONString())
-            userDao.deleteAll()
             user.data?.toUserCacheModel()?.let {
-                userDao.insert(it)
+                saveCurrentUser(it)
             }
             emit(userDao.getUser()?.toUser()!!)
         }.flowOn(Dispatchers.IO)
                 .handleHttpErrors()
+    }
+
+    private suspend fun saveCurrentUser(it: UserCacheModel) {
+        userDao.deleteAll()
+        userDao.insert(it)
+        userPrefManager.setUserAccountId(it.account_id)
     }
 
     override fun updateUserWithOrderId(orderId: String): Flow<User> {
@@ -106,7 +117,7 @@ class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPr
             map["order_number"] = orderId
             map["account_type"] = "paid"
             val user = ekoVPNAPIService.updateUserAccount(userId, map).data
-            userDao.insert(user!!.toUserCacheModel())
+            saveCurrentUser(user!!.toUserCacheModel())
             emit(user.toUser())
         }.flowOn(Dispatchers.IO)
     }

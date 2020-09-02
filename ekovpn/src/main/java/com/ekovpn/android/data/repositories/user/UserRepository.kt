@@ -29,4 +29,5 @@ interface UserRepository {
 
     fun refreshCurrentUser(): Flow<Unit>
 
+     fun isSignedIn():Boolean
 }

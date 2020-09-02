@@ -19,7 +19,17 @@ class UserPrefManager @Inject constructor(val context: Context) : CoreSharedPref
         return getPref(TIME_LEFT, 600000L)
     }
 
+    fun setUserAccountId(id: String) {
+        savePref(USER_ID, id)
+    }
+
+    fun getUserId(): String? {
+        return getPref(USER_ID, null)
+    }
+
+
     companion object {
+        const val USER_ID = "USER_ID"
         const val TIME_LEFT = "TIME_LEFT"
     }
 
