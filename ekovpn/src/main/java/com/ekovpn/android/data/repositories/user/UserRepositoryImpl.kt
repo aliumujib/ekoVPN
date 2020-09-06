@@ -8,6 +8,7 @@ package com.ekovpn.android.data.repositories.user
 import android.content.Context
 import com.ekovpn.android.data.cache.room.dao.UsersDao
 import com.ekovpn.android.data.cache.room.entities.UserCacheModel
+import com.ekovpn.android.data.cache.settings.SettingsPrefManager
 import com.ekovpn.android.data.cache.settings.UserPrefManager
 import com.ekovpn.android.data.remote.models.auth.RemoteDevice
 import com.ekovpn.android.data.remote.models.auth.RemoteUser
@@ -23,6 +24,7 @@ import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPrefManager,
+                                             private val userSettingsPrefManager: SettingsPrefManager,
                                              private val context: Context,
                                              private val authRepository: AuthRepository,
                                              private val ekoVPNAPIService: EkoVPNApiService,
@@ -40,6 +42,7 @@ class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPr
         val original = getTimeLeft()
         val new = original + newTime
         setTimeLeft(new)
+        userSettingsPrefManager.subtractFromRemainingAdAllowance(newTime)
     }
 
     override fun streamCurrentUser(): Flow<User> {

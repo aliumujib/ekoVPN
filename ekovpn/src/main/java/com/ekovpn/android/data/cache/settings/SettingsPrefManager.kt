@@ -12,8 +12,23 @@ import javax.inject.Inject
 
 class SettingsPrefManager @Inject constructor(val context: Context) : CoreSharedPrefManager(context) {
 
-    fun setHasCompletedSetup(hasCompletedSetup:Boolean) {
+    fun setHasCompletedSetup(hasCompletedSetup: Boolean) {
         savePref(HAS_COMPLETED_SETUP, hasCompletedSetup)
+    }
+
+    fun subtractFromRemainingAdAllowance(rewardEarned: Long) {
+        if (getRemainingAdAllowance() > 0) {
+            val timeLeft = getRemainingAdAllowance() - rewardEarned
+            setRemainingAdAllowance(timeLeft)
+        }
+    }
+
+    fun setRemainingAdAllowance(adAllowance: Long) {
+        savePref(AD_ALLOWANCE, adAllowance)
+    }
+
+    fun getRemainingAdAllowance(): Long {
+        return getPref(AD_ALLOWANCE, 43200001L)
     }
 
     fun getHasCompletedSetup(): Boolean {
@@ -41,6 +56,7 @@ class SettingsPrefManager @Inject constructor(val context: Context) : CoreShared
         const val HAS_COMPLETED_SETUP = "HAS_COMPLETED_SETUP"
         const val LAST_SELECTED_PROTOCOL = "LAST_SELECTED_PROTOCOL"
         const val LAST_USED_SERVER = "LAST_USED_SERVER"
+        const val AD_ALLOWANCE = "AD_ALLOWANCE"
     }
 
 }

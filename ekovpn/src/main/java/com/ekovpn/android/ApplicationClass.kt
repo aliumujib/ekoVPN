@@ -9,8 +9,6 @@ package com.ekovpn.android
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.content.SharedPreferences
-import android.net.TrafficStats
 import android.os.Build
 import android.os.StrictMode
 import androidx.annotation.RequiresApi
@@ -20,21 +18,22 @@ import com.ekovpn.android.di.app.DaggerApplicationComponent
 import com.ekovpn.android.di.components.CoreComponent
 import com.ekovpn.android.di.components.DaggerCoreComponent
 import com.ekovpn.android.di.modules.ContextModule
+import com.ekovpn.android.scheduling.TimeResetWorker
+import com.ekovpn.android.scheduling.TimeResetWorkerCreator
 import com.ekovpn.android.utils.detectAllExpect
 import com.ekovpn.wireguard.WireGuardInitializer
+import com.evernote.android.job.JobManager
+import com.evernote.android.job.JobRequest
 import com.google.android.gms.ads.MobileAds
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory
-import com.google.android.play.core.install.model.AppUpdateType
-import com.google.android.play.core.install.model.UpdateAvailability
 import com.onesignal.OneSignal
 import de.blinkt.openvpn.core.ICSOpenVPNApplication
 import org.strongswan.android.security.LocalCertificateKeyStoreProvider
 import org.strongswan.android.utils.ContextProvider
 import java.security.Security
+import java.util.concurrent.TimeUnit
 
 
 class ApplicationClass : ICSOpenVPNApplication() {
-
 
     lateinit var coreComponent: CoreComponent
 
@@ -58,8 +57,19 @@ class ApplicationClass : ICSOpenVPNApplication() {
         ContextProvider.setContext(applicationContext)
         PRDownloader.initialize(applicationContext)
         initAdmob()
+        initAndroidJob()
+
         WireGuardInitializer.onCreate(this)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+    }
+
+    private fun schedulePeriodicJob() {
+        TimeResetWorker.scheduleJob()
+    }
+
+    private fun initAndroidJob() {
+        JobManager.create(this).addJobCreator(TimeResetWorkerCreator())
+        schedulePeriodicJob()
     }
 
 

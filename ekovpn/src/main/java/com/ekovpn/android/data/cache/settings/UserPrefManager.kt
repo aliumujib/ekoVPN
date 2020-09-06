@@ -16,7 +16,7 @@ class UserPrefManager @Inject constructor(val context: Context) : CoreSharedPref
     }
 
     fun getTimeLeft(): Long {
-        return getPref(TIME_LEFT, 600000L)
+        return getPref(TIME_LEFT, 3600001L)
     }
 
     fun setUserAccountId(id: String) {

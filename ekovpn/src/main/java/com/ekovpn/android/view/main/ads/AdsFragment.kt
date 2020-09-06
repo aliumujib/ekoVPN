@@ -98,6 +98,11 @@ class AdsFragment : Fragment(), SelectionListener<Ad>, EkoVPNMgrService.TimeLeft
         bindToTimerService()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchAdOptions()
+    }
+
     private fun bindToTimerService() {
         ApplicationClass.getInstance()?.let {
             it.bindService(Intent(it, EkoVPNMgrService::class.java), mTimerServiceConnection, Service.BIND_AUTO_CREATE)
@@ -159,10 +164,15 @@ class AdsFragment : Fragment(), SelectionListener<Ad>, EkoVPNMgrService.TimeLeft
     }
 
     private fun render(it: AdsState) {
-        Log.d(AdsFragment::class.java.simpleName, "$it")
-        adAdapter.all = it.ads
-        adAdapter.notifyDataSetChanged()
-        timer_view.text = TimeMilliParser().parseTimeInMilliSeconds(it.timeLeft)
+        if(it.isLoading){
+            progressBar.visibility = View.VISIBLE
+        }else{
+            Log.d(AdsFragment::class.java.simpleName, "$it")
+            adAdapter.all = it.ads
+            adAdapter.notifyDataSetChanged()
+            timer_view.text = TimeMilliParser().parseTimeInMilliSeconds(it.timeLeft)
+            progressBar.visibility = View.GONE
+        }
     }
 
     override fun select(item: Ad) {
