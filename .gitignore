@@ -19,6 +19,7 @@ cache.properties
 *.iml
 *.apk
 *hprof
+*.aab
 
 openvpn/openvpn3
 
