@@ -188,8 +188,8 @@ class AdsFragment : Fragment(), SelectionListener<Ad>, EkoVPNMgrService.TimeLeft
         timer_view.text = timeLeftFormatted
     }
 
-    override fun handleSuccessfulSubscription(orderId: String) {
-        viewModel.updateUserWithOrderId(orderId)
+    override fun handleSuccessfulSubscription(orderId: String, purchaseToken:String) {
+        viewModel.updateUserWithOrderId(orderId, purchaseToken)
     }
 
     override fun handleUserCancellation() {

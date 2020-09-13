@@ -103,8 +103,7 @@ class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPr
                 saveCurrentUser(it)
             }
             emit(userDao.getUser()?.toUser()!!)
-        }.flowOn(Dispatchers.IO)
-                .handleHttpErrors()
+        }.flowOn(Dispatchers.IO).handleHttpErrors()
     }
 
     private suspend fun saveCurrentUser(it: UserCacheModel) {
@@ -113,12 +112,13 @@ class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPr
         userPrefManager.setUserAccountId(it.account_id)
     }
 
-    override fun updateUserWithOrderId(orderId: String): Flow<User> {
+    override fun updateUserWithOrderData(orderId: String, purchaseToken: String): Flow<User> {
         return flow {
             val userId = userDao.getUser()!!.id
             val map = mutableMapOf<String, String>()
             map["order_number"] = orderId
-            map["account_type"] = "paid"
+            map["purchase_token"] = purchaseToken
+            //map["account_type"] = "paid"
             val user = ekoVPNAPIService.updateUserAccount(userId, map).data
             saveCurrentUser(user!!.toUserCacheModel())
             emit(user.toUser())

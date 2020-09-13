@@ -130,8 +130,8 @@ class SuccessFragment : Fragment(), PremiumPurchaseView.PurchaseProcessListener 
         }.show(childFragmentManager, javaClass.simpleName)
     }
 
-    override fun handleSuccessfulSubscription(orderId: String) {
-        viewModel.updateUserWithOrderId(orderId)
+    override fun handleSuccessfulSubscription(orderId: String, purchaseToken: String) {
+        viewModel.updateUserWithOrderData(orderId, purchaseToken)
     }
 
     override fun handleUserCancellation() {

@@ -25,8 +25,8 @@ class AdsViewModel @Inject constructor(private val adsRepository: AdsRepository,
         return state.value.user?.account_type != User.AccountType.PAID
     }
 
-    fun updateUserWithOrderId(orderId: String) {
-        userRepository.updateUserWithOrderId(orderId)
+    fun updateUserWithOrderId(orderId: String, purchaseToken:String) {
+        userRepository.updateUserWithOrderData(orderId, purchaseToken)
                 .onStart {
                     _state.value = _state.value.copy(isLoading = true)
                 }.catch {

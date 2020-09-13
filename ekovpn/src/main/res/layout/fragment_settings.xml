@@ -250,7 +250,7 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:id="@+id/youtube"
+                            android:id="@+id/facebook"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -260,14 +260,14 @@
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:layout_gravity="center"
-                                android:src="@drawable/youtube" />
+                                android:src="@drawable/facebook_icon" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_marginTop="@dimen/half_space"
-                                android:text="@string/youtube"
+                                android:text="@string/facebook"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                                 android:textColor="@color/black" />
                         </LinearLayout>

@@ -249,8 +249,8 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
         }
     }
 
-    override fun handleSuccessfulSubscription(orderId: String) {
-        viewModel.updateUserWithOrderId(orderId)
+    override fun handleSuccessfulSubscription(orderId: String, purchaseToken:String) {
+        viewModel.updateUserWithOrderData(orderId, purchaseToken)
     }
 
     override fun handleUserCancellation() {

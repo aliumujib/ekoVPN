@@ -159,7 +159,7 @@ class PremiumPurchaseView : LinearLayout {
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                 listeners.forEach {
                     Log.d(PremiumPurchaseView::class.java.simpleName, purchase.purchaseToken)
-                    it.handleSuccessfulSubscription(purchase.purchaseToken)
+                    it.handleSuccessfulSubscription(purchase.orderId, purchase.purchaseToken)
                 }
             } else {
                 listeners.forEach {
@@ -169,7 +169,7 @@ class PremiumPurchaseView : LinearLayout {
         }
         if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
             if (!purchase.isAcknowledged) {
-                Log.d("PremiumPurchaseView", "$purchase.purchaseToken")
+                Log.d("PremiumPurchaseView", "${purchase.purchaseToken}")
                 val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
                         .setPurchaseToken(purchase.purchaseToken)
                 billingClient.acknowledgePurchase(acknowledgePurchaseParams.build(), acknowledgePurchaseResponseListener)
@@ -202,7 +202,7 @@ class PremiumPurchaseView : LinearLayout {
 
 
     interface PurchaseProcessListener {
-        fun handleSuccessfulSubscription(orderId: String)
+        fun handleSuccessfulSubscription(orderId: String, purchaseToken: String)
         fun handleUserCancellation()
         fun handleOtherError(error: Int)
     }

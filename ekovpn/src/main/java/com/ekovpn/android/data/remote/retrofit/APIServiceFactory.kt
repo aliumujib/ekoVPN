@@ -56,11 +56,11 @@ object APIServiceFactory {
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY
         val httpClientBuilder = OkHttpClient.Builder()
-                .addInterceptor(authInterceptor)
                 .authenticator(AuthTokenRefresherInterceptor(
                         tokenManager,
                         tokenRefresher))
-        httpClientBuilder.addInterceptor(logging)
+                .addInterceptor(authInterceptor)
+                .addInterceptor(logging)
 
         httpClientBuilder.connectTimeout(60, TimeUnit.SECONDS)
         httpClientBuilder.readTimeout(60, TimeUnit.SECONDS)

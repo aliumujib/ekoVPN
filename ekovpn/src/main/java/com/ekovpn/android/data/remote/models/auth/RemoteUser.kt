@@ -31,7 +31,7 @@ data class RemoteUser(
 ) {
 
 
-    fun fromDeviceCacheModelString(value: String): RemoteDevice {
+    private fun fromDeviceCacheModelString(value: String): RemoteDevice {
         val listType = object : TypeToken<RemoteDevice>() {
         }.type
         return Gson().fromJson(value, listType)
