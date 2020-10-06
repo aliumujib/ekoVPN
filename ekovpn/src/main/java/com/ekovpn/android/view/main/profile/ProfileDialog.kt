@@ -23,8 +23,6 @@ import com.ekovpn.android.view.compoundviews.devicesview.DevicesView
 import com.ekovpn.android.view.compoundviews.premiumpurchaseview.PremiumPurchaseView
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.rewarded.RewardItem
-import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import kotlinx.android.synthetic.main.profile_dialog.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -126,14 +124,6 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
 
     }
 
-    private fun getCallback(): RewardedAdCallback {
-        return object : RewardedAdCallback() {
-            override fun onUserEarnedReward(p0: RewardItem) {
-
-            }
-        }
-    }
-
     private fun shareText(text: String?) {
         val mimeType = "text/plain"
         val title = "Eko VPN"
@@ -159,7 +149,7 @@ class ProfileDialog : DialogFragment(), PremiumPurchaseView.PurchaseProcessListe
             it.setOnClickListener {
                 copyAccountNumberToClipBoard()
                 if (viewModel.shouldShowAds()) {
-                    requireActivity().createAndLoadRewardedAd(resources.getString(R.string.rewarded_ad_after_action), getCallback())
+                    requireActivity().createAndLoadInterstitialAd(resources.getString(R.string.interstitial_ad_after_action_))
                 }
             }
         }

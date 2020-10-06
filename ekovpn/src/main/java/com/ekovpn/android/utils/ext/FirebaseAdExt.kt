@@ -6,10 +6,12 @@
 package com.ekovpn.android.utils.ext
 
 import android.app.Activity
-import android.content.Context
 import android.util.Log
 import com.ekovpn.android.view.main.ads.AdsFragment
+import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.InterstitialAd
+import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
@@ -32,4 +34,28 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
     //RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("CF69F6487BD2BF4E9F46D152C82B6FD6"))
     rewardedAd.loadAd(AdRequest.Builder().build(), adLoadCallback)
     return rewardedAd
+}
+
+
+fun Activity.createAndLoadInterstitialAd(adUnitId: String): InterstitialAd {
+    val instance = this
+    val interstitialAd = InterstitialAd(this)
+    interstitialAd.adUnitId = adUnitId
+    val adLoadCallback = object : AdListener() {
+        override fun onAdLoaded() {
+            super.onAdLoaded()
+            Log.d(AdsFragment::class.java.simpleName, "Ad loaded")
+            interstitialAd.show()
+        }
+
+        override fun onAdFailedToLoad(p0: LoadAdError?) {
+            super.onAdFailedToLoad(p0)
+            Log.d(AdsFragment::class.java.simpleName, "failed to load $p0")
+        }
+
+    }
+    interstitialAd.adListener = adLoadCallback
+    //RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("CF69F6487BD2BF4E9F46D152C82B6FD6"))
+    interstitialAd.loadAd(AdRequest.Builder().build())
+    return interstitialAd
 }

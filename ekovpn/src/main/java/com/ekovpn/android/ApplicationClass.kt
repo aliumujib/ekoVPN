@@ -10,20 +10,18 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
-import android.os.StrictMode
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.work.Configuration
+import androidx.work.Constraints
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.downloader.PRDownloader
 import com.ekovpn.android.di.app.DaggerApplicationComponent
 import com.ekovpn.android.di.components.CoreComponent
 import com.ekovpn.android.di.components.DaggerCoreComponent
 import com.ekovpn.android.di.modules.ContextModule
-import com.ekovpn.android.scheduling.TimeResetWorker
-import com.ekovpn.android.scheduling.TimeResetWorkerCreator
-import com.ekovpn.android.utils.detectAllExpect
+import com.ekovpn.android.scheduling.TimeResetWorkerWM
 import com.ekovpn.wireguard.WireGuardInitializer
-import com.evernote.android.job.JobManager
-import com.evernote.android.job.JobRequest
 import com.google.android.gms.ads.MobileAds
 import com.onesignal.OneSignal
 import de.blinkt.openvpn.core.ICSOpenVPNApplication
@@ -32,8 +30,12 @@ import org.strongswan.android.utils.ContextProvider
 import java.security.Security
 import java.util.concurrent.TimeUnit
 
+class ApplicationClass : ICSOpenVPNApplication(), Configuration.Provider {
 
-class ApplicationClass : ICSOpenVPNApplication() {
+    override fun getWorkManagerConfiguration(): Configuration =
+            Configuration.Builder()
+                    .setMinimumLoggingLevel(android.util.Log.DEBUG)
+                    .build()
 
     lateinit var coreComponent: CoreComponent
 
@@ -57,19 +59,37 @@ class ApplicationClass : ICSOpenVPNApplication() {
         ContextProvider.setContext(applicationContext)
         PRDownloader.initialize(applicationContext)
         initAdmob()
-        initAndroidJob()
+        initWorkManager()
 
         WireGuardInitializer.onCreate(this)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
     }
 
-    private fun schedulePeriodicJob() {
-        TimeResetWorker.scheduleJob()
-    }
+    private fun initWorkManager() {
+        val constraintsBuilder = Constraints.Builder()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            constraintsBuilder.setRequiresDeviceIdle(true)
+        }
 
-    private fun initAndroidJob() {
-        JobManager.create(this).addJobCreator(TimeResetWorkerCreator())
-        schedulePeriodicJob()
+        val repeatInterval = if (BuildConfig.DEBUG) {
+            24L
+        } else {
+            24L
+        }
+
+        val timeUnit = if (BuildConfig.DEBUG) {
+            TimeUnit.HOURS
+        } else {
+            TimeUnit.HOURS
+        }
+
+
+        val constraints = constraintsBuilder.build()
+        val work = PeriodicWorkRequestBuilder<TimeResetWorkerWM>(repeatInterval, timeUnit)
+                .setConstraints(constraints)
+                .build()
+        val workManager = WorkManager.getInstance(this)
+        workManager.enqueue(work)
     }
 
 
@@ -96,17 +116,6 @@ class ApplicationClass : ICSOpenVPNApplication() {
             val manager: NotificationManager = getSystemService(NotificationManager::class.java)
             manager.createNotificationChannel(serviceChannel)
         }
-    }
-
-
-    @RequiresApi(Build.VERSION_CODES.P)
-    private fun handleAndroidOStrictModeViolations() {
-        StrictMode.setVmPolicy(
-                StrictMode.VmPolicy.Builder()
-                        .detectAllExpect("android.os.StrictMode.onUntaggedSocket")
-                        .build())
-
-        StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder().detectAll().penaltyLog().build())
     }
 
 

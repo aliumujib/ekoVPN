@@ -42,8 +42,6 @@ import com.ekovpn.android.view.main.webview.WebViewDialog
 import com.ekovpn.wireguard.WireGuardInitializer
 import com.ekovpn.wireguard.service.WireGuardService
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.rewarded.RewardItem
-import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.createBalloon
@@ -349,22 +347,26 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
 
     private fun connectToServer(server: Server) {
         lifecycleScope.launchWhenResumed {
-            if (server is Server.OVPNServer) {
-                viewModel.getOVPNProfileForServer(server.ovpnProfileId)?.let {
-                    startOrStopOpenVPN(it)
+            when (server) {
+                is Server.OVPNServer -> {
+                    viewModel.getOVPNProfileForServer(server.ovpnProfileId)?.let {
+                        startOrStopOpenVPN(it)
+                        viewModel.connectingToServer(server)
+                    }
+                }
+                is Server.IkeV2Server -> {
+                    viewModel.getIKEv2ProfileForServer(server.profileId)?.let {
+                        startOrStopIKEv2(it)
+                        viewModel.connectingToServer(server)
+                    }
+                }
+                is Server.WireGuardServer -> {
+                    if (checkIfWireGuardIsAuthorized()) {
+                        getUserVPNPermission.launch(Unit)
+                    }
                     viewModel.connectingToServer(server)
+                    startOrStopWireGuard(server.tunnelName)
                 }
-            } else if (server is Server.IkeV2Server) {
-                viewModel.getIKEv2ProfileForServer(server.profileId)?.let {
-                    startOrStopIKEv2(it)
-                    viewModel.connectingToServer(server)
-                }
-            } else if (server is Server.WireGuardServer) {
-                if (checkIfWireGuardIsAuthorized()) {
-                    getUserVPNPermission.launch(Unit)
-                }
-                viewModel.connectingToServer(server)
-                startOrStopWireGuard(server.tunnelName)
             }
         }
     }
@@ -599,7 +601,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                 startManagerService(viewModel.state.value)
                 viewModel.setConnected()
                 if (viewModel.shouldShowAds()) {
-                    requireActivity().createAndLoadRewardedAd(resources.getString(R.string.rewarded_ad_after_action), getCallback())
+                    requireActivity().createAndLoadInterstitialAd(resources.getString(R.string.interstitial_ad_after_action_))
                 }
             }
             VpnStateService.State.DISCONNECTING -> {
@@ -608,13 +610,6 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         }
     }
 
-    private fun getCallback(): RewardedAdCallback {
-        return object : RewardedAdCallback() {
-            override fun onUserEarnedReward(p0: RewardItem) {
-
-            }
-        }
-    }
 
     companion object {
         private const val REQUEST_CODE_VPN_PERMISSION = 23491

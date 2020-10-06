@@ -24,11 +24,9 @@ import com.ekovpn.android.R
 import com.ekovpn.android.models.Protocol
 import com.ekovpn.android.di.main.settings.DaggerSettingsComponent
 import com.ekovpn.android.di.main.settings.SettingsModule
-import com.ekovpn.android.utils.ext.createAndLoadRewardedAd
+import com.ekovpn.android.utils.ext.createAndLoadInterstitialAd
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
 import com.ekovpn.android.view.main.webview.WebViewDialog
-import com.google.android.gms.ads.rewarded.RewardItem
-import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
@@ -52,13 +50,6 @@ class SettingsFragment : Fragment() {
         injectDependencies()
     }
 
-    private fun getCallback(): RewardedAdCallback {
-        return object : RewardedAdCallback() {
-            override fun onUserEarnedReward(p0: RewardItem) {
-
-            }
-        }
-    }
 
     private val checkChangeListener = RadioGroup.OnCheckedChangeListener { group, checkedId ->
         when (checkedId) {
@@ -76,7 +67,7 @@ class SettingsFragment : Fragment() {
             }
         }
         if (viewModel.shouldShowAds()) {
-            requireActivity().createAndLoadRewardedAd(resources.getString(R.string.rewarded_ad_after_action), getCallback())
+            requireActivity().createAndLoadInterstitialAd(resources.getString(R.string.interstitial_ad_after_action_))
         }
         Toast.makeText(requireContext(), getString(R.string.new_protocol_selected), Toast.LENGTH_LONG).show()
     }
