@@ -368,6 +368,10 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                     startOrStopWireGuard(server.tunnelName)
                 }
             }
+
+            if (viewModel.shouldShowAds()) {
+                requireActivity().createAndLoadInterstitialAd(resources.getString(R.string.country_page_interstitial_ad))
+            }
         }
     }
 

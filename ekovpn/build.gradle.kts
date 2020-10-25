@@ -19,8 +19,8 @@ android {
         applicationId  = "com.ekovpn.android"
         minSdkVersion(21)
         targetSdkVersion(29)
-        versionCode = 9
-        versionName = "1.0.5"
+        versionCode = 10
+        versionName = "1.0.6"
         resConfigs(listOf("en"))
         manifestPlaceholders = mapOf("onesignal_app_id" to "3016495d-8f12-4187-a7d2-4217b8ce7563", "onesignal_google_project_number" to "REMOTE")
     }
@@ -60,7 +60,6 @@ android {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("release")
-            //isDebuggable = true
         }
 //        create("debuggableRelease") {
 //            isMinifyEnabled = false

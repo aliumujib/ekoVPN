@@ -107,7 +107,6 @@ class ConfigRepositoryImpl @Inject constructor(private val context: Context,
         settingsPrefManager.setHasCompletedSetup(true)
     }
 
-
     companion object {
         const val FILE_NAME = "servers_wg_final.json"
     }

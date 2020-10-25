@@ -33,7 +33,7 @@
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-7604868220609576~8057365177" />
+            android:value="ca-app-pub-7066463386512008~1187120286" />
 
         <activity
             android:name=".view.main.VpnActivity"

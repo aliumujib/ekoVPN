@@ -28,12 +28,14 @@ import com.ekovpn.android.utils.ext.createAndLoadInterstitialAd
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
 import com.ekovpn.android.view.main.webview.WebViewDialog
 import kotlinx.android.synthetic.main.fragment_settings.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 
+@ExperimentalCoroutinesApi
 class SettingsFragment : Fragment() {
 
     @Inject
@@ -67,7 +69,7 @@ class SettingsFragment : Fragment() {
             }
         }
         if (viewModel.shouldShowAds()) {
-            requireActivity().createAndLoadInterstitialAd(resources.getString(R.string.interstitial_ad_after_action_))
+            requireActivity().createAndLoadInterstitialAd(resources.getString(R.string.settings_page_interstitial_ad))
         }
         Toast.makeText(requireContext(), getString(R.string.new_protocol_selected), Toast.LENGTH_LONG).show()
     }
