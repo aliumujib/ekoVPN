@@ -37,8 +37,8 @@ class AuthViewModel @Inject constructor(private val configRepository: ConfigRepo
         return _state.value.user?.account_id
     }
 
-    fun updateUserWithOrderId(orderId: String) {
-        userRepository.updateUserWithOrderId(orderId)
+    fun updateUserWithOrderData(orderId: String, purchaseToken: String) {
+        userRepository.updateUserWithOrderData(orderId, purchaseToken)
                 .onStart {
                     _state.value = _state.value.copy(isLoading = true, error = null)
                 }.catch {
@@ -122,11 +122,12 @@ class AuthViewModel @Inject constructor(private val configRepository: ConfigRepo
     }
 
     fun applyReferralCode(referralCode: String) {
-        userRepository.redeemReferral(referralCode.trim()).onStart {
+        userRepository.redeemReferral(referralCode.trim())
+                .onStart {
             _state.value = _state.value.copy(isLoading = true, error = null)
         }.catch {
             it.printStackTrace()
-            _state.value = _state.value.copy(error = Throwable("An error occurred while recovering your account ${it.message}, please contact support."), isLoading = false, user = null)
+            _state.value = _state.value.copy(error = it, isLoading = false, user = null)
         }.launchIn(viewModelScope)
     }
 

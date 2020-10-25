@@ -19,5 +19,5 @@ data class ProfileState(
 //    object Working : ProfileState(true, null, null)
 //    data class Finished(val user: User) : ProfileState(false, user, null)
 //    object Failed : ProfileState(false, null, Throwable("An error occurred"))
-
 }
+

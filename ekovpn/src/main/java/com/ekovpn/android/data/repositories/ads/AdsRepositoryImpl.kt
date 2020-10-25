@@ -6,6 +6,7 @@
 package com.ekovpn.android.data.repositories.ads
 
 import android.content.Context
+import com.ekovpn.android.data.cache.settings.SettingsPrefManager
 import com.ekovpn.android.models.Ad
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
@@ -13,7 +14,8 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class AdsRepositoryImpl @Inject constructor(val context: Context) : AdsRepository {
+class AdsRepositoryImpl @Inject constructor(val context: Context,
+                                            private val settingsPrefManager: SettingsPrefManager) : AdsRepository {
 
     private fun loadJSONData(): Array<AdModel> {
         val data = loadFromJson()
@@ -24,6 +26,8 @@ class AdsRepositoryImpl @Inject constructor(val context: Context) : AdsRepositor
         return flowOf(loadJSONData()).map { array ->
             array.map {
                 Ad.fromAdModel(it)
+            }.filter {
+                it.timeAddition <= settingsPrefManager.getRemainingAdAllowance()
             }
         }
     }

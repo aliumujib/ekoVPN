@@ -35,7 +35,7 @@ class OpenVpnConfigurator @Inject constructor(
         private val ovpnProfileImporter: OVPNProfileImporter,
         private val serversDao: ServersDao) {
 
-    fun configureOVPNServers(serverConfigurations: Array<ServerConfig>): Flow<List<ServerCacheModel>> {
+    fun configureOVPNServers(serverConfigurations: List<ServerConfig>): Flow<List<ServerCacheModel>> {
         serverConfigurations.forEach {
             Log.d(OpenVpnConfigurator::class.java.simpleName, "OPEN VPN ${it.serverLocation}")
         }

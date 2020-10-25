@@ -15,21 +15,14 @@ class AuthInterceptor @Inject constructor(private var tokenManager: TokenManager
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response? {
-
         val request = chain.request()
-
         val requestBuilder = request.newBuilder()
-
         if (tokenManager.getToken() != null) {
             requestBuilder.addHeader("Authorization", "Bearer " + tokenManager.getToken())
         }
-
-        var response: Response? = null
-
+        val response: Response?
         try {
-
             response = chain.proceed(requestBuilder.build())
-
         } catch (e: Exception) {
             Log.d(TAG, "<-- HTTP FAILED: $e")
             throw e

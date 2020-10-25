@@ -16,11 +16,30 @@ class UserPrefManager @Inject constructor(val context: Context) : CoreSharedPref
     }
 
     fun getTimeLeft(): Long {
-        return getPref(TIME_LEFT, 600000L)
+        return getPref(TIME_LEFT, 3600001L)
     }
 
+    fun setUserAccountId(id: String) {
+        savePref(USER_ID, id)
+    }
+
+    fun setHasScheduledReseter(hasScheduledReseter: Boolean) {
+        savePref(FIRST_RUN, hasScheduledReseter)
+    }
+
+    fun hasScheduledReseter(): Boolean {
+        return getPref(FIRST_RUN, false)
+    }
+
+    fun getUserId(): String? {
+        return getPref(USER_ID, null)
+    }
+
+
     companion object {
+        const val USER_ID = "USER_ID"
         const val TIME_LEFT = "TIME_LEFT"
+        const val FIRST_RUN = "FIRST_RUN"
     }
 
 }

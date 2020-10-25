@@ -51,7 +51,9 @@
 
     <style name="Theme.EkoVPN.WhiteAccent">
         <item name="android:windowEnterAnimation">@anim/slide_in_up</item>
+        <item name="colorAccent">@color/white</item>
     </style>
+
 
     <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog" />
 

@@ -19,7 +19,7 @@ interface UserRepository {
 
     fun streamCurrentUser(): Flow<User>
 
-    fun updateUserWithOrderId(orderId: String) : Flow<User>
+    fun updateUserWithOrderData(orderId: String, purchaseToken: String) : Flow<User>
 
     fun deleteDevice(device: Device): Flow<User>
 
@@ -29,4 +29,5 @@ interface UserRepository {
 
     fun refreshCurrentUser(): Flow<Unit>
 
+     fun isSignedIn():Boolean
 }

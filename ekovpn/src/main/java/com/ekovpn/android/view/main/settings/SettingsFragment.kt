@@ -6,7 +6,6 @@
 package com.ekovpn.android.view.main.settings
 
 import android.content.ActivityNotFoundException
-import android.content.ClipDescription
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -17,29 +16,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioGroup
 import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.ekovpn.android.BuildConfig
 import com.ekovpn.android.R
 import com.ekovpn.android.models.Protocol
 import com.ekovpn.android.di.main.settings.DaggerSettingsComponent
 import com.ekovpn.android.di.main.settings.SettingsModule
-import com.ekovpn.android.utils.ext.createAndLoadRewardedAd
+import com.ekovpn.android.utils.ext.createAndLoadInterstitialAd
 import com.ekovpn.android.view.main.VpnActivity.Companion.vpnComponent
-import com.ekovpn.android.view.main.home.HomeFragmentDirections
 import com.ekovpn.android.view.main.webview.WebViewDialog
-import com.google.android.gms.ads.rewarded.RewardItem
-import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import kotlinx.android.synthetic.main.fragment_settings.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 
+@ExperimentalCoroutinesApi
 class SettingsFragment : Fragment() {
 
     @Inject
@@ -56,13 +52,6 @@ class SettingsFragment : Fragment() {
         injectDependencies()
     }
 
-    private fun getCallback(): RewardedAdCallback {
-        return object : RewardedAdCallback() {
-            override fun onUserEarnedReward(p0: RewardItem) {
-
-            }
-        }
-    }
 
     private val checkChangeListener = RadioGroup.OnCheckedChangeListener { group, checkedId ->
         when (checkedId) {
@@ -80,7 +69,7 @@ class SettingsFragment : Fragment() {
             }
         }
         if (viewModel.shouldShowAds()) {
-            requireActivity().createAndLoadRewardedAd("ca-app-pub-3940256099942544/5224354917", getCallback())
+            requireActivity().createAndLoadInterstitialAd(resources.getString(R.string.settings_page_interstitial_ad))
         }
         Toast.makeText(requireContext(), getString(R.string.new_protocol_selected), Toast.LENGTH_LONG).show()
     }
@@ -119,9 +108,9 @@ class SettingsFragment : Fragment() {
             }
         }
 
-        youtube.children.forEach {
+        facebook.children.forEach {
             it.setOnClickListener {
-                openYoutube()
+                openFacebook()
             }
         }
 
@@ -148,20 +137,20 @@ class SettingsFragment : Fragment() {
     }
 
     private fun openInstagram() {
-        val uri = Uri.parse("http://instagram.com/_u/ekoVPN")
+        val uri = Uri.parse("http://instagram.com/_u/eko.vpn")
         val likeIng = Intent(Intent.ACTION_VIEW, uri)
         likeIng.setPackage("com.instagram.android")
         try {
             startActivity(likeIng)
         } catch (e: ActivityNotFoundException) {
             startActivity(Intent(Intent.ACTION_VIEW,
-                    Uri.parse("http://instagram.com/ekoVPN")))
+                    Uri.parse("http://instagram.com/eko.vpn")))
         }
     }
 
-    private fun openYoutube() {
-        val intentApp = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:NcaiHcBvDR4"))
-        val intentBrowser = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=NcaiHcBvDR4"))
+    private fun openFacebook() {
+        val intentApp = Intent(Intent.ACTION_VIEW, Uri.parse("fb://page/@ekovpn"))
+        val intentBrowser = Intent(Intent.ACTION_VIEW, Uri.parse("https://web.facebook.com/ekovpn/community"))
         try {
             this.startActivity(intentApp)
         } catch (ex: ActivityNotFoundException) {

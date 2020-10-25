@@ -25,7 +25,7 @@
     <string name="IkeV2">IkeV2</string>
     <string name="wireguard">Wireguard</string>
     <string name="rate_our_app">Rate our App</string>
-    <string name="lets_go_social">Lets go social</string>
+    <string name="lets_go_social">Let\'s Go Social</string>
     <string name="twitter">Twitter</string>
     <string name="youtube">Youtube</string>
     <string name="instagram">Instagram</string>
@@ -94,6 +94,7 @@
     <string name="referral_code">Referral Code</string>
     <string name="redeem_ref">Redeem Referral Code</string>
     <string name="error_performing_request">An error occurred</string>
+    <string name="facebook">Facebook</string>
 
     <plurals name="plural_videos">
         <item quantity="one">Watch %d video</item>

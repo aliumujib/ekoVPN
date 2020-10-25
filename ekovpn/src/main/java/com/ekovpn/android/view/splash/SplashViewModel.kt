@@ -28,7 +28,7 @@ class SplashViewModel @Inject constructor(private val configRepository: ConfigRe
     }
 
     fun runSetupIfNeeded() {
-        if (configRepository.hasConfiguredServers().not()) {
+        if (configRepository.hasConfiguredServers().not() && userRepository.isSignedIn().not()) {
             login()
         } else {
             fetchUser()
@@ -38,7 +38,7 @@ class SplashViewModel @Inject constructor(private val configRepository: ConfigRe
     private fun fetchUser() {
         userRepository.refreshCurrentUser()
                 .onStart {
-
+                    _state.value = SetUpState.Working
                 }
                 .onEach {
                     _state.value = SetUpState.Finished
@@ -52,7 +52,7 @@ class SplashViewModel @Inject constructor(private val configRepository: ConfigRe
     private fun login() {
         authRepository.loginToApp()
                 .onStart {
-
+                    _state.value = SetUpState.Working
                 }
                 .onEach {
                     Log.d(SplashViewModel::class.java.simpleName, "$it")

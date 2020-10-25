@@ -21,8 +21,8 @@ class ProfileViewModel @Inject constructor(val userRepository: UserRepository, p
     private val _state = MutableStateFlow(ProfileState(true, null, null, false))
     val state: StateFlow<ProfileState> = _state
 
-    fun updateUserWithOrderId(orderId: String) {
-        userRepository.updateUserWithOrderId(orderId)
+    fun updateUserWithOrderData(orderId: String, purchaseToken:String) {
+        userRepository.updateUserWithOrderData(orderId, purchaseToken)
                 .onStart {
                     _state.value = _state.value.copy(isLoading = true)
                 }.catch {

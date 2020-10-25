@@ -313,9 +313,6 @@
         </androidx.cardview.widget.CardView>
 
 
-        <!--PROD: ca-app-pub-7604868220609576/2561495917 -->
-        <!--TEST: ca-app-pub-3940256099942544/6300978111 -->
-
         <com.google.android.gms.ads.AdView
             android:id="@+id/adView"
             android:layout_width="wrap_content"
@@ -324,7 +321,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             app:adSize="MEDIUM_RECTANGLE"
-            app:adUnitId="ca-app-pub-3940256099942544/6300978111"
+            app:adUnitId="@string/home_banner_ad_id"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-class AdsViewModel @Inject constructor(adsRepository: AdsRepository,
+class AdsViewModel @Inject constructor(private val adsRepository: AdsRepository,
                                        private val userRepository: UserRepository) : ViewModel() {
 
     private val _state = MutableStateFlow(AdsState(timeLeft = userRepository.getTimeLeft()))
@@ -25,8 +25,8 @@ class AdsViewModel @Inject constructor(adsRepository: AdsRepository,
         return state.value.user?.account_type != User.AccountType.PAID
     }
 
-    fun updateUserWithOrderId(orderId: String) {
-        userRepository.updateUserWithOrderId(orderId)
+    fun updateUserWithOrderId(orderId: String, purchaseToken:String) {
+        userRepository.updateUserWithOrderData(orderId, purchaseToken)
                 .onStart {
                     _state.value = _state.value.copy(isLoading = true)
                 }.catch {
@@ -38,6 +38,10 @@ class AdsViewModel @Inject constructor(adsRepository: AdsRepository,
     }
 
     init {
+        fetchAdOptions()
+    }
+
+    fun fetchAdOptions() {
         adsRepository.fetchAds()
                 .onEach {
                     _state.value = _state.value.copy(ads = it)

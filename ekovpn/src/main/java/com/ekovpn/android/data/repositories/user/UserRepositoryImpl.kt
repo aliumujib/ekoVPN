@@ -7,8 +7,11 @@ package com.ekovpn.android.data.repositories.user
 
 import android.content.Context
 import com.ekovpn.android.data.cache.room.dao.UsersDao
+import com.ekovpn.android.data.cache.room.entities.UserCacheModel
+import com.ekovpn.android.data.cache.settings.SettingsPrefManager
 import com.ekovpn.android.data.cache.settings.UserPrefManager
 import com.ekovpn.android.data.remote.models.auth.RemoteDevice
+import com.ekovpn.android.data.remote.models.auth.RemoteUser
 import com.ekovpn.android.data.remote.retrofit.EkoVPNApiService
 import com.ekovpn.android.data.repositories.auth.AuthRepository
 import com.ekovpn.android.models.Device
@@ -21,6 +24,7 @@ import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPrefManager,
+                                             private val userSettingsPrefManager: SettingsPrefManager,
                                              private val context: Context,
                                              private val authRepository: AuthRepository,
                                              private val ekoVPNAPIService: EkoVPNApiService,
@@ -38,6 +42,7 @@ class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPr
         val original = getTimeLeft()
         val new = original + newTime
         setTimeLeft(new)
+        userSettingsPrefManager.subtractFromRemainingAdAllowance(newTime)
     }
 
     override fun streamCurrentUser(): Flow<User> {
@@ -50,41 +55,42 @@ class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPr
                 }.flowOn(Dispatchers.IO)
     }
 
+    override fun isSignedIn():Boolean{
+        return userPrefManager.getUserId() != null
+    }
+
     override fun redeemReferral(referralCode: String): Flow<User> {
         return flow {
             val oldUser = userDao.getUser()!!.id
             val mapOfArgs = mapOf("referred_by" to referralCode)
             val user = ekoVPNAPIService.updateUserByReferralId(oldUser, mapOfArgs)
-            userDao.deleteAll()
             user.data?.toUserCacheModel()?.let {
-                userDao.insert(it)
+                saveCurrentUser(it)
             }
+            addToTimeLeft(3600000L)
             emit(userDao.getUser()?.toUser()!!)
         }.flowOn(Dispatchers.IO)
+                .handleHttpErrors()
     }
 
     override fun refreshCurrentUser(): Flow<Unit> {
-        return userDao.streamUser().filter {
-            it != null
+        return flow{
+            emit(userPrefManager.getUserId()!!)
         }.flatMapConcat {
-            authRepository.fetchUserByAccountNumber(it.account_id)
+            authRepository.fetchUserByAccountNumber(it)
         }.take(1).flatMapConcat {
             claimReferralRewards()
-        }.handleHttpErrors()
+        }.flowOn(Dispatchers.IO)
+                .handleHttpErrors()
     }
 
     override fun claimReferralRewards(): Flow<Unit> {
         return flow {
             val oldUser = userDao.getUser()
             val count = ekoVPNAPIService.claimUserReferrals(oldUser?.account_id!!).data
-            count?.let {
-                repeat(it) {
-                    addToTimeLeft(3600000L)
-                }
-            }
+            addToTimeLeft(3600000L * count!!)
             emit(Unit)
-        }
-                .handleHttpErrors()
+        }.handleHttpErrors()
                 .flowOn(Dispatchers.IO)
     }
 
@@ -93,23 +99,29 @@ class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPr
             val oldUser = userDao.getUser()
             val deviceRemote = RemoteDevice(device.imei, device.device)
             val user = ekoVPNAPIService.deleteDeviceFromUserIMEI(oldUser?.account_id!!, deviceRemote.toJSONString())
-            userDao.deleteAll()
             user.data?.toUserCacheModel()?.let {
-                userDao.insert(it)
+                saveCurrentUser(it)
             }
             emit(userDao.getUser()?.toUser()!!)
-        }.flowOn(Dispatchers.IO)
+        }.flowOn(Dispatchers.IO).handleHttpErrors()
     }
 
-    override fun updateUserWithOrderId(orderId: String): Flow<User> {
+    private suspend fun saveCurrentUser(it: UserCacheModel) {
+        userDao.deleteAll()
+        userDao.insert(it)
+        userPrefManager.setUserAccountId(it.account_id)
+    }
+
+    override fun updateUserWithOrderData(orderId: String, purchaseToken: String): Flow<User> {
         return flow {
             val userId = userDao.getUser()!!.id
             val map = mutableMapOf<String, String>()
             map["order_number"] = orderId
-            map["account_type"] = "paid"
+            map["purchase_token"] = purchaseToken
+            //map["account_type"] = "paid"
             val user = ekoVPNAPIService.updateUserAccount(userId, map).data
-            userDao.insert(user!!.toUserCacheModel())
-            emit(user!!.toUser())
+            saveCurrentUser(user!!.toUserCacheModel())
+            emit(user.toUser())
         }.flowOn(Dispatchers.IO)
     }
 

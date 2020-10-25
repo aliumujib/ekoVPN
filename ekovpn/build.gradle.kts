@@ -16,10 +16,11 @@ android {
     compileSdkVersion(29)
 
     defaultConfig {
+        applicationId  = "com.ekovpn.android"
         minSdkVersion(21)
         targetSdkVersion(29)
-        versionCode = 1
-        versionName = "0.0.8"
+        versionCode = 10
+        versionName = "1.0.6"
         resConfigs(listOf("en"))
         manifestPlaceholders = mapOf("onesignal_app_id" to "3016495d-8f12-4187-a7d2-4217b8ce7563", "onesignal_google_project_number" to "REMOTE")
     }
@@ -33,14 +34,19 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
-
     signingConfigs {
-//        getByName("debug") {
-//            keyAlias = "debug"
-//            keyPassword = "my debug key password"
-//            storeFile = file("/home/miles/keystore.jks")
-//            storePassword = "my keystore password"
-//        }
+        getByName("debug") {
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+            storeFile = rootProject.file("debug.keystore")
+            storePassword = "android"
+        }
+        create("debuggableRelease") {
+            storeFile = file("ekovpn_key.jks")
+            storePassword = "Password01"
+            keyAlias = "ekoVPN"
+            keyPassword = "Password01"
+        }
         create("release") {
             storeFile = file("ekovpn_key.jks")
             storePassword = "Password01"
@@ -54,8 +60,13 @@ android {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("release")
-            isDebuggable = true
         }
+//        create("debuggableRelease") {
+//            isMinifyEnabled = false
+//            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+//            signingConfig = signingConfigs.getByName("release")
+//            isDebuggable = true
+//        }
         getByName("debug") {
             signingConfig = signingConfigs.getByName("debug")
             isDebuggable = true
@@ -69,11 +80,11 @@ android {
             buildConfigField("String", "IP_STACK_API_KEY", "\"c1aab8424db6187a6d0e5baa164afc13\"")
             buildConfigField("String", "IP_STACK_BASE_URL", "\"http://api.ipstack.com/\"")
             buildConfigField("String", "AWS_IP_BASE_URL", "\"http://checkip.amazonaws.com/\"")
-            buildConfigField("String", "EKO_VPN_BASE_URL", "\"http://184.73.71.255:3001/api/v1/app/\"")
+            buildConfigField("String", "EKO_VPN_BASE_URL", "\"https://appapi.ekovpnstagingserver.com/api/v1/app/\"")
             buildConfigField("String", "ANDROID_APP_LOGIN", "\"66868\"")
             buildConfigField("String", "ANDROID_APP_PASSWORD", "\"I52nvt29\"")
             buildConfigField("String", "ADMOB_APP_ID", "\"ca-app-pub-7604868220609576~8057365177\"")
-            setDimension("implementation")
+            dimension = "implementation"
             matchingFallbacks = mutableListOf("uiRelease")
         }
         create("skeleton") {
@@ -81,10 +92,10 @@ android {
             buildConfigField("String", "IP_STACK_BASE_URL", "\"http://api.ipstack.com/\"")
             buildConfigField("String", "AWS_IP_BASE_URL", "\"http://checkip.amazonaws.com/\"")
             buildConfigField("String", "ADMOB_APP_ID", "\"ca-app-pub-7604868220609576~8057365177\"")
-            buildConfigField("String", "EKO_VPN_BASE_URL", "\"http://184.73.71.255:3001/api/v1/app/\"")
+            buildConfigField("String", "EKO_VPN_BASE_URL", "\"https://appapi.ekovpnstagingserver.com/api/v1/app/\"")
             buildConfigField("String", "ANDROID_APP_LOGIN", "\"66868\"")
             buildConfigField("String", "ANDROID_APP_PASSWORD", "\"I52nvt29\"")
-            setDimension("implementation")
+            dimension = "implementation"
             matchingFallbacks = mutableListOf("skeletonRelease")
         }
     }
@@ -110,6 +121,7 @@ dependencies {
     val retrofitGsonVersion = "2.3.0"
     val streamsupportVersion = "1.7.2"
     val billing_version = "3.0.0"
+    val work_version = "2.4.0"
 
 
     implementation("androidx.annotation:annotation:1.1.0")
@@ -150,10 +162,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.mindorks.android:prdownloader:0.6.0")
-    implementation("com.onesignal:OneSignal:3.15.2"){
-        exclude(group = "com.google.firebase", module = "firebase-messaging")
-    }
-
+    implementation("com.onesignal:OneSignal:3.15.2")
     implementation ("com.github.skydoves:balloon:1.1.5")
     implementation("net.sourceforge.streamsupport:android-retrofuture:$streamsupportVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.7")
@@ -163,9 +172,11 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics:17.4.4")
     implementation("com.google.firebase:firebase-crashlytics:17.1.1")
     implementation("com.google.android.gms:play-services-ads:19.3.0")
-    implementation( "com.google.android.play:core:1.6.4")
+    implementation( "com.google.android.play:core-ktx:1.8.0")
     implementation("com.android.billingclient:billing-ktx:$billing_version")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
+    implementation( "androidx.work:work-runtime-ktx:$work_version")
+
     dependencies.add("uiImplementation", project(":openvpn"))
     dependencies.add("skeletonImplementation", project(":openvpn"))
     implementation(project(":ikeV2"))

@@ -155,11 +155,11 @@ class EkoVPNMgrService : Service() {
         val buyPremiumPendingIntent = PendingIntent.getActivity(this, 0, buyPremiumIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val builder: NotificationCompat.Builder = NotificationCompat.Builder(this, EKO_NOTIFICATION_CHANNEL_ID)
-                .setSmallIcon(R.drawable.eko_notifications)
+                .setSmallIcon(R.drawable.ic_stat_onesignal_default)
                 .setContentTitle(getString(R.string.out_of_time))
                 .setContentText(getString(R.string.out_of_time_desc))
-                .addAction(R.drawable.eko_notifications, getString(R.string.get_more_time), viewMoreAdsPendingIntent)
-                .addAction(R.drawable.eko_notifications, getString(R.string.buy_premimum), buyPremiumPendingIntent)
+                .addAction(R.drawable.ic_stat_onesignal_default, getString(R.string.get_more_time), viewMoreAdsPendingIntent)
+                .addAction(R.drawable.ic_stat_onesignal_default, getString(R.string.buy_premimum), buyPremiumPendingIntent)
                 .setAutoCancel(true)
 
         val notification = builder.build()
@@ -244,7 +244,7 @@ class EkoVPNMgrService : Service() {
         val notification: NotificationCompat.Builder = NotificationCompat.Builder(this, EKO_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(resources.getString(R.string.app_name))
                 .setContentText("Connected")
-                .setSmallIcon(R.drawable.eko_notifications)
+                .setSmallIcon(R.drawable.ic_stat_onesignal_default)
                 .setStyle(NotificationCompat.DecoratedCustomViewStyle())
                 .setContentIntent(pendingIntent)
         val notificationBuild = notification.build()
@@ -264,7 +264,7 @@ class EkoVPNMgrService : Service() {
         val notification: NotificationCompat.Builder = NotificationCompat.Builder(this, EKO_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(resources.getString(R.string.app_name))
                 .setContentText("Connected")
-                .setSmallIcon(R.drawable.eko_notifications)
+                .setSmallIcon(R.drawable.ic_stat_onesignal_default)
                 .setStyle(NotificationCompat.DecoratedCustomViewStyle())
                 .setContentIntent(pendingIntent)
 

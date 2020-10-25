@@ -51,7 +51,7 @@ class AuthTokenRefresherInterceptor(
     override fun authenticate(route: Route?, response: Response): Request? {
 
         var errorMessage: String? = getErrorMessageIfExists(response)
-        if (response.code() == 401 && countOfRetry < 4 && errorMessage?.contains("auth token") == true) {
+        if (response.code() == 401 && countOfRetry < 4 && errorMessage?.contains("jwt expired", true) == true) {
             // We need to have a token in order to refresh it.
             Log.d(AuthTokenRefresherInterceptor::class.java.simpleName, "ReAuthenticating token")
 

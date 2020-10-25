@@ -42,8 +42,6 @@ import com.ekovpn.android.view.main.webview.WebViewDialog
 import com.ekovpn.wireguard.WireGuardInitializer
 import com.ekovpn.wireguard.service.WireGuardService
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.rewarded.RewardItem
-import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.createBalloon
@@ -64,7 +62,6 @@ import org.strongswan.android.logic.VpnStateService.LocalBinder
 import org.strongswan.android.ui.VpnProfileControlActivity
 import javax.inject.Inject
 
-
 @ExperimentalCoroutinesApi
 class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener, EkoVPNMgrService.TimeLeftListener, WireGuardService.WireGuardListener {
 
@@ -75,7 +72,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
     private var ekoVpnMgrService: EkoVPNMgrService? = null
     private var wireGuardService: WireGuardService? = null
 
-    private var balloon:Balloon?= null
+    private var balloon: Balloon? = null
 
     private val getUserVPNPermission = registerForActivityResult(GetWireGuardVPNPermissions()) {
         if (it) {
@@ -137,7 +134,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
     }
 
     private fun bindToServices() {
-        /* bind to the service only seems to work from the ApplicationContext */
+        /* we want the service bound to the app context */
         ApplicationClass.getInstance()?.let {
             it.bindService(Intent(it, VpnStateService::class.java), mIKEv2ServiceConnection, Service.BIND_AUTO_CREATE)
             it.bindService(Intent(it, EkoVPNMgrService::class.java), mTimerServiceConnection, Service.BIND_AUTO_CREATE)
@@ -262,12 +259,11 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
 
         balloon = createBalloon(requireContext()) {
             setArrowSize(10)
-            setWidthRatio(0.4f)
             setHeight(50)
             setArrowPosition(0.5f)
             setCornerRadius(4f)
             setAlpha(0.9f)
-            setText("Click here to connect")
+            setText("   Click here to connect   ")
             setTextColorResource(R.color.black)
             setBackgroundColorResource(R.color.grey)
             setBalloonAnimation(BalloonAnimation.FADE)
@@ -351,22 +347,30 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
 
     private fun connectToServer(server: Server) {
         lifecycleScope.launchWhenResumed {
-            if (server is Server.OVPNServer) {
-                viewModel.getOVPNProfileForServer(server.ovpnProfileId)?.let {
-                    startOrStopOpenVPN(it)
+            when (server) {
+                is Server.OVPNServer -> {
+                    viewModel.getOVPNProfileForServer(server.ovpnProfileId)?.let {
+                        startOrStopOpenVPN(it)
+                        viewModel.connectingToServer(server)
+                    }
+                }
+                is Server.IkeV2Server -> {
+                    viewModel.getIKEv2ProfileForServer(server.profileId)?.let {
+                        startOrStopIKEv2(it)
+                        viewModel.connectingToServer(server)
+                    }
+                }
+                is Server.WireGuardServer -> {
+                    if (checkIfWireGuardIsAuthorized()) {
+                        getUserVPNPermission.launch(Unit)
+                    }
                     viewModel.connectingToServer(server)
+                    startOrStopWireGuard(server.tunnelName)
                 }
-            } else if (server is Server.IkeV2Server) {
-                viewModel.getIKEv2ProfileForServer(server.profileId)?.let {
-                    startOrStopIKEv2(it)
-                    viewModel.connectingToServer(server)
-                }
-            } else if (server is Server.WireGuardServer) {
-                if (checkIfWireGuardIsAuthorized()) {
-                    getUserVPNPermission.launch(Unit)
-                }
-                viewModel.connectingToServer(server)
-                startOrStopWireGuard(server.tunnelName)
+            }
+
+            if (viewModel.shouldShowAds()) {
+                requireActivity().createAndLoadInterstitialAd(resources.getString(R.string.country_page_interstitial_ad))
             }
         }
     }
@@ -429,63 +433,78 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         val timeMilliParser = TimeMilliParser()
         when (it.connectionStatus) {
             HomeState.ConnectionStatus.DISCONNECTED -> {
-                connect.setStrokeColorResource(R.color.eko_red_light)
-                connection_status_.text = resources.getString(R.string.disconnected_status_)
-                connect.isEnabled = true
-                connect.isClickable = true
-                disconnect.visibility = View.GONE
-                connect.visibility = View.VISIBLE
-                progressBar.visibility = View.GONE
-                timer_view.text = timeMilliParser.parseTimeInMilliSeconds(it.timeLeft)
-                selected_title.text = resources.getString(R.string.current_location)
-                connection_status_.setIconTintResource(R.color.eko_red_light)
-                it.currentLocation?.let {
-                    initCurrentConnectionUI(it)
-                }
-                stopCountDownTimerService()
-                connect_parent.startRippleAnimation()
-                if(it.hasShownBalloonCTA){
-                    balloon?.dismiss()
-                }else{
-                    balloon?.showAlignTop(connect)
-                }
+                setUiDisconnectedState(timeMilliParser, it)
             }
             HomeState.ConnectionStatus.CONNECTING -> {
-                connection_status_.text = resources.getString(R.string.connecting_status_)
-                disconnect.visibility = View.VISIBLE
-                connect.visibility = View.GONE
-                connect.setStrokeColorResource(R.color.white)
-                connection_status_.setIconTintResource(R.color.grey)
-                progressBar.visibility = View.VISIBLE
-                connect.isEnabled = false
-                connect.isClickable = false
-                timer_view.text = timeMilliParser.parseTimeInMilliSeconds(it.timeLeft)
-                connect_parent.stopRippleAnimation()
+                setUIConnectingState(timeMilliParser, it)
             }
             HomeState.ConnectionStatus.CONNECTED -> {
-                connection_status_.text = resources.getString(R.string.connected_status_)
-                selected_title.text = resources.getString(R.string.selected_location)
-                connect.setStrokeColorResource(R.color.connected_green)
-                connection_status_.setIconTintResource(R.color.connected_green)
-                progressBar.visibility = View.GONE
-                disconnect.visibility = View.GONE
-                connect.visibility = View.VISIBLE
-                connect.isEnabled = true
-                timer_view.text = timeMilliParser.parseTimeInMilliSeconds(it.timeLeft)
-                connect.isClickable = true
-                it.currentConnectionServer?.let {
-                    initCurrentConnectionUI(it.location_)
-                }
-                balloon?.dismiss()
-                connect_parent.stopRippleAnimation()
+                setUIConnectedState(timeMilliParser, it)
             }
         }
+        initLastUsedServer(it)
+    }
 
+    private fun initLastUsedServer(it: HomeState) {
         it.lastUsedServer?.let {
             select_location_card.show()
             initLastSelectedUI(it)
             country_flag.show()
             location_name.show()
+        }
+    }
+
+    private fun setUIConnectedState(timeMilliParser: TimeMilliParser, it: HomeState) {
+        connection_status_.text = resources.getString(R.string.connected_status_)
+        selected_title.text = resources.getString(R.string.selected_location)
+        connect.setStrokeColorResource(R.color.connected_green)
+        connection_status_.setIconTintResource(R.color.connected_green)
+        progressBar.visibility = View.GONE
+        disconnect.visibility = View.GONE
+        connect.visibility = View.VISIBLE
+        connect.isEnabled = true
+        timer_view.text = timeMilliParser.parseTimeInMilliSeconds(it.timeLeft)
+        connect.isClickable = true
+        it.currentConnectionServer?.let {
+            initCurrentConnectionUI(it.location_)
+        }
+        balloon?.dismiss()
+        connect_parent.stopRippleAnimation()
+    }
+
+    private fun setUIConnectingState(timeMilliParser: TimeMilliParser, it: HomeState) {
+        connection_status_.text = resources.getString(R.string.connecting_status_)
+        disconnect.visibility = View.VISIBLE
+        connect.visibility = View.GONE
+        connect.setStrokeColorResource(R.color.white)
+        connection_status_.setIconTintResource(R.color.grey)
+        progressBar.visibility = View.VISIBLE
+        connect.isEnabled = false
+        connect.isClickable = false
+        timer_view.text = timeMilliParser.parseTimeInMilliSeconds(it.timeLeft)
+        connect_parent.stopRippleAnimation()
+    }
+
+    private fun setUiDisconnectedState(timeMilliParser: TimeMilliParser, it: HomeState) {
+        connect.setStrokeColorResource(R.color.eko_red_light)
+        connection_status_.text = resources.getString(R.string.disconnected_status_)
+        connect.isEnabled = true
+        connect.isClickable = true
+        disconnect.visibility = View.GONE
+        connect.visibility = View.VISIBLE
+        progressBar.visibility = View.GONE
+        timer_view.text = timeMilliParser.parseTimeInMilliSeconds(it.timeLeft)
+        selected_title.text = resources.getString(R.string.current_location)
+        connection_status_.setIconTintResource(R.color.eko_red_light)
+        it.currentLocation?.let {
+            initCurrentConnectionUI(it)
+        }
+        stopCountDownTimerService()
+        connect_parent.startRippleAnimation()
+        if (it.hasShownBalloonCTA) {
+            balloon?.dismiss()
+        } else {
+            balloon?.showAlignTop(connect)
         }
     }
 
@@ -496,7 +515,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                 timerServiceIntent.putExtra(EkoVPNMgrService.TIMER_SERVICE_VPN_PROFILE, state.currentConnectionServer)
                 timerServiceIntent.putExtra(EkoVPNMgrService.TIMER_SERVICE_TIME_LEFT, state.timeLeft)
                 timerServiceIntent.action = EkoVPNMgrService.TIMER_ACTION_START_FREE
-            }else{
+            } else {
                 timerServiceIntent.putExtra(EkoVPNMgrService.TIMER_SERVICE_VPN_PROFILE, state.currentConnectionServer)
                 timerServiceIntent.action = EkoVPNMgrService.TIMER_ACTION_START_PAID
             }
@@ -586,7 +605,7 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
                 startManagerService(viewModel.state.value)
                 viewModel.setConnected()
                 if (viewModel.shouldShowAds()) {
-                    requireActivity().createAndLoadRewardedAd("ca-app-pub-3940256099942544/5224354917", getCallback())
+                    requireActivity().createAndLoadInterstitialAd(resources.getString(R.string.interstitial_ad_after_action_))
                 }
             }
             VpnStateService.State.DISCONNECTING -> {
@@ -595,13 +614,6 @@ class HomeFragment : Fragment(), StateListener, VpnStateService.VpnStateListener
         }
     }
 
-    private fun getCallback(): RewardedAdCallback {
-        return object : RewardedAdCallback() {
-            override fun onUserEarnedReward(p0: RewardItem) {
-
-            }
-        }
-    }
 
     companion object {
         private const val REQUEST_CODE_VPN_PERMISSION = 23491
