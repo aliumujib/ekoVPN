@@ -7,6 +7,7 @@ package com.ekovpn.android.view.main.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ekovpn.android.data.repositories.analytics.AnalyticsRepository
 import com.ekovpn.android.data.repositories.servers.ServersRepository
 import com.ekovpn.android.data.repositories.user.UserRepository
 import com.ekovpn.android.models.Server
@@ -17,6 +18,7 @@ import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 class HomeViewModel @Inject constructor(private val serversRepository: ServersRepository,
+                                        private val analyticsRepository: AnalyticsRepository,
                                         private val userRepository: UserRepository) : ViewModel() {
 
 
@@ -46,6 +48,13 @@ class HomeViewModel @Inject constructor(private val serversRepository: ServersRe
     fun setConnected() {
         saveLastUsedLocation()
         _state.value = state.value.copy(connectionStatus = HomeState.ConnectionStatus.CONNECTED, hasShownBalloonCTA = true)
+        logConnectionToAnalytics()
+    }
+
+    private fun logConnectionToAnalytics() {
+        state.value.lastUsedServer?.let {
+            analyticsRepository.logServerConnectionEvent(it)
+        }
     }
 
     private fun saveLastUsedLocation() {

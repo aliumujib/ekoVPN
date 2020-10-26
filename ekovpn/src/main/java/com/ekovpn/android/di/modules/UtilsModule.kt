@@ -16,15 +16,27 @@
 package com.ekovpn.android.di.modules
 
 
+import android.content.Context
 import com.ekovpn.android.utils.flow.PostExecutionThread
 import com.ekovpn.android.utils.flow.PostExecutionThreadImpl
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
 
 @Module
 abstract class UtilsModule {
 
     @Binds
     abstract fun bindsPostExecutionThread(postExecutionThread: PostExecutionThreadImpl): PostExecutionThread
+
+    @Module
+    companion object {
+        @Provides
+        @JvmStatic
+        fun bindsAnalyticsProvider(context: Context): FirebaseAnalytics {
+            return FirebaseAnalytics.getInstance(context)
+        }
+    }
 
 }

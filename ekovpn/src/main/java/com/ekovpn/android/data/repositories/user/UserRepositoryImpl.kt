@@ -118,7 +118,7 @@ class UserRepositoryImpl @Inject constructor(private val userPrefManager: UserPr
             val map = mutableMapOf<String, String>()
             map["order_number"] = orderId
             map["purchase_token"] = purchaseToken
-            //map["account_type"] = "paid"
+            map["account_type"] = "paid"
             val user = ekoVPNAPIService.updateUserAccount(userId, map).data
             saveCurrentUser(user!!.toUserCacheModel())
             emit(user.toUser())

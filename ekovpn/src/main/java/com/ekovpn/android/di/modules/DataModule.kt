@@ -17,6 +17,8 @@ package com.ekovpn.android.di.modules
 
 import com.ekovpn.android.data.repositories.ads.AdsRepository
 import com.ekovpn.android.data.repositories.ads.AdsRepositoryImpl
+import com.ekovpn.android.data.repositories.analytics.AnalyticsRepository
+import com.ekovpn.android.data.repositories.analytics.AnalyticsRepositoryImpl
 import com.ekovpn.android.data.repositories.auth.AuthRepository
 import com.ekovpn.android.data.repositories.auth.AuthRepositoryImpl
 import com.ekovpn.android.data.repositories.config.repository.ConfigRepository
@@ -68,5 +70,11 @@ class DataModule {
     @Provides
     fun providesAdsRepository(adsRepository: AdsRepositoryImpl): AdsRepository {
         return adsRepository
+    }
+
+    @Singleton
+    @Provides
+    fun providesAnalyticsRepository(analyticsRepository: AnalyticsRepositoryImpl): AnalyticsRepository {
+        return analyticsRepository
     }
 }

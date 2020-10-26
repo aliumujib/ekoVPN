@@ -70,6 +70,7 @@ android {
         getByName("debug") {
             signingConfig = signingConfigs.getByName("debug")
             isDebuggable = true
+            //applicationIdSuffix = ".debug"
         }
     }
 
@@ -169,6 +170,7 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.6")
     implementation("io.cabriole:decorator:1.0.0")
     implementation("com.wireguard.android:tunnel:1.0.20200407")
+
     implementation("com.google.firebase:firebase-analytics:17.4.4")
     implementation("com.google.firebase:firebase-crashlytics:17.1.1")
     implementation("com.google.android.gms:play-services-ads:19.3.0")
