@@ -17,6 +17,7 @@ package com.ekovpn.android.di.components
 
 import android.content.Context
 import com.ekovpn.android.data.repositories.ads.AdsRepository
+import com.ekovpn.android.data.repositories.analytics.AnalyticsRepository
 import com.ekovpn.android.data.repositories.config.repository.ConfigRepository
 import com.ekovpn.android.data.repositories.auth.AuthRepository
 import com.ekovpn.android.data.repositories.servers.ServersRepository
@@ -24,6 +25,7 @@ import com.ekovpn.android.data.repositories.settings.SettingsRepository
 import com.ekovpn.android.data.repositories.user.UserRepository
 import com.ekovpn.android.di.modules.*
 import com.ekovpn.android.utils.flow.PostExecutionThread
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.Component
 import javax.inject.Singleton
 
@@ -46,17 +48,21 @@ interface CoreComponent {
     fun context(): Context
 
     fun configRepository(): ConfigRepository
+
     fun authRepository(): AuthRepository
 
     fun serversRepository(): ServersRepository
 
     fun settingsRepository(): SettingsRepository
 
+    fun analyticsRepository(): AnalyticsRepository
 
     fun userRepository(): UserRepository
 
     fun adsRepository (): AdsRepository
 
     fun postExecutionThread(): PostExecutionThread
+
+    fun firebaseAnalytics(): FirebaseAnalytics
 
 }

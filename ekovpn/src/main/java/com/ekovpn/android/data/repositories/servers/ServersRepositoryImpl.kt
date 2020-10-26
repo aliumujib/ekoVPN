@@ -14,6 +14,7 @@ import com.ekovpn.android.models.Protocol
 import com.ekovpn.android.models.Server
 import com.ekovpn.android.data.remote.retrofit.AWSIPApiService
 import com.ekovpn.android.data.remote.retrofit.IPStackApiService
+import com.ekovpn.android.data.repositories.analytics.AnalyticsRepository
 import de.blinkt.openvpn.VpnProfile
 import de.blinkt.openvpn.core.ProfileManager
 import kotlinx.coroutines.delay

@@ -15,9 +15,11 @@ data class Location(
         val city: String,
         val country: String,
         val country_code: String
-): Parcelable{
+) : Parcelable {
 
-    companion object{
+    val name: String = "$city - $country"
+
+    companion object {
         fun fromLocationCacheModel(cacheModel: LocationCacheModel): Location {
             return Location(cacheModel.locationId, cacheModel.city, cacheModel.country, cacheModel.country_code)
         }
