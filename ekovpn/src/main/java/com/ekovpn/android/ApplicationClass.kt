@@ -23,6 +23,7 @@ import com.ekovpn.android.di.modules.ContextModule
 import com.ekovpn.android.scheduling.TimeResetWorkerWM
 import com.ekovpn.wireguard.WireGuardInitializer
 import com.google.android.gms.ads.MobileAds
+import com.jirbo.adcolony.AdColonyBundleBuilder
 import com.onesignal.OneSignal
 import de.blinkt.openvpn.core.ICSOpenVPNApplication
 import org.strongswan.android.security.LocalCertificateKeyStoreProvider
@@ -38,6 +39,12 @@ class ApplicationClass : ICSOpenVPNApplication(), Configuration.Provider {
                     .build()
 
     lateinit var coreComponent: CoreComponent
+
+//    private val listOfAdUnitIds = mutableListOf(
+//            getString(R.string.interstitial_zone_id),
+//            getString(R.string.banner_zone_id),
+//            getString(R.string.rewarded_zone_id)
+//    )
 
 
     init {
@@ -61,8 +68,12 @@ class ApplicationClass : ICSOpenVPNApplication(), Configuration.Provider {
         initAdmob()
         initWorkManager()
 
+        AdColonyBundleBuilder.setShowPrePopup(true)
+        AdColonyBundleBuilder.setShowPostPopup(true)
+
         WireGuardInitializer.onCreate(this)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
     }
 
     private fun initWorkManager() {

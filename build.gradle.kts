@@ -9,6 +9,7 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven(url = "https://adcolony.bintray.com/AdColony")
         maven(url = "https://plugins.gradle.org/m2/")
     }
     dependencies {

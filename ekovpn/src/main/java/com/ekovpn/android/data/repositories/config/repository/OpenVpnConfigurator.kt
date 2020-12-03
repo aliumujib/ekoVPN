@@ -8,6 +8,7 @@ package com.ekovpn.android.data.repositories.config.repository
 import android.content.Context
 import android.util.Log
 import androidx.core.net.toUri
+import com.ekovpn.android.BuildConfig
 import com.ekovpn.android.data.cache.room.dao.LocationsDao
 import com.ekovpn.android.data.cache.room.dao.ServersDao
 import com.ekovpn.android.data.cache.room.entities.ServerCacheModel
@@ -88,6 +89,8 @@ class OpenVpnConfigurator @Inject constructor(
     private suspend fun saveOVPNProfile(result: VPNServer.OVPNServer): ServerCacheModel? {
         val profile = result.openVpnProfile
         profile.mName = "${result.serverLocation.city}-${result.serverLocation.country}-${result.protocol.value}"
+        profile.mAllowedAppsVpn.add(BuildConfig.APPLICATION_ID)
+        profile.mAllowedAppsVpnAreDisallowed = true
         GlobalScope.launch(Dispatchers.Main) {
             profileManager.addProfile(profile)
             profileManager.saveProfile(context, profile)

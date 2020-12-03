@@ -146,6 +146,12 @@ class TunnelManager constructor(private val configStore: ConfigStore, val contex
         getSharedPreferences().edit().putStringSet(KEY_RUNNING_TUNNELS, tunnelMap.filter { it.value.state == Tunnel.State.UP }.map { it.value.name }.toSet()).commit()
     }
 
+    fun setTunnelConfigSync(tunnel: EkoTunnel, config: Config):Config{
+        getBackend().setState(tunnel, tunnel.state, config)
+        configStore.save(tunnel.name, config)
+        return tunnel.onConfigChanged(config)!!
+    }
+
     fun setTunnelConfig(tunnel: EkoTunnel, config: Config): Flow<Config> = flow {
         getBackend().setState(tunnel, tunnel.state, config)
         configStore.save(tunnel.name, config)

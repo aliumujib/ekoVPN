@@ -72,6 +72,10 @@ class EkoTunnel internal constructor(
         else
             flowOf(config!!)
 
+    fun setConfig(newConfig: Config){
+        manager.setTunnelConfigSync(this, newConfig)
+    }
+
     fun setConfigAsync(newConfig: Config): Flow<Config> {
         return if (newConfig != this@EkoTunnel.config)
             manager.setTunnelConfig(this, newConfig)

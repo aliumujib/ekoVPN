@@ -25,4 +25,10 @@
     <string name="settings_page_interstitial_ad">ca-app-pub-7066463386512008/4008724743</string>
     <string name="country_page_interstitial_ad">ca-app-pub-7066463386512008/5612793910</string>
 
+    <string name="ad_colony_app_uuid">appabdc3ee1b7214a75a0</string>
+    <string name="interstitial_zone_id">vzad2b486f122e44f287</string>
+    <string name="banner_zone_id">vz653a1be5ada14e4890</string>
+    <string name="rewarded_zone_id">vz7acb096ce25d42c6aa</string>
+    <string name="ad_colony_read_only_api_key">nmlyPWFrlkMTshlCJi1N</string>
+
 </resources>

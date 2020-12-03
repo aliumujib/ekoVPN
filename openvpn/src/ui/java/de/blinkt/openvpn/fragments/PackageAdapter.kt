@@ -136,7 +136,6 @@ internal class PackageAdapter(c: Context, vp: VpnProfile) : RecyclerView.Adapter
         }
 
 
-
         val vpnAllowBypassSwitch = settingsView.findViewById<View>(R.id.allow_bypass) as Switch
 
         vpnAllowBypassSwitch.setOnCheckedChangeListener { _, isChecked -> mProfile.mAllowAppVpnBypass = isChecked }

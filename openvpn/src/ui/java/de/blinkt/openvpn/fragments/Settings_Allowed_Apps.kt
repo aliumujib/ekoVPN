@@ -91,10 +91,10 @@ class Settings_Allowed_Apps : Fragment(), AdapterView.OnItemClickListener, View.
 
         Thread(Runnable {
             packageAdapter.populateList(requireContext())
-            activity?.runOnUiThread({
+            activity?.runOnUiThread {
                 (v.findViewById<View>(R.id.loading_container)).visibility = View.GONE
                 (v.findViewById<View>(R.id.app_recycler_view)).visibility = View.VISIBLE
-            })
+            }
         }).start()
 
         return v

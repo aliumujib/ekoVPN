@@ -19,8 +19,8 @@ android {
         applicationId  = "com.ekovpn.android"
         minSdkVersion(21)
         targetSdkVersion(29)
-        versionCode = 10
-        versionName = "1.0.6"
+        versionCode = 11
+        versionName = "1.0.7"
         resConfigs(listOf("en"))
         manifestPlaceholders = mapOf("onesignal_app_id" to "3016495d-8f12-4187-a7d2-4217b8ce7563", "onesignal_google_project_number" to "REMOTE")
     }
@@ -178,6 +178,7 @@ dependencies {
     implementation("com.android.billingclient:billing-ktx:$billing_version")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     implementation( "androidx.work:work-runtime-ktx:$work_version")
+    implementation("com.google.ads.mediation:adcolony:4.3.0.0")
 
     dependencies.add("uiImplementation", project(":openvpn"))
     dependencies.add("skeletonImplementation", project(":openvpn"))

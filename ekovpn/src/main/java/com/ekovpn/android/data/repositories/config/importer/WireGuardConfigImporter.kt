@@ -12,6 +12,8 @@ import android.util.Log
 import com.ekovpn.wireguard.WireGuardInitializer
 import com.ekovpn.wireguard.repo.EkoTunnel
 import com.wireguard.config.Config
+import com.wireguard.config.Interface
+import com.wireguard.config.Peer
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.nio.charset.StandardCharsets
@@ -22,7 +24,7 @@ import javax.inject.Inject
 
 class WireGuardConfigImporter @Inject constructor(private val context: Context) {
 
-    fun importConfigProfile(uri: Uri) : EkoTunnel {
+    fun importConfigProfile(uri: Uri): EkoTunnel {
         val contentResolver = context.contentResolver
         val columns = arrayOf(OpenableColumns.DISPLAY_NAME)
         var name = ""
@@ -46,7 +48,6 @@ class WireGuardConfigImporter @Inject constructor(private val context: Context) 
         } else {
             require(isZip) { "Invalid config file extension error" }
         }
-        Log.d(WireGuardConfigImporter::class.java.simpleName, name)
 
         if (isZip) {
             ZipInputStream(contentResolver.openInputStream(uri)).use { zip ->
@@ -72,11 +73,12 @@ class WireGuardConfigImporter @Inject constructor(private val context: Context) 
                 }
             }
         } else {
-            try{
+            try {
                 tunnel = WireGuardInitializer.getTunnelManager().create(
                         name,
                         Config.parse(contentResolver.openInputStream(uri)!!))
-            }catch (e:Exception){
+
+            } catch (e: Exception) {
                 Log.d(WireGuardConfigImporter::class.java.simpleName, "Error making config $name")
                 WireGuardInitializer.getTunnelManager().deleteAll()
                 throw e
@@ -85,8 +87,43 @@ class WireGuardConfigImporter @Inject constructor(private val context: Context) 
 //                    name,
 //                    Config.parse(contentResolver.openInputStream(uri)!!))
         }
-
+        val config = tunnel?.config
+        tunnel?.setConfig(buildNewConfig(config!!))
+        Log.d(WireGuardConfigImporter::class.java.simpleName, "EXCLUDED = ${tunnel!!.config!!.`interface`.excludedApplications}")
         return tunnel!!
+    }
+
+    private fun buildNewConfig(other: Config):Config{
+        return Config.Builder()
+                .setInterface(buildNewInterface(other.`interface`))
+                .addPeers(other.peers)
+                .build()
+    }
+
+    private fun buildNewPeer(other: Peer): Peer {
+        val builder = Peer.Builder()
+        builder.apply {
+            addAllowedIps(other.allowedIps)
+            setEndpoint(other.endpoint.get())
+            setPersistentKeepalive(other.persistentKeepalive.get())
+            setPreSharedKey(other.preSharedKey.get())
+            setPublicKey(other.publicKey)
+        }
+        return builder.build()
+    }
+
+    private fun buildNewInterface(other: Interface): Interface {
+        val builder = Interface.Builder()
+        builder.apply {
+            addAddresses(other.addresses)
+            addDnsServers(other.dnsServers)
+            excludeApplications(listOf("com.ekovpn.android"))
+            includeApplications(other.includedApplications)
+            //setListenPort(other.listenPort.get())
+            //setMtu(other.mtu.get())
+            setKeyPair(other.keyPair)
+        }
+        return builder.build()
     }
 
 }
