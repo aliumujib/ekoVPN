@@ -119,8 +119,6 @@ class WireGuardConfigImporter @Inject constructor(private val context: Context) 
             addDnsServers(other.dnsServers)
             excludeApplications(listOf("com.ekovpn.android"))
             includeApplications(other.includedApplications)
-            //setListenPort(other.listenPort.get())
-            //setMtu(other.mtu.get())
             setKeyPair(other.keyPair)
         }
         return builder.build()
